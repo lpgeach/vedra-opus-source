@@ -45,11 +45,15 @@ test('updates are off by default, and a development build says it checks nothing
   try {
     expect(await menuChecked(app, 'help.updatesAutomatic')).toBe(false);
     expect(await menuChecked(app, 'help.channel.stable')).toBe(true);
-    await recordMessages(app, 0);
-    await clickMenuItem(app, 'help.checkForUpdates');
-    await expect
-      .poll(() => messages(app))
-      .toEqual(['Updates are checked in installed copies of Vedra Opus.']);
+    // Only a development build says it checks nothing. A packaged one (the CI smoke test,
+    // VEDRAOPUS_E2E_EXECUTABLE) really checks, which would reach the network: not here.
+    if (!process.env['VEDRAOPUS_E2E_EXECUTABLE']) {
+      await recordMessages(app, 0);
+      await clickMenuItem(app, 'help.checkForUpdates');
+      await expect
+        .poll(() => messages(app))
+        .toEqual(['Updates are checked in installed copies of Vedra Opus.']);
+    }
 
     // The channel is remembered.
     await clickMenuItem(app, 'help.channel.beta');

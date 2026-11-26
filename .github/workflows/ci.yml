@@ -167,14 +167,17 @@ jobs:
       - name: Install Chromium for the smoke test
         if: runner.os != 'Linux'
         run: npx playwright install chromium
+      # The performance budget is left out here: the checks above run it on all three systems
+      # against the same code, and CI's shared macOS machine can miss it by a hair while
+      # packaging (Luke, 2026-11-26).
       - name: Smoke-test the packaged app (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run --auto-servernum npx playwright test
+        run: xvfb-run --auto-servernum npx playwright test --grep-invert "200-slide project"
         env:
           VEDRAOPUS_E2E_EXECUTABLE: ${{ matrix.executable }}
       - name: Smoke-test the packaged app
         if: runner.os != 'Linux'
-        run: npx playwright test
+        run: npx playwright test --grep-invert "200-slide project"
         env:
           VEDRAOPUS_E2E_EXECUTABLE: ${{ matrix.executable }}
       - uses: actions/upload-artifact@v4
