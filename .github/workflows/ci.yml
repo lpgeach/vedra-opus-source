@@ -105,6 +105,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium firefox webkit
+      # A sound device, silent: with none, Firefox and WebKit run their media clocks wrongly
+      # (positions jump, or stand still), and the player's media timing tests fail. PulseAudio
+      # with no hardware plays into its null sink in real time (session 117).
+      - name: A silent sound device for the browsers' media clocks
+        run: sudo apt-get install -y pulseaudio && pulseaudio --start --exit-idle-time=-1
       - uses: actions/cache@v4
         with:
           path: vendor/ffmpeg

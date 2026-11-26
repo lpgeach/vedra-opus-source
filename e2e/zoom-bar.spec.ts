@@ -60,3 +60,45 @@ test('the zoom stays visible and usable, zoomed right out and right in, in a win
     await app.close();
   }
 });
+
+test('fitted, the stage settles at any window size: no scrollbars coming and going (B17)', async () => {
+  // At some sizes a fitted slide filled its viewport to a rounding sliver; scrollbars came,
+  // shrank the fit, went, and came again every frame, so nothing on the stage stood still
+  // (CI's macOS, 1024 × 680).
+  const { app, page } = await launchApp();
+  try {
+    await page.getByRole('button', { name: 'New Project', exact: true }).click();
+    await expect(page.getByTestId('stage-canvas')).toBeVisible();
+    for (const [width, height] of [
+      [1024, 680],
+      [1024, 676],
+      [1024, 684],
+      [960, 640],
+      [1100, 720],
+    ] as const) {
+      await app.evaluate(
+        ({ BrowserWindow }, [w, h]) => BrowserWindow.getAllWindows()[0]!.setSize(w!, h!),
+        [width, height],
+      );
+      await page.waitForTimeout(200);
+      const frames = await page.evaluate(async () => {
+        const seen = new Set<string>();
+        for (let i = 0; i < 10; i++) {
+          await new Promise((done) => requestAnimationFrame(() => done(null)));
+          const viewport = document.querySelector<HTMLElement>('[data-testid="stage-viewport"]')!;
+          const canvas = document.querySelector('[data-testid="stage-canvas"]')!;
+          const box = canvas.getBoundingClientRect();
+          seen.add(
+            `${viewport.clientWidth}x${viewport.clientHeight} ${viewport.offsetWidth - viewport.clientWidth} ${box.x},${box.y},${box.width}`,
+          );
+        }
+        return [...seen];
+      });
+      // One state across ten frames, with no scrollbar taking room.
+      expect(frames, `${width} × ${height}`).toHaveLength(1);
+      expect(frames[0]!.split(' ')[1], `${width} × ${height}`).toBe('0');
+    }
+  } finally {
+    await app.close();
+  }
+});

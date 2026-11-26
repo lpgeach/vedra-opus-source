@@ -189,7 +189,20 @@ test('triggers pause and play the sound, and its end runs a media-completes trig
   await page.waitForTimeout(300);
   await clickObject(page, ids.pause);
   await expect.poll(async () => (await probe(page, ids.audio)).paused).toBe(true);
-  const held = (await probe(page, ids.audio)).time;
+  // Where it stopped, once the browser has settled on it: Firefox can report a position
+  // ahead of the sound for a moment after pausing (CI, session 117).
+  let held = -1;
+  await expect
+    .poll(
+      async () => {
+        const time = (await probe(page, ids.audio)).time;
+        const settled = Math.abs(time - held) < 0.01;
+        held = time;
+        return settled;
+      },
+      { intervals: [150] },
+    )
+    .toBe(true);
   expect(held).toBeGreaterThan(0.1);
   await page.waitForTimeout(400);
   expect((await probe(page, ids.audio)).time).toBeCloseTo(held, 1);

@@ -34,6 +34,15 @@ const undo = (page: Page) => page.getByRole('button', { name: 'Undo' }).click();
 test('editing a state changes only that state, and the course shows it on hover', async () => {
   const { app, page } = await start();
   try {
+    // Into the slide's top-left corner first. On CI the real mouse pointer rests in the middle
+    // of the screen, where Preview opens: a button in the middle of the slide is under it, and
+    // the system reports it hovered, whatever the test's own pointer does.
+    for (const field of ['X', 'Y']) {
+      await formatField(page, field, '40');
+      await page.getByTestId('format-panel').getByLabel(field, { exact: true }).press('Enter');
+    }
+    await expect.poll(() => leftOf(page)).toBeLessThan(100);
+    await page.getByTestId('panel-bottom').getByRole('tab', { name: 'States' }).click();
     const normal = await look(page);
     await expect(chip(page, 'Normal')).toHaveAttribute('aria-selected', 'true');
 

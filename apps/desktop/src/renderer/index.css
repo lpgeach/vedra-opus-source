@@ -941,6 +941,11 @@ button.link {
   outline: none;
 }
 
+/* Fitted, there is nothing to scroll; no scrollbars to come and go (B17, see Stage.tsx). */
+.stage-viewport.fitting {
+  overflow: hidden;
+}
+
 /* Rulers sit outside the scrolling viewport, so it gives up a strip to them. */
 .stage-area.with-rulers .stage-viewport {
   top: 20px;

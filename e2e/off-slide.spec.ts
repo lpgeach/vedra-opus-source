@@ -69,14 +69,15 @@ test('objects past the slide: shown, dimmed or hidden, still picked, and the cho
       'true',
     );
     await expect(page.getByTestId('stage-off-slide')).toHaveAttribute('data-off-slide', 'dim');
-    expect(near(await outside(), halfway(fill, bare), 8)).toBe(true);
+    // Read once the stage has painted, as the checks below do.
+    await expect.poll(async () => near(await outside(), halfway(fill, bare), 8)).toBe(true);
 
     // Shown: past the edge it is drawn as it is inside.
     await choices.getByRole('radio', { name: 'Show' }).click();
     await expect(page.getByTestId('stage-off-slide')).toHaveCount(0);
     await expect.poll(async () => near(await outside(), fill)).toBe(true);
     expect(near(await inside(), fill)).toBe(true);
-    expect(near(await pasteboard(), bare)).toBe(true);
+    await expect.poll(async () => near(await pasteboard(), bare)).toBe(true);
 
     // Hidden: past the edge is the bare pasteboard.
     await choices.getByRole('radio', { name: 'Hide' }).click();

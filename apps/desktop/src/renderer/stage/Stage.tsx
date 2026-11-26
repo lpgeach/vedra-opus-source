@@ -203,9 +203,18 @@ export function Stage({ open, current }: { open: OpenProject; current: CurrentSl
   const zoom = zoomSetting === 'fit' ? fit : zoomSetting;
   const canvas = { width: size.width * zoom, height: size.height * zoom };
   // The scrolled content is at least the viewport, so a small stage sits centred.
+  // Fitted, the slide is inside the viewport by definition: the content is the viewport, with
+  // no scrollbars. Otherwise a rounding sliver of overflow brings scrollbars, which shrink the
+  // viewport, which shrinks the fit, which needs no scrollbars, and round again every frame
+  // (found on CI's macOS, session 117).
+  const fitting = zoomSetting === 'fit';
   const content = {
-    width: Math.max(viewport?.width ?? 0, canvas.width + 2 * MARGIN),
-    height: Math.max(viewport?.height ?? 0, canvas.height + 2 * MARGIN),
+    width: fitting
+      ? (viewport?.width ?? 0)
+      : Math.max(viewport?.width ?? 0, canvas.width + 2 * MARGIN),
+    height: fitting
+      ? (viewport?.height ?? 0)
+      : Math.max(viewport?.height ?? 0, canvas.height + 2 * MARGIN),
   };
   const offset = {
     x: (content.width - canvas.width) / 2,
@@ -1014,7 +1023,7 @@ export function Stage({ open, current }: { open: OpenProject; current: CurrentSl
         )}
         <div
           ref={viewportRef}
-          className={`stage-viewport${panning ? ' panning' : ''}`}
+          className={`stage-viewport${panning ? ' panning' : ''}${fitting ? ' fitting' : ''}`}
           data-testid="stage-viewport"
           tabIndex={0}
           onPointerDown={onPointerDown}
