@@ -1,0 +1,1422 @@
+{
+  "formatVersion": 16,
+  "id": "project_88pxxbzidytzm1zl",
+  "title": "Old quiz",
+  "stage": {
+    "width": 1280,
+    "height": 720
+  },
+  "theme": {
+    "colors": {
+      "background": "#ffffff",
+      "text": "#1c2024",
+      "accent1": "#2f6fed",
+      "accent2": "#12a594",
+      "accent3": "#f5a524",
+      "accent4": "#e5484d",
+      "accent5": "#8e4ec6",
+      "accent6": "#60656c"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene_55q4me25jz7rhg25",
+      "title": "Untitled Scene",
+      "slides": [
+        {
+          "id": "slide_512exhwe3tceq7xr",
+          "title": "Multiple Choice",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_2y7bkamhl6i6urew",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_nr7f19rn6p6kqcgj",
+                "name": "Question",
+                "frame": {
+                  "x": 102,
+                  "y": 72,
+                  "width": 1076,
+                  "height": 80,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Type the question here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_63gzpt3lmfpd9g9y",
+                "name": "Choice 1",
+                "frame": {
+                  "x": 102,
+                  "y": 216,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_zhyxpivc4n5zohnh",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_dakfudxxphyznaeb",
+                "name": "Choice 2",
+                "frame": {
+                  "x": 102,
+                  "y": 276,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_zhyxpivc4n5zohnh",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Second answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_pmg9htqhio4yoneo",
+                "name": "Choice 3",
+                "frame": {
+                  "x": 102,
+                  "y": 336,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_zhyxpivc4n5zohnh",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Third answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_o62789qd0084rx9i",
+                "name": "Submit",
+                "frame": {
+                  "x": 1018,
+                  "y": 570,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Submit"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            },
+            "transition": null
+          },
+          "triggers": [
+            {
+              "id": "trigger_kwjnkvg1bwhpdf8n",
+              "owner": {
+                "kind": "object",
+                "id": "obj_o62789qd0084rx9i"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_o62789qd0084rx9i"
+              },
+              "action": {
+                "type": "submitInteraction"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            }
+          ],
+          "question": {
+            "kind": "multipleChoice",
+            "prompt": "obj_nr7f19rn6p6kqcgj",
+            "submit": "obj_o62789qd0084rx9i",
+            "attempts": 2,
+            "branch": {
+              "correct": null,
+              "incorrect": null
+            },
+            "required": true,
+            "choices": [
+              {
+                "id": "choice_72llb3onzc127ywb",
+                "object": "obj_63gzpt3lmfpd9g9y",
+                "correct": true,
+                "points": 10,
+                "feedback": ""
+              },
+              {
+                "id": "choice_mlme8ung7aoidiw0",
+                "object": "obj_dakfudxxphyznaeb",
+                "correct": false,
+                "points": 0,
+                "feedback": ""
+              },
+              {
+                "id": "choice_67ju07ax5hugit1d",
+                "object": "obj_pmg9htqhio4yoneo",
+                "correct": false,
+                "points": 0,
+                "feedback": ""
+              }
+            ],
+            "scoring": {
+              "by": "question",
+              "points": 10
+            },
+            "shuffle": false,
+            "feedback": {
+              "by": "question",
+              "correct": "Yes!",
+              "incorrect": "No.",
+              "tryAgain": "Again?"
+            }
+          }
+        },
+        {
+          "id": "slide_pxtk5nfe4hr5wkrm",
+          "title": "Pick One",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_83dwqb2o36lhmony",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_jgurixxohri3u0yp",
+                "name": "Question",
+                "frame": {
+                  "x": 102,
+                  "y": 72,
+                  "width": 1076,
+                  "height": 80,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Type the question here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_ppemvjc5r39j3qhk",
+                "name": "Choice 1",
+                "frame": {
+                  "x": 102,
+                  "y": 216,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_3l2bka39n00ap2o8",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_lz2ahsj4kdls8maf",
+                "name": "Choice 2",
+                "frame": {
+                  "x": 102,
+                  "y": 276,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_3l2bka39n00ap2o8",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Second answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_af879om5mvcds9wz",
+                "name": "Choice 3",
+                "frame": {
+                  "x": 102,
+                  "y": 336,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_3l2bka39n00ap2o8",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Third answer"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_o3tte4yomml0c93k",
+                "name": "Submit",
+                "frame": {
+                  "x": 1018,
+                  "y": 570,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Submit"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            },
+            "transition": null
+          },
+          "triggers": [
+            {
+              "id": "trigger_eohb8rxkud1nszde",
+              "owner": {
+                "kind": "object",
+                "id": "obj_o3tte4yomml0c93k"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_o3tte4yomml0c93k"
+              },
+              "action": {
+                "type": "submitInteraction"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            }
+          ],
+          "question": {
+            "kind": "pickOne",
+            "prompt": "obj_jgurixxohri3u0yp",
+            "submit": "obj_o3tte4yomml0c93k",
+            "required": true,
+            "branch": {
+              "answered": null
+            },
+            "feedback": {
+              "by": "question",
+              "answered": "Thanks for that."
+            },
+            "choices": [
+              {
+                "id": "choice_rigzkcw7lc3vaojf",
+                "object": "obj_ppemvjc5r39j3qhk"
+              },
+              {
+                "id": "choice_kyrbb61g3ppz5y9c",
+                "object": "obj_lz2ahsj4kdls8maf"
+              },
+              {
+                "id": "choice_dm08ohxs8wlrb84e",
+                "object": "obj_af879om5mvcds9wz"
+              }
+            ],
+            "shuffle": false
+          }
+        },
+        {
+          "id": "slide_f8e84v1i8ba982sg",
+          "title": "True or False",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_nmpagk16mhwkwyng",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_o5aomes9ad4wr15o",
+                "name": "Question",
+                "frame": {
+                  "x": 102,
+                  "y": 72,
+                  "width": 1076,
+                  "height": 80,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Type the question here"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_bomxfinwqecrnip3",
+                "name": "Choice 1",
+                "frame": {
+                  "x": 102,
+                  "y": 216,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_5vaoqy01t8gyq8n2",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "True"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_m2yyg8h5ookl4382",
+                "name": "Choice 2",
+                "frame": {
+                  "x": 102,
+                  "y": 276,
+                  "width": 1076,
+                  "height": 44,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "obj_5vaoqy01t8gyq8n2",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "choice",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "False"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "mark": "radio",
+                  "padding": 8
+                }
+              },
+              {
+                "id": "obj_okfmwv4kvv8vm57f",
+                "name": "Submit",
+                "frame": {
+                  "x": 1018,
+                  "y": 570,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Submit"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            },
+            "transition": null
+          },
+          "triggers": [
+            {
+              "id": "trigger_0qp8cbloldnhlrxm",
+              "owner": {
+                "kind": "object",
+                "id": "obj_okfmwv4kvv8vm57f"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_okfmwv4kvv8vm57f"
+              },
+              "action": {
+                "type": "submitInteraction"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            }
+          ],
+          "question": {
+            "kind": "trueFalse",
+            "prompt": "obj_o5aomes9ad4wr15o",
+            "submit": "obj_okfmwv4kvv8vm57f",
+            "attempts": 1,
+            "branch": {
+              "correct": null,
+              "incorrect": null
+            },
+            "required": true,
+            "choices": [
+              {
+                "id": "choice_5b99r07r9gh5scwq",
+                "object": "obj_bomxfinwqecrnip3",
+                "correct": true,
+                "points": 10,
+                "feedback": ""
+              },
+              {
+                "id": "choice_fggg9v8e9hzx6ps2",
+                "object": "obj_m2yyg8h5ookl4382",
+                "correct": false,
+                "points": 0,
+                "feedback": ""
+              }
+            ],
+            "scoring": {
+              "by": "question",
+              "points": 10
+            },
+            "shuffle": false,
+            "feedback": {
+              "by": "none",
+              "correct": "a",
+              "incorrect": "b",
+              "tryAgain": "c"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "masters": [
+    {
+      "id": "master_t6rs1fty9np6a17b",
+      "name": "Brand",
+      "layer": {
+        "id": "layer_1kexlwkf409k7iyl",
+        "name": "Brand Layer",
+        "objects": [],
+        "timeline": {
+          "duration": 5,
+          "cuePoints": []
+        },
+        "properties": {
+          "hideOtherLayers": true,
+          "hideBaseObjects": false,
+          "pauseBaseTimeline": false,
+          "blockBaseClicks": false,
+          "allowSeek": true,
+          "onRevisit": "auto",
+          "transition": null
+        }
+      },
+      "layouts": [
+        {
+          "id": "layout_5kmasm12oeseb27e",
+          "name": "Title and Content",
+          "layer": {
+            "id": "layer_n730amfnpdmfw26p",
+            "name": "Title and Content",
+            "objects": [
+              {
+                "id": "obj_7ar67ki9uyx4madu",
+                "name": "Title Placeholder",
+                "frame": {
+                  "x": 80,
+                  "y": 48,
+                  "width": 1120,
+                  "height": 96,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Click to edit the title"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "title"
+                }
+              },
+              {
+                "id": "obj_kncsp8vl3r1vlick",
+                "name": "Content Placeholder",
+                "frame": {
+                  "x": 80,
+                  "y": 176,
+                  "width": 1120,
+                  "height": 472,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Click to add text"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "content"
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          }
+        },
+        {
+          "id": "layout_ujvhx6021xxxthlt",
+          "name": "Title Only",
+          "layer": {
+            "id": "layer_277nunk5bn9d3wbi",
+            "name": "Title Only",
+            "objects": [
+              {
+                "id": "obj_ywznru25apjsrwd7",
+                "name": "Title Placeholder",
+                "frame": {
+                  "x": 80,
+                  "y": 48,
+                  "width": 1120,
+                  "height": 96,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Click to edit the title"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "title"
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          }
+        },
+        {
+          "id": "layout_dkvuocouhxoi2213",
+          "name": "Blank",
+          "layer": {
+            "id": "layer_1us9p4qyd83xs2qu",
+            "name": "Blank",
+            "objects": [],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "assets": {},
+  "tracking": {
+    "completion": {
+      "kind": "slidesViewed",
+      "count": null
+    },
+    "reporting": "completed-incomplete",
+    "resume": "prompt"
+  },
+  "publish": {
+    "target": "web",
+    "scorm2004Edition": 4,
+    "title": "",
+    "identifier": "",
+    "version": "1.0",
+    "description": "",
+    "zip": false
+  }
+}

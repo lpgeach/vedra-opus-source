@@ -1,0 +1,59 @@
+{
+  "name": "project-vedraopus",
+  "version": "0.1.0-alpha.4",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=vedraopus-desktop",
+    "build": "npm run build --workspace=vedraopus-desktop",
+    "typecheck": "tsc --noEmit && npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "e2e": "npm run build && playwright test",
+    "test:visual": "playwright test --config playwright.render.config.ts",
+    "test:visual:update": "playwright test --config playwright.render.config.ts --project=chromium --update-snapshots",
+    "build:player": "npm run build --workspace=@vedraopus/player",
+    "test:player": "npm run build:player && playwright test --config playwright.player.config.ts",
+    "test:lms": "npm run build:player && playwright test --config playwright.lms.config.ts",
+    "fetch:ffmpeg": "node scripts/fetch-ffmpeg.mjs",
+    "fetch:libreoffice": "node scripts/fetch-libreoffice.mjs",
+    "collect:sources": "node scripts/collect-sources.mjs",
+    "check:signing": "node scripts/check-signing.mjs",
+    "package": "npm run fetch:ffmpeg && npm run fetch:libreoffice && npm run package --workspace=vedraopus-desktop"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@fontsource/inter": "^5.2.5",
+    "@playwright/test": "^1.65.1",
+    "@tiptap/core": "^2.27.3",
+    "@tiptap/extension-color": "^2.27.3",
+    "@tiptap/extension-font-family": "^2.27.3",
+    "@tiptap/extension-link": "^2.27.3",
+    "@tiptap/extension-text-align": "^2.27.3",
+    "@tiptap/extension-text-style": "^2.27.3",
+    "@tiptap/extension-underline": "^2.27.3",
+    "@tiptap/html": "^2.27.3",
+    "@tiptap/starter-kit": "^2.27.3",
+    "@types/node": "^26.6.6",
+    "axe-core": "4.14.1",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "happy-dom": "^21.0.4",
+    "prettier": "^3.10.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.1.0"
+  }
+}

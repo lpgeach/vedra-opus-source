@@ -1,0 +1,90 @@
+# Signing-ready (P11.4, docs/releasing.md): builds are signed and notarised when the
+# certificate and account variables are set (CSC_LINK, CSC_KEY_PASSWORD, APPLE_API_KEY…),
+# and are unsigned otherwise. Nothing in this file is a secret.
+appId: app.vedraopus.desktop
+productName: Vedra Opus
+artifactName: ${productName}-${version}-${arch}.${ext}
+directories:
+  output: release
+files:
+  - out/**
+  - package.json
+# Third-party notices for the icons and illustrations library (P9.8; docs/licences.md).
+# electron-builder adds each platform's extraResources (ffmpeg, LibreOffice) to these.
+extraResources:
+  - from: resources/licences
+    to: licences
+  # Built-in template files, the demo course among them (B4; docs/licences.md for its media).
+  - from: resources/templates
+    to: templates
+# The update feed (P11.4 part B): the public downloads repository's GitHub releases (alpha 4).
+# The app checks it only when the author asks, or automatically once they turn that on.
+publish:
+  provider: github
+  owner: lpgeach
+  repo: vedra-opus-releases
+fileAssociations:
+  - ext: vedraopus
+    name: Vedra Opus Project
+    description: Vedra Opus Project
+    mimeType: application/x-vedraopus-project
+    role: Editor
+  - ext: eloquent
+    name: Vedra Opus Project (legacy extension)
+    description: Older Vedra Opus project files remain openable
+    mimeType: application/x-vedraopus-project
+    role: Editor
+linux:
+  executableName: vedraopus
+  # Required by the deb target. Placeholder: replace with a real contact before any public release.
+  maintainer: Vedra Opus contributors <maintainers@vedraopus.invalid>
+  category: Education
+  target:
+    - AppImage
+    - deb
+  # The media pipeline's ffmpeg (npm run fetch:ffmpeg; docs/licences.md).
+  extraResources:
+    - from: ../../vendor/ffmpeg/linux-${arch}
+      to: ffmpeg
+    # LibreOffice, trimmed, for a PowerPoint deck's charts and SmartArt (npm run fetch:libreoffice).
+    - from: ../../vendor/libreoffice/linux-${arch}
+      to: libreoffice
+mac:
+  category: public.app-category.education
+  # Notarisation needs the hardened runtime; its exceptions are in the entitlements.
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: signing/entitlements.mac.plist
+  entitlementsInherit: signing/entitlements.mac.plist
+  # Notarised when APPLE_API_KEY, APPLE_API_KEY_ID and APPLE_API_ISSUER are set; skipped otherwise.
+  # Asked when the author records narration (Insert → Record Audio…).
+  extendInfo:
+    NSMicrophoneUsageDescription: Vedra Opus records narration for your slides when you choose Record Audio.
+  target:
+    - dmg
+  # The media pipeline's ffmpeg, our own LGPL build (npm run fetch:ffmpeg builds it), and
+  # LibreOffice, trimmed (npm run fetch:libreoffice).
+  extraResources:
+    - from: ../../vendor/ffmpeg/mac-${arch}
+      to: ffmpeg
+    - from: ../../vendor/libreoffice/mac-${arch}
+      to: libreoffice
+win:
+  executableName: Vedra Opus
+  target:
+    - nsis
+  # Signed when CSC_LINK and CSC_KEY_PASSWORD are set: SHA-256 only, which current Windows
+  # requires. ELECTRON_BUILDER_OFFLINE=true leaves out the timestamp (a test build).
+  signtoolOptions:
+    publisherName: Vedra Opus contributors
+    signingHashAlgorithms:
+      - sha256
+    rfc3161TimeStampServer: http://timestamp.digicert.com
+  extraResources:
+    - from: ../../vendor/ffmpeg/win-${arch}
+      to: ffmpeg
+    - from: ../../vendor/libreoffice/win-${arch}
+      to: libreoffice
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

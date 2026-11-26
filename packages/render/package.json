@@ -1,0 +1,16 @@
+{
+  "name": "@vedraopus/render",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@vedraopus/model": "^0.1.0"
+  }
+}

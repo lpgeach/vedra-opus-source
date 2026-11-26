@@ -1,0 +1,74 @@
+{
+  "description": "Tabs built from layers. Continue only moves on once every tab has been seen; until then it shows a hint. Written by hand from the design, not recorded from the engine.",
+  "steps": [
+    {
+      "click": null,
+      "expect": {
+        "slide": "Tabs",
+        "layers": ["Panel A"],
+        "visible": ["Title", "Tab A", "Tab B", "Tab C", "Viewed text", "Continue", "Content A"],
+        "states": { "Tab A": "selected", "Tab B": "normal", "Tab C": "normal" },
+        "text": { "Viewed text": "Viewed 1 of 3" }
+      }
+    },
+    {
+      "click": "Continue",
+      "expect": {
+        "slide": "Tabs",
+        "layers": ["Panel A", "Hint"],
+        "visible": [
+          "Title",
+          "Tab A",
+          "Tab B",
+          "Tab C",
+          "Viewed text",
+          "Continue",
+          "Content A",
+          "Hint text"
+        ],
+        "states": { "Tab A": "selected", "Tab B": "normal", "Tab C": "normal" },
+        "text": { "Viewed text": "Viewed 1 of 3" }
+      }
+    },
+    {
+      "click": "Tab B",
+      "expect": {
+        "slide": "Tabs",
+        "layers": ["Panel B"],
+        "visible": ["Title", "Tab A", "Tab B", "Tab C", "Viewed text", "Continue", "Content B"],
+        "states": { "Tab A": "normal", "Tab B": "selected", "Tab C": "normal" },
+        "text": { "Viewed text": "Viewed 2 of 3" }
+      }
+    },
+    {
+      "click": "Tab A",
+      "expect": {
+        "slide": "Tabs",
+        "layers": ["Panel A"],
+        "visible": ["Title", "Tab A", "Tab B", "Tab C", "Viewed text", "Continue", "Content A"],
+        "states": { "Tab A": "selected", "Tab B": "normal", "Tab C": "normal" },
+        "text": { "Viewed text": "Viewed 2 of 3" }
+      }
+    },
+    {
+      "click": "Tab C",
+      "expect": {
+        "slide": "Tabs",
+        "layers": ["Panel C"],
+        "visible": ["Title", "Tab A", "Tab B", "Tab C", "Viewed text", "Continue", "Content C"],
+        "states": { "Tab A": "normal", "Tab B": "normal", "Tab C": "selected" },
+        "text": { "Viewed text": "Viewed 3 of 3" }
+      }
+    },
+    {
+      "click": "Continue",
+      "expect": {
+        "slide": "Done",
+        "layers": [],
+        "visible": ["Well done"],
+        "states": {},
+        "text": { "Well done": "Well done" }
+      }
+    }
+  ]
+}

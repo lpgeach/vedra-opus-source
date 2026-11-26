@@ -1,0 +1,161 @@
+name: CI
+
+on:
+  push:
+    branches: [master, 'wp/**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Our ffmpeg for Windows is cross-compiled on Linux (docs/briefs/R1-own-ffmpeg-builds.md),
+  # since the Windows runners have no WSL; the Windows checks take it from here.
+  ffmpeg-windows:
+    name: ffmpeg for Windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: vendor/ffmpeg/win-x64
+          key: ffmpeg-win-x64-${{ hashFiles('scripts/build-ffmpeg.sh', 'scripts/build-decoder.sh', 'apps/desktop/native/decoder/**') }}
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: bash scripts/build-ffmpeg.sh win vendor/ffmpeg/win-x64
+      # vo-decode, which reads H.264 and the like through Media Foundation (R3).
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: bash scripts/build-decoder.sh win vendor/ffmpeg/win-x64/bin
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-win-x64
+          path: vendor/ffmpeg/win-x64
+
+  verify:
+    name: Verify (${{ matrix.os }})
+    needs: ffmpeg-windows
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # The media pipeline's ffmpeg, built from pinned sources (about ten minutes), so the
+      # result is kept between runs until the build script changes. Windows takes the one
+      # cross-compiled above; fetch:ffmpeg then finds it in place.
+      - if: runner.os != 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: vendor/ffmpeg
+          key: ffmpeg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-ffmpeg.sh', 'scripts/build-decoder.sh', 'apps/desktop/native/decoder/**') }}
+      - if: runner.os == 'Windows'
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-win-x64
+          path: vendor/ffmpeg/win-x64
+      - run: npm run fetch:ffmpeg
+      # The speech tests use the system's espeak-ng on Linux (docs/briefs/P6.8-text-to-speech.md).
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y espeak-ng
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - name: End-to-end tests (Linux, under a virtual display)
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum npm run e2e
+      - name: End-to-end tests
+        if: runner.os != 'Linux'
+        run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.os }}
+          path: |
+            playwright-report
+            test-results
+
+  visual:
+    name: Browsers (Chromium, Firefox, WebKit)
+    # One system is enough: the point is that three browser engines agree with
+    # one set of reference images, and those were made on Linux.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - uses: actions/cache@v4
+        with:
+          path: vendor/ffmpeg
+          key: ffmpeg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-ffmpeg.sh', 'scripts/build-decoder.sh', 'apps/desktop/native/decoder/**') }}
+      - run: npm run fetch:ffmpeg
+      - run: npm run test:visual
+      # The player and published LMS packages in each engine (P3.2, Phase 5).
+      - run: npm run test:player
+      - run: npm run test:lms
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-test-results
+          path: |
+            playwright-report
+            test-results
+
+  package:
+    name: Package (${{ matrix.os }})
+    needs: verify
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            executable: apps/desktop/release/linux-unpacked/vedraopus
+          - os: macos-latest
+            executable: apps/desktop/release/mac-arm64/Vedra Opus.app/Contents/MacOS/Vedra Opus
+          - os: windows-latest
+            executable: apps/desktop/release/win-unpacked/Vedra Opus.exe
+    env:
+      # Unsigned until P11.4.
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run package
+      - name: Smoke-test the packaged app (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum npx playwright test
+        env:
+          VEDRAOPUS_E2E_EXECUTABLE: ${{ matrix.executable }}
+      - name: Smoke-test the packaged app
+        if: runner.os != 'Linux'
+        run: npx playwright test
+        env:
+          VEDRAOPUS_E2E_EXECUTABLE: ${{ matrix.executable }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vedraopus-${{ matrix.os }}
+          if-no-files-found: error
+          path: |
+            apps/desktop/release/*.AppImage
+            apps/desktop/release/*.deb
+            apps/desktop/release/*.dmg
+            apps/desktop/release/*.exe

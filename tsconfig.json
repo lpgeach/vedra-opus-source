@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"]
+  },
+  "include": [
+    "e2e",
+    "fixtures",
+    "packages/render/visual",
+    "*.config.ts",
+    "apps/desktop/src/renderer/env.d.ts"
+  ]
+}

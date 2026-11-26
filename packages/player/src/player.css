@@ -1,0 +1,929 @@
+/*
+ * The frame's colours (docs/briefs/P8.3-player-appearance.md): a dark set and
+ * a light set; "auto" follows the learner's system. The accent, its text
+ * colour and the font come from the course, set on the element: the accent
+ * once for each scheme, made strong enough for it (`accentFor`), and picked
+ * here. These colours are the model's `PLAYER_SCHEMES`, whose contrast is
+ * tested (docs/briefs/P10.1-accessibility.md, part C); change both together.
+ */
+.vo-player {
+  --vo-bg: #1c2024;
+  --vo-fg: #f0f0f3;
+  --vo-chrome: #11181c;
+  --vo-control: #2b3138;
+  --vo-border: #6e7780;
+  --vo-sheet-bg: #262c33;
+  --vo-sheet-fg: #f0f0f3;
+  --vo-link: #8ab4ff;
+  --vo-accent: var(--vo-accent-dark, #2f6fed);
+  --vo-accent-text: var(--vo-accent-text-dark, #fff);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--vo-bg);
+  color: var(--vo-fg);
+  font: 14px/1.4 var(--vo-font, system-ui, sans-serif);
+  outline: none;
+}
+.vo-player[data-scheme='light'] {
+  --vo-bg: #eef1f4;
+  --vo-fg: #1c2024;
+  --vo-chrome: #ffffff;
+  --vo-control: #e4e8ec;
+  --vo-border: #808a93;
+  --vo-sheet-bg: #ffffff;
+  --vo-sheet-fg: #1c2024;
+  --vo-link: #1d4ed8;
+  --vo-accent: var(--vo-accent-light, #2f6fed);
+  --vo-accent-text: var(--vo-accent-text-light, #fff);
+}
+@media (prefers-color-scheme: light) {
+  .vo-player[data-scheme='auto'] {
+    --vo-bg: #eef1f4;
+    --vo-fg: #1c2024;
+    --vo-chrome: #ffffff;
+    --vo-control: #e4e8ec;
+    --vo-border: #808a93;
+    --vo-sheet-bg: #ffffff;
+    --vo-sheet-fg: #1c2024;
+    --vo-link: #1d4ed8;
+    --vo-accent: var(--vo-accent-light, #2f6fed);
+    --vo-accent-text: var(--vo-accent-text-light, #fff);
+  }
+}
+/* Controls above the course: bar, then controls, then the course. */
+.vo-player[data-controls='top'] > .vo-player-bar {
+  order: 0;
+}
+.vo-player[data-controls='top'] > .vo-player-footer {
+  order: 1;
+}
+.vo-player[data-controls='top'] > .vo-player-viewport {
+  order: 2;
+}
+.vo-player[data-controls='top'] > .vo-player-text-view {
+  order: 3;
+}
+.vo-player-bar button {
+  padding: 4px 12px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.vo-player-bar button:focus-visible {
+  outline: 2px solid var(--vo-accent, #2f6fed);
+  outline-offset: 2px;
+}
+.vo-player-bar button[aria-expanded='true'] {
+  background: var(--vo-accent, #2f6fed);
+  color: var(--vo-accent-text, #fff);
+  border-color: transparent;
+}
+
+.vo-player-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--vo-chrome);
+  font-weight: 600;
+}
+
+.vo-player-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.vo-player-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+}
+
+.vo-player-layer {
+  /* The stage's size, so a transition can clip or scale it about its middle. */
+  position: absolute;
+  inset: 0;
+  /* The layer itself takes no clicks, only what is on it, so the layers beneath can be reached. */
+  pointer-events: none;
+}
+.vo-player-layer > * {
+  pointer-events: auto;
+}
+/* On its way out: still drawn, but nothing on it can be pressed. */
+.vo-player-layer.vo-player-closing > * {
+  pointer-events: none;
+}
+
+.vo-player-footer {
+  flex: none;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: var(--vo-chrome);
+}
+
+.vo-player-footer button {
+  padding: 4px 14px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.vo-player-footer button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/*
+ * Visible focus on the slide's objects (P10.1, WCAG 2.4.7): a white ring inside
+ * a dark one, so it shows on light and dark slides alike.
+ */
+.vo-player-stage :focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 5px #111418;
+}
+.vo-player-stage:focus-visible {
+  box-shadow: inset 0 0 0 3px #111418;
+  outline: none;
+}
+
+/* The skip link: out of sight until it has focus (P10.1, WCAG 2.4.1). */
+.vo-skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 3000;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  font:
+    600 14px/1.2 system-ui,
+    sans-serif;
+}
+.vo-skip-link:focus {
+  top: 8px;
+  outline: 2px solid var(--vo-link);
+  outline-offset: 2px;
+}
+
+/* What the live region says, and the drag hint, are for screen readers only (P10.1). */
+.vo-player-announcer,
+.vo-player-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.vo-player-footer button:focus-visible {
+  outline: 2px solid var(--vo-accent, #2f6fed);
+  outline-offset: 2px;
+}
+
+.vo-resume,
+.vo-loading {
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.vo-resume p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.vo-resume-choices {
+  display: flex;
+  gap: 12px;
+}
+
+.vo-resume button {
+  padding: 6px 18px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Shown when the browser would not play sound until the learner acts. */
+.vo-player-unblock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  padding: 12px 28px;
+  border: 1px solid var(--vo-border);
+  border-radius: 6px;
+  background: var(--vo-control);
+  color: var(--vo-fg);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.vo-player-unblock:focus-visible {
+  outline: 2px solid var(--vo-accent, #2f6fed);
+  outline-offset: 2px;
+}
+.vo-player-unblock[hidden] {
+  display: none;
+}
+
+/* Closed captions: a band near the bottom of the stage, scaled with it. */
+.vo-player-captions {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  max-width: 86%;
+  padding: 0.35em 0.8em;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font:
+    500 26px/1.35 system-ui,
+    sans-serif;
+  text-align: center;
+  white-space: pre-line;
+  pointer-events: none;
+  z-index: 3;
+}
+.vo-player-captions[hidden] {
+  display: none;
+}
+.vo-player-cc[aria-pressed='true'],
+.vo-player-footer button[aria-pressed='true'] {
+  background: var(--vo-accent, #2f6fed);
+  color: var(--vo-accent-text, #fff);
+}
+.vo-player-cc[hidden] {
+  display: none;
+}
+
+/* Each slide's drawing, which a transition moves (docs/briefs/P6.6-transitions.md). */
+.vo-player-slide {
+  position: absolute;
+  inset: 0;
+}
+
+/* A drag question's tiles (P7.2): picked up by mouse or touch, so a touch drag
+   does not scroll the page; the one being carried goes over everything else. */
+.vo-player-stage [data-draggable='true'] {
+  cursor: grab;
+  touch-action: none;
+  /* Selected words would start the browser's own drag of the text instead. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+.vo-player-stage [data-dragging='true'] {
+  cursor: grabbing;
+  z-index: 1000;
+}
+
+/* Where the learner marked a hotspot picture (P7.2): a crosshair at the point. */
+.vo-hotspot-mark {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid #e5484d;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #fff;
+  pointer-events: none;
+  z-index: 1001;
+}
+.vo-hotspot-mark[hidden] {
+  display: none;
+}
+
+/* Hotspots and markers are pressable (P9.1). */
+.vo-player-stage [data-object-type='hotspot'],
+.vo-player-stage [data-object-type='marker'] {
+  cursor: pointer;
+}
+.vo-player-stage [data-object-type='marker'][data-pulse='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--vo-accent, #2f6fed);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: vo-marker-pulse 1.8s ease-out infinite;
+}
+@keyframes vo-marker-pulse {
+  from {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+.vo-player[data-reduced-motion='true'] [data-object-type='marker'][data-pulse='true']::after {
+  animation: none;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vo-player-stage [data-object-type='marker'][data-pulse='true']::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* A marker's label: the player's own sheet over the stage, in stage pixels. */
+.vo-marker-label {
+  position: absolute;
+  z-index: 1200;
+  box-sizing: border-box;
+  max-width: 320px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.35);
+  font:
+    400 18px/1.4 system-ui,
+    sans-serif;
+}
+.vo-marker-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+.vo-marker-label p {
+  margin: 0 0 6px;
+  white-space: pre-wrap;
+}
+.vo-marker-label p:last-of-type {
+  margin-bottom: 0;
+}
+.vo-marker-media {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  margin-top: 8px;
+}
+.vo-marker-sound {
+  display: none;
+}
+
+/* 360° images (P9.10): spots over the view, a marker's label, guided buttons. */
+.vo-panorama:focus-visible {
+  outline: 3px solid var(--vo-link);
+  outline-offset: -3px;
+}
+.vo-panorama:active {
+  cursor: grabbing;
+}
+.vo-panorama-spot {
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--vo-sheet-fg);
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  font:
+    700 14px/1 system-ui,
+    sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.4);
+}
+.vo-panorama-spot[data-kind='hotspot'] {
+  background: rgb(255 255 255 / 0.25);
+}
+.vo-panorama-spot[data-visited='true'] {
+  border-color: var(--vo-link);
+}
+.vo-panorama-spot:focus-visible {
+  outline: 3px solid var(--vo-link);
+  outline-offset: 2px;
+}
+.vo-panorama-label {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-height: 60%;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.35);
+  font:
+    400 16px/1.4 system-ui,
+    sans-serif;
+}
+.vo-panorama-label h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.vo-panorama-label p {
+  margin: 0 0 6px;
+}
+.vo-panorama-label-close,
+.vo-panorama-guide button {
+  border: 1px solid var(--vo-border);
+  border-radius: 6px;
+  background: var(--vo-control);
+  color: var(--vo-fg);
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.vo-panorama-guide {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+/* Review mode (P7.5): the right answer outlined in green, a wrong choice in red. */
+.vo-player-stage [data-review='right'] {
+  outline: 3px solid #1a7f37;
+  outline-offset: 3px;
+}
+.vo-player-stage [data-review='chosen'] {
+  outline: 3px dashed #c62828;
+  outline-offset: 3px;
+}
+.vo-review-banner {
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  background: #f1f3f5;
+  color: #1c2024;
+}
+.vo-review-banner[data-result='correct'] {
+  background: #dff3e4;
+  color: #145a2b;
+}
+.vo-review-banner[data-result='incorrect'] {
+  background: #fde2e2;
+  color: #8a1c1c;
+}
+.vo-review-banner[hidden] {
+  display: none;
+}
+
+/* A running result timer (P7.7). */
+.vo-result-timer {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.vo-result-timer[hidden] {
+  display: none;
+}
+
+/* The player frame (P8.1): the menu, the seekbar, the learner's controls. */
+.vo-player-logo {
+  height: 28px;
+  width: auto;
+}
+.vo-player-viewport > .vo-player-menu {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(280px, 80%);
+  overflow-y: auto;
+  padding: 12px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  z-index: 2000;
+  box-shadow: 2px 0 12px rgb(0 0 0 / 0.4);
+}
+/* The menu at the right; the tab panel then takes the left. */
+.vo-player[data-menu-side='right'] .vo-player-viewport > .vo-player-menu {
+  inset: 0 0 0 auto;
+  box-shadow: -2px 0 12px rgb(0 0 0 / 0.4);
+}
+.vo-player[data-menu-side='right'] .vo-player-viewport > .vo-player-tab-panel {
+  inset: 0 auto 0 0;
+  box-shadow: 2px 0 12px rgb(0 0 0 / 0.4);
+}
+.vo-player-menu[hidden],
+.vo-player-a11y[hidden] {
+  display: none;
+}
+.vo-player-menu-title {
+  margin: 8px 0 4px;
+  font-size: 13px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.vo-player-menu ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vo-player-menu-item {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.vo-player-menu-item[aria-current='page'] {
+  background: var(--vo-accent, #2f6fed);
+  color: var(--vo-accent-text, #fff);
+}
+.vo-player-menu-item:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.vo-player-seek {
+  flex: 1 1 160px;
+  min-width: 80px;
+}
+.vo-player-volume {
+  width: 90px;
+}
+.vo-player-viewport > .vo-player-a11y {
+  position: absolute;
+  /* At the end of the line: the right, or the left in a right-to-left course (P10.3). */
+  inset-inline-end: 12px;
+  bottom: 12px;
+  max-width: 360px;
+  padding: 12px 16px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.35);
+  z-index: 2000;
+}
+.vo-player-shortcuts {
+  padding-inline-start: 18px;
+}
+/* One setting a line, its words beside it (the Phase 10 review). */
+.vo-player-a11y-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+.vo-player[data-caption-size='large'] .vo-player-captions {
+  font-size: 150%;
+}
+.vo-player[data-caption-size='larger'] .vo-player-captions {
+  font-size: 200%;
+}
+
+/* The player's tabs (P8.2): buttons in the bar, a panel at the right of the viewport. */
+.vo-player-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.vo-player-viewport > .vo-player-tab-panel {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(360px, 85%);
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  z-index: 2000;
+  box-shadow: -2px 0 12px rgb(0 0 0 / 0.4);
+}
+.vo-player-tab-panel[hidden] {
+  display: none;
+}
+.vo-player-tab-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.vo-player-resources {
+  margin: 0;
+  padding-left: 18px;
+}
+.vo-player-resources li {
+  margin: 4px 0;
+}
+.vo-player-glossary dt {
+  font-weight: 600;
+  margin-top: 8px;
+}
+.vo-player-glossary dd {
+  margin: 2px 0 0;
+}
+.vo-player-tab-empty {
+  opacity: 0.7;
+}
+.vo-player-tab-panel a {
+  color: var(--vo-link);
+}
+
+/* Lightbox slides (P8.4): the slide under it, still and dimmed; the lightbox framed above it. */
+.vo-player-lightbox-under {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.vo-player-lightbox-under::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.55);
+}
+.vo-player[data-lightbox='true'] .vo-player-stage {
+  z-index: 1;
+  box-shadow: 0 8px 40px rgb(0 0 0 / 0.6);
+  outline: 2px solid var(--vo-border);
+}
+.vo-player-lightbox-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1500;
+  display: flex;
+  gap: 8px;
+}
+.vo-player-lightbox-bar[hidden],
+.vo-player-lightbox-bar button[hidden] {
+  display: none;
+}
+.vo-player-lightbox-bar button {
+  padding: 4px 14px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: var(--vo-fg);
+  font: inherit;
+  cursor: pointer;
+}
+.vo-player-lightbox-bar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.vo-player-lightbox-bar button:focus-visible {
+  outline: 2px solid var(--vo-accent, #2f6fed);
+  outline-offset: 2px;
+}
+
+/* Small screens and touch (P8.5). */
+.vo-player-viewport {
+  /* A sideways swipe is the player's; the browser keeps vertical panning and its own pinch zoom. */
+  touch-action: pan-y pinch-zoom;
+}
+.vo-player-more[hidden],
+.vo-player-break {
+  display: none;
+}
+.vo-player[data-compact='true'] .vo-player-bar {
+  min-width: 0;
+}
+.vo-player[data-compact='true'] .vo-player-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vo-player[data-compact='true'] .vo-player-tabs {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.vo-player[data-compact='true'] .vo-player-footer {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 8px;
+}
+/* Compact: the extra controls only when More is open, on a row above the rest. */
+.vo-player[data-compact='true'] .vo-player-extra {
+  display: none;
+}
+.vo-player[data-compact='true'][data-more='true'] .vo-player-extra {
+  display: revert;
+  order: -2;
+}
+.vo-player[data-compact='true'][data-more='true'] .vo-player-seek.vo-player-extra {
+  display: block;
+  flex: 1 1 100%;
+}
+.vo-player[data-compact='true'][data-more='true'] .vo-player-break {
+  display: block;
+  order: -1;
+  flex-basis: 100%;
+  height: 0;
+}
+/* The menu and the tab panels cover the course. */
+.vo-player[data-compact='true'] .vo-player-viewport > .vo-player-menu,
+.vo-player[data-compact='true'] .vo-player-viewport > .vo-player-tab-panel {
+  width: 100%;
+  inset: 0;
+  box-sizing: border-box;
+}
+@media (pointer: coarse) {
+  .vo-player-bar button,
+  .vo-player-footer button,
+  .vo-player-footer select,
+  .vo-player-lightbox-bar button,
+  .vo-player-menu-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+.vo-player-rotate {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.4);
+}
+.vo-player-rotate[hidden] {
+  display: none;
+}
+.vo-player-rotate button {
+  padding: 4px 12px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: var(--vo-fg);
+  font: inherit;
+}
+
+/* After "exit course" (P8.6), when the window could not close. */
+.vo-player-ended {
+  position: absolute;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  font-size: 18px;
+  background: var(--vo-bg);
+  color: var(--vo-fg);
+}
+
+/* Printing a slide (P8.6): the course only, none of the frame. */
+@media print {
+  .vo-player-bar,
+  .vo-player-footer,
+  .vo-player-menu,
+  .vo-player-tab-panel,
+  .vo-player-a11y,
+  .vo-player-lightbox-bar,
+  .vo-player-rotate,
+  .vo-player-unblock {
+    display: none !important;
+  }
+  .vo-player {
+    background: #fff;
+  }
+}
+
+/* The Phase 8 review's looks fixes. */
+/* Bar buttons keep their words: the tab row scrolls sideways instead (P8.5). */
+.vo-player-bar button {
+  flex: none;
+  white-space: nowrap;
+}
+/* The speed menu as a frame control, in either scheme. */
+.vo-player-footer select {
+  padding: 3px 6px;
+  border: 1px solid var(--vo-border);
+  border-radius: 4px;
+  background: var(--vo-control);
+  color: var(--vo-fg);
+  font: inherit;
+}
+/* In light, a line between the frame and a white slide. */
+.vo-player[data-scheme='light'] .vo-player-bar {
+  border-bottom: 1px solid #d2d8de;
+}
+.vo-player[data-scheme='light'] .vo-player-footer {
+  border-top: 1px solid #d2d8de;
+}
+@media (prefers-color-scheme: light) {
+  .vo-player[data-scheme='auto'] .vo-player-bar {
+    border-bottom: 1px solid #d2d8de;
+  }
+  .vo-player[data-scheme='auto'] .vo-player-footer {
+    border-top: 1px solid #d2d8de;
+  }
+}
+
+/*
+ * The text view (P10.1, part C; WCAG 1.4.4, 1.4.10, 1.4.12): the slide's text
+ * beside the slide, or below it when the player is narrow, at the learner's
+ * size. It wraps at any width, and leaves line and letter spacing to the
+ * learner's own style sheet.
+ */
+.vo-player-text-view {
+  flex: none;
+  box-sizing: border-box;
+  max-height: 40%;
+  overflow: auto;
+  padding: 12px 16px;
+  background: var(--vo-sheet-bg);
+  color: var(--vo-sheet-fg);
+  font-size: calc(16px * var(--vo-text-scale, 1));
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.vo-player-text-view[hidden] {
+  display: none;
+}
+.vo-player-text-view:focus-visible {
+  outline: 2px solid var(--vo-link);
+  outline-offset: -2px;
+}
+.vo-player-text-view h2 {
+  margin: 0 0 0.5em;
+  font-size: 1.25em;
+}
+.vo-player-text-view p,
+.vo-player-text-view ul,
+.vo-player-text-view ol,
+.vo-player-text-view table {
+  margin: 0 0 0.75em;
+}
+.vo-player-text-view table {
+  border-collapse: collapse;
+}
+.vo-player-text-view th,
+.vo-player-text-view td {
+  padding: 0.25em 0.5em;
+  border: 1px solid var(--vo-border);
+  text-align: start;
+}
+/* Beside the slide, when there is room: the course and the text side by side. */
+.vo-player[data-text-view='on']:not([data-compact='true']) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 34%);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'bar bar'
+    'viewport text'
+    'footer footer';
+}
+.vo-player[data-text-view='on'][data-controls='top']:not([data-compact='true']) {
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    'bar bar'
+    'footer footer'
+    'viewport text';
+}
+.vo-player[data-text-view='on']:not([data-compact='true']) > .vo-player-bar {
+  grid-area: bar;
+}
+.vo-player[data-text-view='on']:not([data-compact='true']) > .vo-player-viewport {
+  grid-area: viewport;
+}
+.vo-player[data-text-view='on']:not([data-compact='true']) > .vo-player-text-view {
+  grid-area: text;
+  max-height: none;
+}
+.vo-player[data-text-view='on']:not([data-compact='true']) > .vo-player-footer {
+  grid-area: footer;
+}

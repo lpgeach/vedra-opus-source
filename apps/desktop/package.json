@@ -1,0 +1,53 @@
+{
+  "name": "vedraopus-desktop",
+  "productName": "Vedra Opus",
+  "description": "Desktop eLearning authoring tool",
+  "author": "Vedra Opus contributors",
+  "homepage": "https://github.com/lpgeach/vedra-opus-source",
+  "version": "0.1.0-alpha.4",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "npm run build --workspace=@vedraopus/player && electron-vite build && node scripts/copy-player.mjs",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "package": "npm run build && electron-builder --config electron-builder.yml",
+    "package:dir": "npm run build && electron-builder --config electron-builder.yml --dir"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/yauzl": "^3.4.0",
+    "@types/yazl": "^3.3.1",
+    "@vedraopus/engine": "^0.1.0",
+    "@vedraopus/model": "^0.1.0",
+    "@vedraopus/publish": "^0.1.0",
+    "@vedraopus/render": "^0.1.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "45.3.2",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "fast-check": "^4.10.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "vite": "^8.3.8",
+    "yauzl": "^3.4.0",
+    "yazl": "^3.3.1",
+    "zod": "^4.6.7"
+  },
+  "dependencies": {
+    "@tiptap/extension-color": "^2.27.3",
+    "@tiptap/extension-font-family": "^2.27.3",
+    "@tiptap/extension-link": "^2.27.3",
+    "@tiptap/extension-text-align": "^2.27.3",
+    "@tiptap/extension-text-style": "^2.27.3",
+    "@tiptap/extension-underline": "^2.27.3",
+    "@tiptap/pm": "^2.27.3",
+    "@tiptap/react": "^2.27.3",
+    "@tiptap/starter-kit": "^2.27.3",
+    "electron-updater": "6.8.11"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "formatVersion": 0,
+  "id": "project_legacy_v0",
+  "title": "Legacy v0",
+  "theme": {
+    "colors": {
+      "background": "#ffffff",
+      "text": "#1c2024",
+      "accent1": "#2f6fed",
+      "accent2": "#12a594",
+      "accent3": "#f5a524",
+      "accent4": "#e5484d",
+      "accent5": "#8e4ec6",
+      "accent6": "#60656c"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Scene 1",
+      "slides": [
+        {
+          "id": "slide_1",
+          "title": "Untitled Slide",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_1_base",
+            "name": "Base Layer",
+            "objects": [],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto"
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto"
+          },
+          "triggers": []
+        }
+      ]
+    }
+  ],
+  "masters": [],
+  "variables": [],
+  "assets": {},
+  "slideWidth": 960,
+  "slideHeight": 540
+}

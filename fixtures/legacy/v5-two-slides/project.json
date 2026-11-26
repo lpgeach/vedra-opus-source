@@ -1,0 +1,633 @@
+{
+  "formatVersion": 5,
+  "id": "project_two_slides",
+  "title": "Two Slides",
+  "stage": {
+    "width": 1280,
+    "height": 720
+  },
+  "theme": {
+    "colors": {
+      "background": "#ffffff",
+      "text": "#1c2024",
+      "accent1": "#2f6fed",
+      "accent2": "#12a594",
+      "accent3": "#f5a524",
+      "accent4": "#e5484d",
+      "accent5": "#8e4ec6",
+      "accent6": "#60656c"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene_main",
+      "title": "Main",
+      "slides": [
+        {
+          "id": "slide_welcome",
+          "title": "Welcome",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_welcome_base",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_title",
+                "name": "Title",
+                "frame": {
+                  "x": 80,
+                  "y": 60,
+                  "width": 1120,
+                  "height": 90,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Welcome to the course"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_panel",
+                "name": "Panel",
+                "frame": {
+                  "x": 80,
+                  "y": 180,
+                  "width": 520,
+                  "height": 360,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0.5,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "shape",
+                "props": {
+                  "geometry": {
+                    "kind": "roundRect",
+                    "radius": 16
+                  },
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": {
+                      "color": "#1c2024",
+                      "width": 2,
+                      "dash": "solid"
+                    },
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Shapes can hold text"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "obj_picture",
+                "name": "Blue square",
+                "frame": {
+                  "x": 680,
+                  "y": 180,
+                  "width": 360,
+                  "height": 360,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 1,
+                  "duration": 3
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "A plain blue square",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "image",
+                "props": {
+                  "asset": "2f30a27fe5645d478daabfde4338553c7dec6c45dcd205d7c8b38ce06b56c815",
+                  "crop": null,
+                  "opacity": 1
+                }
+              },
+              {
+                "id": "obj_next",
+                "name": "Continue button",
+                "frame": {
+                  "x": 1040,
+                  "y": 600,
+                  "width": 160,
+                  "height": 56,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "hover",
+                    "name": "Hover",
+                    "overrides": {
+                      "appearance": {
+                        "fill": {
+                          "kind": "solid",
+                          "color": {
+                            "theme": "accent2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 8,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Continue"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto"
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            }
+          },
+          "triggers": [
+            {
+              "id": "trigger_count",
+              "owner": {
+                "kind": "object",
+                "id": "obj_next"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_next"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_clicks",
+                "operator": "add",
+                "operand": {
+                  "kind": "literal",
+                  "value": 1
+                }
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_next",
+              "owner": {
+                "kind": "object",
+                "id": "obj_next"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_next"
+              },
+              "action": {
+                "type": "jumpToSlide",
+                "target": {
+                  "kind": "slide",
+                  "slide": "slide_end"
+                }
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            }
+          ]
+        },
+        {
+          "id": "slide_end",
+          "title": "The End",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_end_base",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_end_title",
+                "name": "Title",
+                "frame": {
+                  "x": 80,
+                  "y": 60,
+                  "width": 1120,
+                  "height": 90,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "You clicked Continue %Clicks% time(s)"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_badge",
+                "name": "Badge",
+                "frame": {
+                  "x": 80,
+                  "y": 240,
+                  "width": 460,
+                  "height": 120,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "type": "group",
+                "children": [
+                  {
+                    "id": "obj_dot",
+                    "name": "Dot",
+                    "frame": {
+                      "x": 80,
+                      "y": 240,
+                      "width": 120,
+                      "height": 120,
+                      "rotation": 0
+                    },
+                    "timing": {
+                      "start": 0,
+                      "duration": "untilEnd"
+                    },
+                    "locked": false,
+                    "hiddenInEditor": false,
+                    "initialState": "normal",
+                    "states": [
+                      {
+                        "id": "normal",
+                        "name": "Normal",
+                        "overrides": {}
+                      }
+                    ],
+                    "a11y": {
+                      "altText": "",
+                      "visibleToAssistiveTech": true
+                    },
+                    "buttonSet": null,
+                    "type": "shape",
+                    "props": {
+                      "geometry": {
+                        "kind": "ellipse"
+                      },
+                      "appearance": {
+                        "fill": {
+                          "kind": "solid",
+                          "color": "#f5a524"
+                        },
+                        "stroke": null,
+                        "shadow": null,
+                        "opacity": 1
+                      },
+                      "text": null
+                    }
+                  },
+                  {
+                    "id": "obj_bar",
+                    "name": "Bar",
+                    "frame": {
+                      "x": 240,
+                      "y": 280,
+                      "width": 300,
+                      "height": 40,
+                      "rotation": 0
+                    },
+                    "timing": {
+                      "start": 0,
+                      "duration": "untilEnd"
+                    },
+                    "locked": false,
+                    "hiddenInEditor": false,
+                    "initialState": "normal",
+                    "states": [
+                      {
+                        "id": "normal",
+                        "name": "Normal",
+                        "overrides": {}
+                      }
+                    ],
+                    "a11y": {
+                      "altText": "",
+                      "visibleToAssistiveTech": true
+                    },
+                    "buttonSet": null,
+                    "type": "shape",
+                    "props": {
+                      "geometry": {
+                        "kind": "rect"
+                      },
+                      "appearance": {
+                        "fill": {
+                          "kind": "gradient",
+                          "angle": 90,
+                          "stops": [
+                            {
+                              "offset": 0,
+                              "color": "#2f6fed"
+                            },
+                            {
+                              "offset": 1,
+                              "color": "#12a594"
+                            }
+                          ]
+                        },
+                        "stroke": null,
+                        "shadow": null,
+                        "opacity": 1
+                      },
+                      "text": null
+                    }
+                  }
+                ]
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto"
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            }
+          },
+          "triggers": [
+            {
+              "id": "trigger_back",
+              "owner": {
+                "kind": "slide",
+                "id": "slide_end"
+              },
+              "event": {
+                "type": "keyPress",
+                "key": "Backspace"
+              },
+              "action": {
+                "type": "jumpToSlide",
+                "target": {
+                  "kind": "previous"
+                }
+              },
+              "conditions": {
+                "combine": "and",
+                "items": [
+                  {
+                    "subject": "variable",
+                    "variable": "var_clicks",
+                    "operator": "<",
+                    "value": {
+                      "kind": "literal",
+                      "value": 3
+                    }
+                  }
+                ]
+              },
+              "otherwise": null,
+              "enabled": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "masters": [],
+  "variables": [
+    {
+      "id": "var_clicks",
+      "name": "Clicks",
+      "type": "number",
+      "default": 0
+    }
+  ],
+  "assets": {
+    "2f30a27fe5645d478daabfde4338553c7dec6c45dcd205d7c8b38ce06b56c815": {
+      "kind": "image",
+      "fileName": "blue-square.png",
+      "ext": "png",
+      "mimeType": "image/png",
+      "byteLength": 136,
+      "width": 64,
+      "height": 64
+    }
+  },
+  "tracking": {
+    "completion": {
+      "kind": "slidesViewed",
+      "count": null
+    },
+    "reporting": "completed-incomplete",
+    "resume": "prompt"
+  },
+  "publish": {
+    "target": "web",
+    "scorm2004Edition": 4,
+    "title": "",
+    "identifier": "",
+    "version": "1.0",
+    "description": "",
+    "zip": false
+  }
+}

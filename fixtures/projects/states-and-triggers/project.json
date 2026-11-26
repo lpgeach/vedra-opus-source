@@ -1,0 +1,2299 @@
+{
+  "formatVersion": 40,
+  "id": "project_states_and_triggers",
+  "title": "States and Triggers",
+  "stage": {
+    "width": 1280,
+    "height": 720
+  },
+  "theme": {
+    "colors": {
+      "background": "#ffffff",
+      "text": "#1c2024",
+      "accent1": "#2f6fed",
+      "accent2": "#12a594",
+      "accent3": "#f5a524",
+      "accent4": "#e5484d",
+      "accent5": "#8e4ec6",
+      "accent6": "#60656c"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene_fixture_main0",
+      "title": "Main",
+      "slides": [
+        {
+          "id": "slide_fixture_tabs00",
+          "title": "Tabs",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_fixture_base0",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_fixture000000002",
+                "name": "Title",
+                "frame": {
+                  "x": 80,
+                  "y": 40,
+                  "width": 600,
+                  "height": 60,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Explore each tab"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_fixture000000004",
+                "name": "Tab A",
+                "frame": {
+                  "x": 80,
+                  "y": 120,
+                  "width": 180,
+                  "height": 50,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "selected",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {
+                      "appearance": {
+                        "fill": {
+                          "kind": "solid",
+                          "color": {
+                            "theme": "accent2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "tabs",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Tab A"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "obj_fixture000000005",
+                "name": "Tab B",
+                "frame": {
+                  "x": 280,
+                  "y": 120,
+                  "width": 180,
+                  "height": 50,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {
+                      "appearance": {
+                        "fill": {
+                          "kind": "solid",
+                          "color": {
+                            "theme": "accent2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "tabs",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Tab B"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "obj_fixture000000006",
+                "name": "Tab C",
+                "frame": {
+                  "x": 480,
+                  "y": 120,
+                  "width": 180,
+                  "height": 50,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  },
+                  {
+                    "id": "selected",
+                    "name": "Selected",
+                    "overrides": {
+                      "appearance": {
+                        "fill": {
+                          "kind": "solid",
+                          "color": {
+                            "theme": "accent2"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": "tabs",
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Tab C"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "obj_fixture000000003",
+                "name": "Viewed text",
+                "frame": {
+                  "x": 80,
+                  "y": 600,
+                  "width": 400,
+                  "height": 50,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Viewed %Viewed% of 3"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_fixture000000007",
+                "name": "Continue",
+                "frame": {
+                  "x": 1040,
+                  "y": 600,
+                  "width": 160,
+                  "height": 50,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Continue"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "layers": [
+            {
+              "id": "layer_fixture000000008",
+              "name": "Panel A",
+              "objects": [
+                {
+                  "id": "obj_fixture000000009",
+                  "name": "Content A",
+                  "frame": {
+                    "x": 80,
+                    "y": 200,
+                    "width": 800,
+                    "height": 300,
+                    "rotation": 0
+                  },
+                  "timing": {
+                    "start": 0,
+                    "duration": "untilEnd"
+                  },
+                  "locked": false,
+                  "hiddenInEditor": false,
+                  "initialState": "normal",
+                  "states": [
+                    {
+                      "id": "normal",
+                      "name": "Normal",
+                      "overrides": {}
+                    }
+                  ],
+                  "a11y": {
+                    "altText": "",
+                    "visibleToAssistiveTech": true
+                  },
+                  "buttonSet": null,
+                  "animations": {
+                    "entrance": null,
+                    "exit": null,
+                    "motionPaths": []
+                  },
+                  "drag": null,
+                  "type": "text",
+                  "props": {
+                    "text": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Content of tab A"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "autofit": "none",
+                    "padding": 8,
+                    "placeholder": null
+                  }
+                }
+              ],
+              "timeline": {
+                "duration": 5,
+                "cuePoints": []
+              },
+              "properties": {
+                "hideOtherLayers": true,
+                "hideBaseObjects": false,
+                "pauseBaseTimeline": false,
+                "blockBaseClicks": false,
+                "allowSeek": true,
+                "onRevisit": "auto",
+                "transition": null
+              }
+            },
+            {
+              "id": "layer_fixture000000010",
+              "name": "Panel B",
+              "objects": [
+                {
+                  "id": "obj_fixture000000011",
+                  "name": "Content B",
+                  "frame": {
+                    "x": 80,
+                    "y": 200,
+                    "width": 800,
+                    "height": 300,
+                    "rotation": 0
+                  },
+                  "timing": {
+                    "start": 0,
+                    "duration": "untilEnd"
+                  },
+                  "locked": false,
+                  "hiddenInEditor": false,
+                  "initialState": "normal",
+                  "states": [
+                    {
+                      "id": "normal",
+                      "name": "Normal",
+                      "overrides": {}
+                    }
+                  ],
+                  "a11y": {
+                    "altText": "",
+                    "visibleToAssistiveTech": true
+                  },
+                  "buttonSet": null,
+                  "animations": {
+                    "entrance": null,
+                    "exit": null,
+                    "motionPaths": []
+                  },
+                  "drag": null,
+                  "type": "text",
+                  "props": {
+                    "text": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Content of tab B"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "autofit": "none",
+                    "padding": 8,
+                    "placeholder": null
+                  }
+                }
+              ],
+              "timeline": {
+                "duration": 5,
+                "cuePoints": []
+              },
+              "properties": {
+                "hideOtherLayers": true,
+                "hideBaseObjects": false,
+                "pauseBaseTimeline": false,
+                "blockBaseClicks": false,
+                "allowSeek": true,
+                "onRevisit": "auto",
+                "transition": null
+              }
+            },
+            {
+              "id": "layer_fixture000000012",
+              "name": "Panel C",
+              "objects": [
+                {
+                  "id": "obj_fixture000000013",
+                  "name": "Content C",
+                  "frame": {
+                    "x": 80,
+                    "y": 200,
+                    "width": 800,
+                    "height": 300,
+                    "rotation": 0
+                  },
+                  "timing": {
+                    "start": 0,
+                    "duration": "untilEnd"
+                  },
+                  "locked": false,
+                  "hiddenInEditor": false,
+                  "initialState": "normal",
+                  "states": [
+                    {
+                      "id": "normal",
+                      "name": "Normal",
+                      "overrides": {}
+                    }
+                  ],
+                  "a11y": {
+                    "altText": "",
+                    "visibleToAssistiveTech": true
+                  },
+                  "buttonSet": null,
+                  "animations": {
+                    "entrance": null,
+                    "exit": null,
+                    "motionPaths": []
+                  },
+                  "drag": null,
+                  "type": "text",
+                  "props": {
+                    "text": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Content of tab C"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "autofit": "none",
+                    "padding": 8,
+                    "placeholder": null
+                  }
+                }
+              ],
+              "timeline": {
+                "duration": 5,
+                "cuePoints": []
+              },
+              "properties": {
+                "hideOtherLayers": true,
+                "hideBaseObjects": false,
+                "pauseBaseTimeline": false,
+                "blockBaseClicks": false,
+                "allowSeek": true,
+                "onRevisit": "auto",
+                "transition": null
+              }
+            },
+            {
+              "id": "layer_fixture000000014",
+              "name": "Hint",
+              "objects": [
+                {
+                  "id": "obj_fixture000000015",
+                  "name": "Hint text",
+                  "frame": {
+                    "x": 700,
+                    "y": 520,
+                    "width": 500,
+                    "height": 60,
+                    "rotation": 0
+                  },
+                  "timing": {
+                    "start": 0,
+                    "duration": "untilEnd"
+                  },
+                  "locked": false,
+                  "hiddenInEditor": false,
+                  "initialState": "normal",
+                  "states": [
+                    {
+                      "id": "normal",
+                      "name": "Normal",
+                      "overrides": {}
+                    }
+                  ],
+                  "a11y": {
+                    "altText": "",
+                    "visibleToAssistiveTech": true
+                  },
+                  "buttonSet": null,
+                  "animations": {
+                    "entrance": null,
+                    "exit": null,
+                    "motionPaths": []
+                  },
+                  "drag": null,
+                  "type": "text",
+                  "props": {
+                    "text": {
+                      "type": "doc",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Look at every tab first"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "autofit": "none",
+                    "padding": 8,
+                    "placeholder": null
+                  }
+                }
+              ],
+              "timeline": {
+                "duration": 5,
+                "cuePoints": []
+              },
+              "properties": {
+                "hideOtherLayers": false,
+                "hideBaseObjects": false,
+                "pauseBaseTimeline": false,
+                "blockBaseClicks": false,
+                "allowSeek": true,
+                "onRevisit": "auto",
+                "transition": null
+              }
+            }
+          ],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            },
+            "transition": null,
+            "focusOrder": null
+          },
+          "triggers": [
+            {
+              "id": "trigger_fixture000000020",
+              "owner": {
+                "kind": "slide",
+                "id": "slide_fixture_tabs00"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture_base0"
+              },
+              "action": {
+                "type": "showLayer",
+                "layer": "layer_fixture000000008"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000021",
+              "owner": {
+                "kind": "object",
+                "id": "obj_fixture000000004"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_fixture000000004"
+              },
+              "action": {
+                "type": "showLayer",
+                "layer": "layer_fixture000000008"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000022",
+              "owner": {
+                "kind": "object",
+                "id": "obj_fixture000000005"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_fixture000000005"
+              },
+              "action": {
+                "type": "showLayer",
+                "layer": "layer_fixture000000010"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000023",
+              "owner": {
+                "kind": "object",
+                "id": "obj_fixture000000006"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_fixture000000006"
+              },
+              "action": {
+                "type": "showLayer",
+                "layer": "layer_fixture000000012"
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000024",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000008"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000008"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000016",
+                "operator": "add",
+                "operand": {
+                  "kind": "literal",
+                  "value": 1
+                }
+              },
+              "conditions": {
+                "combine": "and",
+                "items": [
+                  {
+                    "subject": "variable",
+                    "variable": "var_fixture000000017",
+                    "operator": "==",
+                    "value": {
+                      "kind": "literal",
+                      "value": false
+                    }
+                  }
+                ]
+              },
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000025",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000008"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000008"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000017",
+                "operator": "assign",
+                "operand": {
+                  "kind": "literal",
+                  "value": true
+                }
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000026",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000010"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000010"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000016",
+                "operator": "add",
+                "operand": {
+                  "kind": "literal",
+                  "value": 1
+                }
+              },
+              "conditions": {
+                "combine": "and",
+                "items": [
+                  {
+                    "subject": "variable",
+                    "variable": "var_fixture000000018",
+                    "operator": "==",
+                    "value": {
+                      "kind": "literal",
+                      "value": false
+                    }
+                  }
+                ]
+              },
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000027",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000010"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000010"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000018",
+                "operator": "assign",
+                "operand": {
+                  "kind": "literal",
+                  "value": true
+                }
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000028",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000012"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000012"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000016",
+                "operator": "add",
+                "operand": {
+                  "kind": "literal",
+                  "value": 1
+                }
+              },
+              "conditions": {
+                "combine": "and",
+                "items": [
+                  {
+                    "subject": "variable",
+                    "variable": "var_fixture000000019",
+                    "operator": "==",
+                    "value": {
+                      "kind": "literal",
+                      "value": false
+                    }
+                  }
+                ]
+              },
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000029",
+              "owner": {
+                "kind": "layer",
+                "id": "layer_fixture000000012"
+              },
+              "event": {
+                "type": "timelineStart",
+                "layer": "layer_fixture000000012"
+              },
+              "action": {
+                "type": "setVariable",
+                "variable": "var_fixture000000019",
+                "operator": "assign",
+                "operand": {
+                  "kind": "literal",
+                  "value": true
+                }
+              },
+              "conditions": null,
+              "otherwise": null,
+              "enabled": true
+            },
+            {
+              "id": "trigger_fixture000000030",
+              "owner": {
+                "kind": "object",
+                "id": "obj_fixture000000007"
+              },
+              "event": {
+                "type": "click",
+                "object": "obj_fixture000000007"
+              },
+              "action": {
+                "type": "jumpToSlide",
+                "target": {
+                  "kind": "next"
+                }
+              },
+              "conditions": {
+                "combine": "and",
+                "items": [
+                  {
+                    "subject": "variable",
+                    "variable": "var_fixture000000016",
+                    "operator": ">=",
+                    "value": {
+                      "kind": "literal",
+                      "value": 3
+                    }
+                  }
+                ]
+              },
+              "otherwise": {
+                "type": "showLayer",
+                "layer": "layer_fixture000000014"
+              },
+              "enabled": true
+            }
+          ],
+          "question": null,
+          "draw": null,
+          "result": null
+        },
+        {
+          "id": "slide_fixture_done00",
+          "title": "Done",
+          "layoutId": null,
+          "baseLayer": {
+            "id": "layer_fixture_done0",
+            "name": "Base Layer",
+            "objects": [
+              {
+                "id": "obj_fixture000000001",
+                "name": "Well done",
+                "frame": {
+                  "x": 80,
+                  "y": 80,
+                  "width": 600,
+                  "height": 60,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Well done"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "layers": [],
+          "notes": {
+            "type": "doc",
+            "content": []
+          },
+          "properties": {
+            "advance": "user",
+            "onRevisit": "auto",
+            "controls": {
+              "previous": true,
+              "next": true
+            },
+            "transition": null,
+            "focusOrder": null
+          },
+          "triggers": [],
+          "question": null,
+          "draw": null,
+          "result": null
+        }
+      ]
+    }
+  ],
+  "banks": [],
+  "masters": [
+    {
+      "id": "master_e3q0n9bmcuneuzvr",
+      "name": "Feedback",
+      "kind": "feedback",
+      "layer": {
+        "id": "layer_h4j0zp5kchhxssmu",
+        "name": "Feedback Layer",
+        "objects": [],
+        "timeline": {
+          "duration": 5,
+          "cuePoints": []
+        },
+        "properties": {
+          "hideOtherLayers": true,
+          "hideBaseObjects": false,
+          "pauseBaseTimeline": false,
+          "blockBaseClicks": false,
+          "allowSeek": true,
+          "onRevisit": "auto",
+          "transition": null
+        }
+      },
+      "layouts": [
+        {
+          "id": "layout_iedoegvakot29mty",
+          "name": "Correct",
+          "layer": {
+            "id": "layer_z30g0dtcu6e2y32c",
+            "name": "Correct",
+            "objects": [
+              {
+                "id": "obj_20lbamonf4kmyt58",
+                "name": "Panel",
+                "frame": {
+                  "x": 64,
+                  "y": 446,
+                  "width": 1152,
+                  "height": 210,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "shape",
+                "props": {
+                  "geometry": {
+                    "kind": "roundRect",
+                    "radius": 12
+                  },
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "background"
+                      }
+                    },
+                    "stroke": {
+                      "color": {
+                        "theme": "accent3"
+                      },
+                      "width": 4,
+                      "dash": "solid"
+                    },
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "text": null
+                }
+              },
+              {
+                "id": "obj_1so4clu4hrf36dcm",
+                "name": "Heading",
+                "frame": {
+                  "x": 88,
+                  "y": 462,
+                  "width": 1104,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Correct"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_1f1xc1heb3gfod95",
+                "name": "Message",
+                "frame": {
+                  "x": 88,
+                  "y": 514,
+                  "width": 904,
+                  "height": 118,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": []
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "content"
+                }
+              },
+              {
+                "id": "obj_7jrferde4z8k5rdk",
+                "name": "Continue",
+                "frame": {
+                  "x": 1032,
+                  "y": 584,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Continue"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "role": "correct"
+        },
+        {
+          "id": "layout_ug4femcfdilox6c3",
+          "name": "Incorrect",
+          "layer": {
+            "id": "layer_9au3765y6hbngd6k",
+            "name": "Incorrect",
+            "objects": [
+              {
+                "id": "obj_eee106roqllwwvc2",
+                "name": "Panel",
+                "frame": {
+                  "x": 64,
+                  "y": 446,
+                  "width": 1152,
+                  "height": 210,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "shape",
+                "props": {
+                  "geometry": {
+                    "kind": "roundRect",
+                    "radius": 12
+                  },
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "background"
+                      }
+                    },
+                    "stroke": {
+                      "color": {
+                        "theme": "accent2"
+                      },
+                      "width": 4,
+                      "dash": "solid"
+                    },
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "text": null
+                }
+              },
+              {
+                "id": "obj_oi3k66kf9v5c7nad",
+                "name": "Heading",
+                "frame": {
+                  "x": 88,
+                  "y": 462,
+                  "width": 1104,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Incorrect"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_gl8tc38jrrrps3ms",
+                "name": "Message",
+                "frame": {
+                  "x": 88,
+                  "y": 514,
+                  "width": 904,
+                  "height": 118,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": []
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "content"
+                }
+              },
+              {
+                "id": "obj_0439dvkgcyyxuk5i",
+                "name": "Continue",
+                "frame": {
+                  "x": 1032,
+                  "y": 584,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Continue"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "role": "incorrect"
+        },
+        {
+          "id": "layout_lu063py4rlh4jncy",
+          "name": "Try Again",
+          "layer": {
+            "id": "layer_7a3epsb0ykd0jg7r",
+            "name": "Try Again",
+            "objects": [
+              {
+                "id": "obj_av3zzenjz6oikw2u",
+                "name": "Panel",
+                "frame": {
+                  "x": 64,
+                  "y": 446,
+                  "width": 1152,
+                  "height": 210,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "shape",
+                "props": {
+                  "geometry": {
+                    "kind": "roundRect",
+                    "radius": 12
+                  },
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "background"
+                      }
+                    },
+                    "stroke": {
+                      "color": {
+                        "theme": "accent4"
+                      },
+                      "width": 4,
+                      "dash": "solid"
+                    },
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "text": null
+                }
+              },
+              {
+                "id": "obj_o1g58o4jvnyayu1v",
+                "name": "Heading",
+                "frame": {
+                  "x": 88,
+                  "y": 462,
+                  "width": 1104,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Not quite"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_bblkg6c1agrl28qo",
+                "name": "Message",
+                "frame": {
+                  "x": 88,
+                  "y": 514,
+                  "width": 904,
+                  "height": 118,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": []
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "content"
+                }
+              },
+              {
+                "id": "obj_9jj5ruzlxlm6xvk8",
+                "name": "Try Again",
+                "frame": {
+                  "x": 1032,
+                  "y": 584,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Try Again"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "role": "tryAgain"
+        },
+        {
+          "id": "layout_wuc7pmih1d6qfki8",
+          "name": "Thank You",
+          "layer": {
+            "id": "layer_vqkns29s1th6gzuu",
+            "name": "Thank You",
+            "objects": [
+              {
+                "id": "obj_iyscpxsrf11rmwax",
+                "name": "Panel",
+                "frame": {
+                  "x": 64,
+                  "y": 446,
+                  "width": 1152,
+                  "height": 210,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "shape",
+                "props": {
+                  "geometry": {
+                    "kind": "roundRect",
+                    "radius": 12
+                  },
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "background"
+                      }
+                    },
+                    "stroke": {
+                      "color": {
+                        "theme": "accent1"
+                      },
+                      "width": 4,
+                      "dash": "solid"
+                    },
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "text": null
+                }
+              },
+              {
+                "id": "obj_8c51k7ulikgyjkua",
+                "name": "Heading",
+                "frame": {
+                  "x": 88,
+                  "y": 462,
+                  "width": 1104,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Thank you"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": null
+                }
+              },
+              {
+                "id": "obj_n56rbwqrna8ip6co",
+                "name": "Message",
+                "frame": {
+                  "x": 88,
+                  "y": 514,
+                  "width": 904,
+                  "height": 118,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "text",
+                "props": {
+                  "text": {
+                    "type": "doc",
+                    "content": []
+                  },
+                  "autofit": "none",
+                  "padding": 8,
+                  "placeholder": "content"
+                }
+              },
+              {
+                "id": "obj_1x70c1k65ur3e1tv",
+                "name": "Continue",
+                "frame": {
+                  "x": 1032,
+                  "y": 584,
+                  "width": 160,
+                  "height": 48,
+                  "rotation": 0
+                },
+                "timing": {
+                  "start": 0,
+                  "duration": "untilEnd"
+                },
+                "locked": false,
+                "hiddenInEditor": false,
+                "initialState": "normal",
+                "states": [
+                  {
+                    "id": "normal",
+                    "name": "Normal",
+                    "overrides": {}
+                  }
+                ],
+                "a11y": {
+                  "altText": "",
+                  "visibleToAssistiveTech": true
+                },
+                "buttonSet": null,
+                "animations": {
+                  "entrance": null,
+                  "exit": null,
+                  "motionPaths": []
+                },
+                "drag": null,
+                "type": "button",
+                "props": {
+                  "appearance": {
+                    "fill": {
+                      "kind": "solid",
+                      "color": {
+                        "theme": "accent1"
+                      }
+                    },
+                    "stroke": null,
+                    "shadow": null,
+                    "opacity": 1
+                  },
+                  "cornerRadius": 6,
+                  "text": {
+                    "type": "doc",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Continue"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "timeline": {
+              "duration": 5,
+              "cuePoints": []
+            },
+            "properties": {
+              "hideOtherLayers": true,
+              "hideBaseObjects": false,
+              "pauseBaseTimeline": false,
+              "blockBaseClicks": false,
+              "allowSeek": true,
+              "onRevisit": "auto",
+              "transition": null
+            }
+          },
+          "role": "answered"
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "id": "var_fixture000000016",
+      "name": "Viewed",
+      "type": "number",
+      "default": 0
+    },
+    {
+      "id": "var_fixture000000017",
+      "name": "SeenA",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "var_fixture000000018",
+      "name": "SeenB",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "var_fixture000000019",
+      "name": "SeenC",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "assets": {},
+  "tracking": {
+    "completion": {
+      "kind": "slidesViewed",
+      "count": null
+    },
+    "reporting": "completed-incomplete",
+    "resume": "prompt"
+  },
+  "player": {
+    "title": true,
+    "logo": null,
+    "menu": {
+      "show": true,
+      "navigation": "free",
+      "entries": {}
+    },
+    "controls": {
+      "seekbar": "view",
+      "submit": false,
+      "volume": true,
+      "captions": true,
+      "speed": true,
+      "fullscreen": true,
+      "accessibility": true
+    },
+    "tabs": {
+      "resources": {
+        "show": true,
+        "items": []
+      },
+      "glossary": {
+        "show": true,
+        "terms": []
+      },
+      "notes": {
+        "show": true
+      },
+      "custom": []
+    },
+    "look": {
+      "scheme": "dark",
+      "accent": "#2f6fed",
+      "font": "system",
+      "controlsAt": "bottom",
+      "menuSide": "left"
+    },
+    "labels": {
+      "language": "en",
+      "words": {}
+    }
+  },
+  "publish": {
+    "target": "web",
+    "scorm2004Edition": 4,
+    "title": "",
+    "identifier": "",
+    "version": "1.0",
+    "description": "",
+    "zip": false
+  }
+}

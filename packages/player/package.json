@@ -1,0 +1,21 @@
+{
+  "name": "@vedraopus/player",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./suspend": "./src/lms/suspend.ts",
+    "./xapi-vocabulary": "./src/lms/xapi-vocabulary.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@vedraopus/engine": "^0.1.0",
+    "@vedraopus/model": "^0.1.0",
+    "@vedraopus/render": "^0.1.0"
+  }
+}
