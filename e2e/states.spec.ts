@@ -78,7 +78,10 @@ test('editing a state changes only that state, and the course shows it on hover'
         width: parseFloat(e.style.width),
         opacity: e.style.opacity || '1',
       }));
-    expect(await playedLook()).toEqual(normal);
+    // Away from the button first: under a real display the pointer stays where the last click
+    // left it, which can be over the course's button.
+    await preview.mouse.move(0, 0);
+    await expect.poll(playedLook).toEqual(normal);
     await played.hover();
     await expect.poll(playedLook).toEqual({ width: 240, opacity: '0.5' });
     await preview.close();

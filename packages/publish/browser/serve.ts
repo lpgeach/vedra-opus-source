@@ -140,7 +140,13 @@ async function serveWork(work: string, lmsPage: string) {
   return {
     base: `http://127.0.0.1:${(server.address() as { port: number }).port}/`,
     read: (path: string) => readFileSync(join(course, path), 'utf8'),
-    close: () => new Promise<void>((done) => server.close(() => done())),
+    // Drop the browser's kept-alive connections too: `close` alone waits for them to end,
+    // which a browser left open can make longer than a test's time (CI, session 117).
+    close: () =>
+      new Promise<void>((done) => {
+        server.close(() => done());
+        server.closeAllConnections();
+      }),
   };
 }
 

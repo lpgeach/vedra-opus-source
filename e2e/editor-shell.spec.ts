@@ -331,8 +331,8 @@ test('New Slide adds a slide after the current one and makes it current; undo ta
 
 test('a narrow window keeps the ribbon inside it, not scrolling the editor, and its menus open whole', async () => {
   // Found in the Phase 9 review: a click on a command past the window's edge scrolled the whole
-  // page sideways. Since B17 the ribbon folds groups into drop-downs instead of running off the
-  // side, so nothing is past the edge.
+  // page sideways. Since B17 the ribbon shows groups' small commands as icons, or folds groups,
+  // instead of running off the side, so nothing is past the edge.
   const { app, page } = await launchApp();
   try {
     await answerDialogs(app, { message: [DONT_SAVE] });
@@ -343,9 +343,8 @@ test('a narrow window keeps the ribbon inside it, not scrolling the editor, and 
     await expect
       .poll(() => commands.evaluate((row) => row.scrollWidth <= row.clientWidth))
       .toBe(true);
-    // The last group is folded; its Data Entry menu opens whole, inside the window.
-    const folded = page.getByTestId('ribbon').locator('.ribbon-group-folded').last();
-    await folded.locator('button').first().click();
+    // Its last commands are still there (as icons); the Data Entry menu opens whole, inside the
+    // window.
     await page.getByRole('button', { name: 'Data Entry', exact: true }).click();
     const menu = page.getByRole('menu', { name: 'Data Entry' });
     await expect(menu).toBeVisible();

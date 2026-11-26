@@ -656,6 +656,15 @@ button.link {
   font-size: 12px;
 }
 
+/* A tight group (B17): its small commands show only their icons, names in their tooltips. */
+.ribbon-group-tight .ribbon-button.compact > span {
+  display: none;
+}
+
+.ribbon-group-tight .ribbon-stack-select {
+  max-width: 96px;
+}
+
 /* A group folded into a drop-down when the window is too narrow for the tab (B17). */
 .ribbon-group-panel {
   display: flex;

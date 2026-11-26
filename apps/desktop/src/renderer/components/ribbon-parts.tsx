@@ -7,10 +7,14 @@ import { popupPlace, useDismiss } from './popover';
 /** Pieces every ribbon tab is built from. */
 
 /**
- * The groups folded into a drop-down because the window is too narrow for the whole tab
- * (B17): the ribbon measures itself and folds groups from the right until it fits.
+ * How each group fits the window (B17), by label: tight (its small commands show only their
+ * icons) or folded into a drop-down. The ribbon measures itself and decides (`useFolding`).
  */
-export const FoldedGroups = createContext<ReadonlySet<string>>(new Set());
+export interface GroupFit {
+  tight: ReadonlySet<string>;
+  folded: ReadonlySet<string>;
+}
+export const FoldedGroups = createContext<GroupFit>({ tight: new Set(), folded: new Set() });
 
 export function Group({
   label,
@@ -22,10 +26,12 @@ export function Group({
   icon?: IconName;
   children: ReactNode;
 }) {
-  const folded = useContext(FoldedGroups).has(label);
+  const fit = useContext(FoldedGroups);
+  const folded = fit.folded.has(label);
+  const tight = fit.tight.has(label);
   return (
     <div
-      className={`ribbon-group${folded ? ' ribbon-group-folded' : ''}`}
+      className={`ribbon-group${folded ? ' ribbon-group-folded' : ''}${tight ? ' ribbon-group-tight' : ''}`}
       role="group"
       aria-label={label}
     >
@@ -119,7 +125,13 @@ export function Command({
     <button
       className={small ? 'ribbon-button compact' : 'ribbon-button'}
       disabled={!onClick}
-      title={onClick ? title : `${label.replace('…', '')} is not available yet`}
+      // A small command keeps its name when a tight group shows only its icon.
+      aria-label={small ? label : undefined}
+      title={
+        onClick
+          ? (title ?? (small ? label : undefined))
+          : `${label.replace('…', '')} is not available yet`
+      }
       aria-pressed={pressed}
       onClick={onClick}
       onDoubleClick={onDoubleClick}

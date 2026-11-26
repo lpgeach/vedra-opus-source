@@ -313,6 +313,12 @@ export async function startMockLrs(auth: string) {
       failNext = 0;
       fetches = 0;
     },
-    close: () => new Promise<void>((done) => server.close(() => done())),
+    // Drop the browser's kept-alive connections too: `close` alone waits for them to end,
+    // which a browser left open can make longer than a test's time (CI, session 117).
+    close: () =>
+      new Promise<void>((done) => {
+        server.close(() => done());
+        server.closeAllConnections();
+      }),
   };
 }

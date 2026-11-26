@@ -44,6 +44,7 @@ import { Icon } from './icons';
 import type { IconName } from './icons';
 import { AnimationsTab } from './AnimationsTab';
 import { Command, FoldedGroups, Group, Stack } from './ribbon-parts';
+import type { GroupFit } from './ribbon-parts';
 import { addSlideLayer } from './LayersPanel';
 import { overview } from '../overview-actions';
 import { popupPlace, useDismiss } from './popover';
@@ -99,7 +100,7 @@ export function Ribbon() {
   const ribbon = useRef<HTMLDivElement>(null);
   useDismiss(ribbon, peek, () => setPeek(false));
   const showCommands = !ribbonCollapsed || peek;
-  const [attachRow, foldedLabels] = useFolding(tab);
+  const [attachRow, groupFit] = useFolding(tab);
   return (
     <div
       className={`ribbon${ribbonCollapsed ? ' ribbon-collapsed' : ''}`}
@@ -158,7 +159,7 @@ export function Ribbon() {
               event.currentTarget.scrollLeft += event.deltaY;
           }}
         >
-          <FoldedGroups.Provider value={foldedLabels}>
+          <FoldedGroups.Provider value={groupFit}>
             {tab === 'home' && <HomeTab />}
             {tab === 'insert' && <InsertTab />}
             {tab === 'slides' && <SlidesTab />}
@@ -174,21 +175,21 @@ export function Ribbon() {
 }
 
 /**
- * Keeps the ribbon inside the window (B17): when a tab's groups are wider than the ribbon,
- * they fold into drop-downs from the right until it fits, and unfold, from the left, as room
- * comes back. Measured after every render and whenever the ribbon changes size.
+ * Keeps the ribbon inside the window (B17), in two steps, as office ribbons do. When a tab's
+ * groups are wider than the ribbon, they first tighten, from the right: their small commands
+ * show only their icons (each keeps its name, as a tooltip and for screen readers). Only if the
+ * tab still does not fit do groups fold into drop-downs, again from the right. As room comes
+ * back, they unfold and loosen again from the left. Measured after every render and whenever
+ * the ribbon changes size or content.
  */
 function useFolding(tab: RibbonTab) {
   const [row, setRow] = useState<HTMLDivElement | null>(null);
-  const [folding, setFolding] = useState<{ tab: RibbonTab; labels: ReadonlySet<string> }>({
-    tab,
-    labels: NOTHING_FOLDED,
-  });
-  // Another tab starts unfolded, and is measured afresh.
-  const labels = folding.tab === tab ? folding.labels : NOTHING_FOLDED;
+  const [state, setState] = useState<{ tab: RibbonTab; fit: GroupFit }>({ tab, fit: ALL_OPEN });
+  // Another tab starts open, and is measured afresh.
+  const fit = state.tab === tab ? state.fit : ALL_OPEN;
   const [measure, remeasure] = useReducer((n: number) => n + 1, 0);
-  // Each group's width unfolded, by tab and label, to know when there is room to unfold it.
-  const natural = useRef(new Map<string, number>());
+  // Each group's width in each form it has had, to know when there is room to undo a step.
+  const widths = useRef(new Map<string, number>());
   useEffect(() => {
     if (!row) return;
     // The ribbon resized, or what is in it changed (a tab, a selection with text).
@@ -205,10 +206,14 @@ function useFolding(tab: RibbonTab) {
     if (!row) return;
     const groups = [...row.querySelectorAll<HTMLElement>(':scope > .ribbon-group')];
     const labelOf = (group: HTMLElement) => group.getAttribute('aria-label') ?? '';
-    const key = (group: HTMLElement) => `${tab}
-${labelOf(group)}`;
+    const formOf = (label: string) =>
+      fit.folded.has(label) ? 'folded' : fit.tight.has(label) ? 'tight' : 'open';
+    const key = (label: string, form: string) => `${tab}
+${label}
+${form}`;
     for (const group of groups) {
-      if (!labels.has(labelOf(group))) natural.current.set(key(group), group.offsetWidth);
+      const label = labelOf(group);
+      widths.current.set(key(label, formOf(label)), group.offsetWidth);
     }
     // What the groups take, padding included: not `scrollWidth`, which is never less than the
     // row's own width, so it cannot tell how much room is spare.
@@ -218,28 +223,41 @@ ${labelOf(group)}`;
       groups.reduce((sum, group) => sum + group.offsetWidth, 0) +
       parseFloat(style.paddingLeft) +
       parseFloat(style.paddingRight);
-    // Too wide: fold the last group still open. Room again: unfold the first folded one, if
-    // it fits at its own width.
-    let next: ReadonlySet<string> | null = null;
+    const labels = groups.map(labelOf);
+    let next: GroupFit | null = null;
     if (used > room + 1) {
-      const last = [...groups].reverse().find((group) => !labels.has(labelOf(group)));
-      if (last) next = new Set([...labels, labelOf(last)]);
+      // Too wide: tighten the last open group; when all are tight, fold the last unfolded one.
+      const open = [...labels].reverse().find((label) => formOf(label) === 'open');
+      const unfolded = [...labels].reverse().find((label) => formOf(label) !== 'folded');
+      if (open !== undefined) next = { ...fit, tight: new Set([...fit.tight, open]) };
+      else if (unfolded !== undefined)
+        next = { ...fit, folded: new Set([...fit.folded, unfolded]) };
     } else {
-      const first = groups.find((group) => labels.has(labelOf(group)));
-      const width = first && natural.current.get(key(first));
-      if (first && width !== undefined && used - first.offsetWidth + width <= room) {
-        next = new Set([...labels].filter((label) => label !== labelOf(first)));
+      // Room to spare: unfold the first folded group, else loosen the first tight one, if it
+      // fits at the width it had in that form.
+      const folded = labels.find((label) => formOf(label) === 'folded');
+      const tight = labels.find((label) => formOf(label) === 'tight');
+      const undo = folded ?? tight;
+      if (undo !== undefined) {
+        const now = groups[labels.indexOf(undo)]!.offsetWidth;
+        const then = widths.current.get(key(undo, folded !== undefined ? 'tight' : 'open'));
+        if (then !== undefined && used - now + then <= room) {
+          next =
+            folded !== undefined
+              ? { ...fit, folded: new Set([...fit.folded].filter((each) => each !== undo)) }
+              : { ...fit, tight: new Set([...fit.tight].filter((each) => each !== undo)) };
+        }
       }
     }
     if (next) {
-      const labelsNext = next;
-      setFolding(() => ({ tab, labels: labelsNext }));
+      const fitNext = next;
+      setState(() => ({ tab, fit: fitNext }));
     }
-  }, [row, tab, labels, measure]);
-  return [setRow, labels] as const;
+  }, [row, tab, fit, measure]);
+  return [setRow, fit] as const;
 }
 
-const NOTHING_FOLDED: ReadonlySet<string> = new Set();
+const ALL_OPEN: GroupFit = { tight: new Set(), folded: new Set() };
 
 /** Preview: the whole course, or this slide or scene from its menu (B17). */
 function PreviewButton() {
@@ -1365,6 +1383,8 @@ function CommandMenu({
     <div className="gallery" ref={container}>
       <button
         className={small ? 'ribbon-button compact' : 'ribbon-button'}
+        aria-label={small ? label : undefined}
+        title={small ? label : undefined}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setPlace(open ? null : popupPlace(container))}
@@ -2091,6 +2111,7 @@ function ViewTab() {
               className="ribbon-button compact"
               role="radio"
               aria-checked={view.offSlide === choice}
+              aria-label={OFF_SLIDE_BUTTONS[choice].label}
               title={OFF_SLIDE_BUTTONS[choice].title}
               onClick={() => ui.setView({ offSlide: choice })}
             >
@@ -2124,6 +2145,8 @@ function ViewTab() {
               className="ribbon-button compact"
               role="radio"
               aria-checked={theme === choice}
+              aria-label={THEME_BUTTONS[choice].label}
+              title={THEME_BUTTONS[choice].label}
               onClick={() => ui.setTheme(choice)}
             >
               <Icon name={THEME_BUTTONS[choice].icon} />

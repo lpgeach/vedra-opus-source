@@ -6,6 +6,8 @@
 
 - **Drawn from Luke's artwork**, a picture of the logo in white on black and black on white.
   - The VO mark is geometry, not a trace: the V's arms, then the right arm running on into the O, all as one band drawn in outline. Its tail is cut parallel to the right arm, a gap away from it.
+  - **One band width throughout** (Luke, 2026-11-26: the band "flows back into the V" thinner than through the O): each arm of the V is two parallel lines exactly the O's band apart (the right arm's touching the O's two circles), and the V's inner point is where the inner lines meet, so the band is the same width everywhere.
+  - **A symmetrical V** (Luke, 2026-11-26: the raised inner point "has moved to the right a bit"): the arms leaned 28° and 34°, so the inner point, on the line halfway between them, sat right of the outer one. The V's point moved right until both arms lean 30.4°; the inner point is now straight above it.
   - The words are Outfit's own outlines: "Vedra" Bold, "Opus" Regular, at the artwork's letter height, centred under the mark.
   - Outfit is narrower than the lettering in the artwork, so "Vedra" is a little narrower than the mark. Luke named the font, so the font wins.
 - **Files:** the full logo and the mark alone, each in black and in white, and the app icon (the white mark on a black square with round corners). `brand/README.md` lists them.
