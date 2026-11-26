@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * Phase 4 end to end: a course built only through the UI with every kind of
@@ -50,12 +50,12 @@ async function build(page: Page): Promise<void> {
   await page.getByTestId('panel-bottom').getByRole('tab', { name: 'Timeline' }).click();
 
   // A layer with a message on it.
-  await rightTab(page, 'Layers');
+  await rightTab(page, 'Slide Layers');
   await page.getByRole('button', { name: 'New layer' }).click();
   await ribbonTab(page, 'Insert');
   await page.getByRole('button', { name: 'Text Box', exact: true }).click();
   await typeInto(page, page.locator('.stage-slide > [data-object-type="text"]'), 'Well done');
-  await rightTab(page, 'Layers');
+  await rightTab(page, 'Slide Layers');
   await page
     .getByTestId('layer-row')
     .filter({ hasText: 'Base Layer' })
@@ -98,7 +98,7 @@ async function build(page: Page): Promise<void> {
   await ribbonTab(page, 'Home');
   await page.getByRole('button', { name: 'New Slide' }).click();
   await page.getByTestId('slide-list').locator('.slide-item').first().click();
-  await rightTab(page, 'Format');
+  await rightTab(page, 'Slide Properties');
   await page.getByTestId('slide-properties').getByLabel('Next').uncheck();
 }
 
@@ -167,9 +167,9 @@ test('a course using all of Phase 4 survives saving and plays in preview and pub
       'Show layer Layer 1 when the learner clicks Button if Score is at least 2',
     );
     await expect(page.getByTestId('triggers-panel')).toContainText('when the learner presses s');
-    await rightTab(page, 'Layers');
+    await rightTab(page, 'Slide Layers');
     await expect(page.getByTestId('layer-row').filter({ hasText: 'Layer 1' })).toHaveCount(1);
-    await rightTab(page, 'Format');
+    await rightTab(page, 'Slide Properties');
     await expect(page.getByTestId('slide-properties').getByLabel('Next')).not.toBeChecked();
     await selectRow(page, 'Button');
     await page.getByTestId('panel-bottom').getByRole('tab', { name: 'States' }).click();
@@ -179,7 +179,7 @@ test('a course using all of Phase 4 survives saving and plays in preview and pub
     await ribbonTab(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     await play(preview);
     await preview.close();

@@ -125,3 +125,10 @@ Luke chose both sets (session 71). `scripts/build-library.mjs` downloads the pin
 - **espeak-ng** (Linux): GPL-3.0-or-later. Vedra Opus does not ship it. If the system has it installed, Vedra Opus runs it as a separate program, giving it text on standard input and reading back a WAV file. Nothing of espeak-ng is linked into or distributed with Vedra Opus, so its licence asks nothing of us. The sounds it makes belong to the author.
 - **macOS `say`** and **Windows SAPI** are parts of the operating systems, used through their own command-line tools (not tested until December).
 - Cloud voices and bundled engines (such as Piper) are not used; adding one is Luke's decision (docs/briefs/P6.8-text-to-speech.md).
+
+## Outfit, the brand typeface (B18)
+
+- **What:** Outfit, © 2021 The Outfit Project Authors (github.com/Outfitio/Outfit-Fonts), **SIL Open Font License 1.1**, as the variable font from the npm package `@fontsource-variable/outfit`. The app's whole interface is set in it.
+- **How it ships:** built into the renderer like the other npm packages, so the build's third-party notices list it with its licence (above).
+- **The logos** in `brand/` have "Vedra Opus" in Outfit, turned into outlines. The licence covers the font software, not what is made with it, so the outlines need nothing more.
+- **Asks:** keep its licence with the font, and do not sell the font on its own. Its name may not be used for a changed version of the font; we use it unchanged.

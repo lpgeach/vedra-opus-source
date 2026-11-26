@@ -5,15 +5,19 @@ import type { PanelName } from '../../shared/settings';
 const STEP = 8;
 const BIG_STEP = 40;
 
+/** What a divider resizes: a panel, or the lower of the right side's two panels (B17). */
+export type SplitterName = PanelName | 'rightSplit';
+
 /** Which way along its axis each panel grows: the left panel grows as the divider moves right, and so on. */
-const GROWS: Record<PanelName, { axis: 'x' | 'y'; sign: 1 | -1; more: string; less: string }> = {
+const GROWS: Record<SplitterName, { axis: 'x' | 'y'; sign: 1 | -1; more: string; less: string }> = {
   left: { axis: 'x', sign: 1, more: 'ArrowRight', less: 'ArrowLeft' },
   right: { axis: 'x', sign: -1, more: 'ArrowLeft', less: 'ArrowRight' },
   bottom: { axis: 'y', sign: -1, more: 'ArrowUp', less: 'ArrowDown' },
+  rightSplit: { axis: 'y', sign: -1, more: 'ArrowUp', less: 'ArrowDown' },
 };
 
 interface SplitterProps {
-  panel: PanelName;
+  panel: SplitterName;
   /** What the divider resizes, for screen readers: "Resize slides panel". */
   label: string;
   size: number;

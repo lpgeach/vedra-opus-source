@@ -559,12 +559,14 @@ test('guides come from the rulers, move, snap and are dragged back to delete', a
     const guideX = Number(await vertical.getAttribute('data-guide-x'));
     expect(Math.abs(guideX - 400)).toBeLessThanOrEqual(1);
 
-    // A horizontal guide from the top ruler, at stage y = 200.
-    await page.mouse.move(area.x + area.width / 2, area.y + 10);
+    // A horizontal guide from the top ruler, at stage y = 200. The ruler is under the stage's
+    // toolbar (B17), so it is found by its own place.
+    const ruler = (await page.getByTestId('ruler-top').boundingBox())!;
+    await page.mouse.move(area.x + area.width / 2, ruler.y + ruler.height / 2);
     await page.mouse.down();
     await settleLayout(page);
     const across = await onScreen(page, { x: 300, y: 200 });
-    await page.mouse.move(area.x + area.width / 2, (area.y + 10 + across.y) / 2, { steps: 4 });
+    await page.mouse.move(area.x + area.width / 2, (ruler.y + across.y) / 2, { steps: 4 });
     await page.mouse.move(across.x, across.y, { steps: 4 });
     await page.mouse.up();
     const horizontal = page.locator('.guide-horizontal');
@@ -866,8 +868,11 @@ test('zoom changes the size on screen but not the document; Ctrl+wheel zooms abo
       (element) => element.scrollWidth - element.clientWidth,
     );
     expect(furthest).toBeGreaterThan(scrollBefore);
-    expect(await viewport.evaluate((element) => element.scrollLeft)).toBe(
+    // Scroll offsets can be fractional where the display is scaled, and are kept in single
+    // precision, so to within a hundredth of a pixel.
+    expect(await viewport.evaluate((element) => element.scrollLeft)).toBeCloseTo(
       Math.min(scrollBefore + 80, furthest),
+      2,
     );
     // Panning is not editing.
     expect(await frameOf(objects(page).first())).toEqual({ ...RECT, x: 600, y: 340 });

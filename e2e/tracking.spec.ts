@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 test('tracking settings, and a Complete the course trigger completing the course in preview', async () => {
   const { app, page } = await launchApp();
@@ -51,7 +51,7 @@ test('tracking settings, and a Complete the course trigger completing the course
     await ribbon('Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     const complete = () =>
       preview.evaluate(

@@ -61,6 +61,8 @@ import { previewAt } from '../timeline-preview';
 import { spaceKey } from '../space-key';
 import { MotionPaths } from './MotionPaths';
 import { offerTransitionPreview, playOnStage } from './transition-preview';
+import { StageToolbar, ZOOM_LEVELS } from './StageToolbar';
+import { SelectionTags } from './SelectionTags';
 import { Selection } from './Selection';
 import { leavesOf, selectionFrame, transformObjects } from './transform';
 
@@ -78,7 +80,7 @@ const SNAP_PX = 6;
  * or rounding a placed position by a pixel shortly afterwards.
  */
 const SCROLL_SLOP = 2;
-const ZOOM_STEPS = [0.1, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 8];
+const ZOOM_STEPS = ZOOM_LEVELS;
 const LINE_HANDLES: readonly Handle[] = ['w', 'e'];
 const CORNERS: readonly Handle[] = ['nw', 'ne', 'se', 'sw'];
 
@@ -997,202 +999,208 @@ export function Stage({ open, current }: { open: OpenProject; current: CurrentSl
       data-testid="stage"
       aria-label="Stage"
     >
-      {view.rulers && (
-        <Rulers stage={size} zoom={zoom} scroll={scroll} offset={offset} onStart={startGuide} />
-      )}
-      <div
-        ref={viewportRef}
-        className={`stage-viewport${panning ? ' panning' : ''}`}
-        data-testid="stage-viewport"
-        tabIndex={0}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={() => endDrag(true)}
-        onKeyDown={onKeyDown}
-        onContextMenu={onStageContextMenu}
-        onDoubleClick={onDoubleClick}
-        onScroll={(event) => {
-          // Scrolling or panning by the author moves the stage under the
-          // pointer, so a wheel zoom after it must take a fresh anchor. The
-          // browser can nudge a placed position by a pixel as the layout
-          // settles, which is not the author: allow for that much.
-          const { scrollLeft, scrollTop } = event.currentTarget;
-          setScroll({ left: scrollLeft, top: scrollTop });
-          const placed = placedScroll.current;
-          if (
-            placed === null ||
-            Math.abs(placed.left - scrollLeft) > SCROLL_SLOP ||
-            Math.abs(placed.top - scrollTop) > SCROLL_SLOP
-          ) {
-            wheelBurst.current = null;
-          }
-        }}
-        onPointerEnter={() => {
-          hovering.current = true;
-        }}
-        onPointerLeave={() => {
-          hovering.current = false;
-        }}
-      >
-        {viewport && current && (
-          <div className="stage-content" style={{ width: content.width, height: content.height }}>
-            <div
-              ref={canvasRef}
-              className="stage-canvas"
-              data-testid="stage-canvas"
-              data-zoom={zoom}
-              style={{ left: offset.x, top: offset.y, width: canvas.width, height: canvas.height }}
-            >
+      <StageToolbar
+        open={open}
+        current={current}
+        zoom={zoom}
+        fitting={zoomSetting === 'fit'}
+        onStep={zoomStep}
+        onZoom={(level) => (level === 'fit' ? editor.setZoom('fit') : zoomTo(level))}
+      />
+      {/* The stage itself, under the toolbar: rulers, and the scrolling area they measure. */}
+      <div className="stage-body">
+        {view.rulers && (
+          <Rulers stage={size} zoom={zoom} scroll={scroll} offset={offset} onStart={startGuide} />
+        )}
+        <div
+          ref={viewportRef}
+          className={`stage-viewport${panning ? ' panning' : ''}`}
+          data-testid="stage-viewport"
+          tabIndex={0}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => endDrag(true)}
+          onKeyDown={onKeyDown}
+          onContextMenu={onStageContextMenu}
+          onDoubleClick={onDoubleClick}
+          onScroll={(event) => {
+            // Scrolling or panning by the author moves the stage under the
+            // pointer, so a wheel zoom after it must take a fresh anchor. The
+            // browser can nudge a placed position by a pixel as the layout
+            // settles, which is not the author: allow for that much.
+            const { scrollLeft, scrollTop } = event.currentTarget;
+            setScroll({ left: scrollLeft, top: scrollTop });
+            const placed = placedScroll.current;
+            if (
+              placed === null ||
+              Math.abs(placed.left - scrollLeft) > SCROLL_SLOP ||
+              Math.abs(placed.top - scrollTop) > SCROLL_SLOP
+            ) {
+              wheelBurst.current = null;
+            }
+          }}
+          onPointerEnter={() => {
+            hovering.current = true;
+          }}
+          onPointerLeave={() => {
+            hovering.current = false;
+          }}
+        >
+          {viewport && current && (
+            <div className="stage-content" style={{ width: content.width, height: content.height }}>
               <div
-                ref={slideRef}
-                className="stage-slide"
+                ref={canvasRef}
+                className="stage-canvas"
+                data-testid="stage-canvas"
+                data-zoom={zoom}
                 style={{
-                  width: size.width,
-                  height: size.height,
-                  transform: `scale(${zoom})`,
-                  background: project.theme.colors.background,
+                  left: offset.x,
+                  top: offset.y,
+                  width: canvas.width,
+                  height: canvas.height,
                 }}
               >
-                {underlay.length > 0 && (
-                  <div
-                    className="stage-underlay"
-                    data-testid="stage-underlay"
-                    data-dim={beneath ? 'true' : undefined}
-                    aria-hidden="true"
-                  >
-                    {underlay.map((node, index) => toReact(node, index))}
-                  </div>
-                )}
-                {objects.map(
-                  (object) =>
-                    !object.hiddenInEditor &&
-                    (!shownAtPlayhead || shownAtPlayhead.has(object.id)) && (
-                      <ObjectView
-                        key={object.id}
-                        object={object}
-                        context={context}
-                        editingText={editingTextId === object.id}
-                        editingCell={
-                          editingTextId === object.id && object.type === 'table' && editingCell
-                            ? `${editingCell.row}:${editingCell.column}`
-                            : undefined
-                        }
-                        // Drawn in the state being edited (a choice's mark fills when selected).
-                        state={stateEdit?.objectId === object.id ? stateEdit.stateId : 'normal'}
-                      />
-                    ),
-                )}
-                {editingObject &&
-                  (() => {
-                    const cell = editingObject.type === 'table' ? editingCell : null;
-                    const tp = textProps(editingObject, cell);
-                    if (!tp) return null;
-                    return (
-                      <TextEditor
-                        key={cell ? `${cell.row}:${cell.column}` : 'text'}
-                        object={
-                          editingObject.type === 'table' && cell
-                            ? { ...editingObject, frame: cellFrame(editingObject, cell) }
-                            : editingObject
-                        }
-                        doc={tp.doc}
-                        padding={tp.padding}
-                        align={tp.align}
-                        autofit={tp.autofit}
-                        context={context}
-                        onCommit={(doc, patch) =>
-                          commitTextEdit(editingObject.id, doc, patch, cell)
-                        }
-                        onCancel={() => editor.stopEditingText()}
-                      />
-                    );
-                  })()}
-              </div>
-              {view.offSlide !== 'show' && (
-                // Over what is past the slide's edges, in the pasteboard's colour (B2). It
-                // takes no pointer, so those objects are still picked and moved as before.
                 <div
-                  className="stage-off-slide"
-                  data-testid="stage-off-slide"
-                  data-off-slide={view.offSlide}
-                  aria-hidden="true"
-                />
-              )}
-              {view.grid && (
-                <div
-                  className="stage-grid"
+                  ref={slideRef}
+                  className="stage-slide"
                   style={{
-                    backgroundSize: `${view.gridSize * zoom}px ${view.gridSize * zoom}px`,
+                    width: size.width,
+                    height: size.height,
+                    transform: `scale(${zoom})`,
+                    background: project.theme.colors.background,
                   }}
-                />
-              )}
-              {view.guides &&
-                view.guideX.map((at) => (
+                >
+                  {underlay.length > 0 && (
+                    <div
+                      className="stage-underlay"
+                      data-testid="stage-underlay"
+                      data-dim={beneath ? 'true' : undefined}
+                      aria-hidden="true"
+                    >
+                      {underlay.map((node, index) => toReact(node, index))}
+                    </div>
+                  )}
+                  {objects.map(
+                    (object) =>
+                      !object.hiddenInEditor &&
+                      (!shownAtPlayhead || shownAtPlayhead.has(object.id)) && (
+                        <ObjectView
+                          key={object.id}
+                          object={object}
+                          context={context}
+                          editingText={editingTextId === object.id}
+                          editingCell={
+                            editingTextId === object.id && object.type === 'table' && editingCell
+                              ? `${editingCell.row}:${editingCell.column}`
+                              : undefined
+                          }
+                          // Drawn in the state being edited (a choice's mark fills when selected).
+                          state={stateEdit?.objectId === object.id ? stateEdit.stateId : 'normal'}
+                        />
+                      ),
+                  )}
+                  {editingObject &&
+                    (() => {
+                      const cell = editingObject.type === 'table' ? editingCell : null;
+                      const tp = textProps(editingObject, cell);
+                      if (!tp) return null;
+                      return (
+                        <TextEditor
+                          key={cell ? `${cell.row}:${cell.column}` : 'text'}
+                          object={
+                            editingObject.type === 'table' && cell
+                              ? { ...editingObject, frame: cellFrame(editingObject, cell) }
+                              : editingObject
+                          }
+                          doc={tp.doc}
+                          padding={tp.padding}
+                          align={tp.align}
+                          autofit={tp.autofit}
+                          context={context}
+                          onCommit={(doc, patch) =>
+                            commitTextEdit(editingObject.id, doc, patch, cell)
+                          }
+                          onCancel={() => editor.stopEditingText()}
+                        />
+                      );
+                    })()}
+                </div>
+                {view.offSlide !== 'show' && (
+                  // Over what is past the slide's edges, in the pasteboard's colour (B2). It
+                  // takes no pointer, so those objects are still picked and moved as before.
                   <div
-                    key={`guide-x-${at}`}
-                    className="guide guide-vertical"
-                    data-guide-x={at}
-                    style={{ left: at * zoom }}
+                    className="stage-off-slide"
+                    data-testid="stage-off-slide"
+                    data-off-slide={view.offSlide}
+                    aria-hidden="true"
                   />
-                ))}
-              {view.guides &&
-                view.guideY.map((at) => (
+                )}
+                {view.grid && (
                   <div
-                    key={`guide-y-${at}`}
-                    className="guide guide-horizontal"
-                    data-guide-y={at}
-                    style={{ top: at * zoom }}
+                    className="stage-grid"
+                    style={{
+                      backgroundSize: `${view.gridSize * zoom}px ${view.gridSize * zoom}px`,
+                    }}
                   />
-                ))}
-              <Selection
-                box={box}
-                handles={handles}
-                marquee={marquee}
-                snapLines={snapLines}
-                zoom={zoom}
-              />
-              {selected.length === 1 && !timelinePreview && (
-                <MotionPaths
-                  open={open}
-                  slide={current.slide}
-                  object={pathsOf ?? selected[0]!}
+                )}
+                {view.guides &&
+                  view.guideX.map((at) => (
+                    <div
+                      key={`guide-x-${at}`}
+                      className="guide guide-vertical"
+                      data-guide-x={at}
+                      style={{ left: at * zoom }}
+                    />
+                  ))}
+                {view.guides &&
+                  view.guideY.map((at) => (
+                    <div
+                      key={`guide-y-${at}`}
+                      className="guide guide-horizontal"
+                      data-guide-y={at}
+                      style={{ top: at * zoom }}
+                    />
+                  ))}
+                <Selection
+                  box={box}
+                  handles={handles}
+                  marquee={marquee}
+                  snapLines={snapLines}
                   zoom={zoom}
-                  canvas={canvasRef}
                 />
-              )}
+                {box && !editingTextId && (
+                  <SelectionTags
+                    box={box}
+                    zoom={zoom}
+                    name={selected.length === 1 ? selected[0]!.name : `${selected.length} objects`}
+                  />
+                )}
+                {selected.length === 1 && !timelinePreview && (
+                  <MotionPaths
+                    open={open}
+                    slide={current.slide}
+                    object={pathsOf ?? selected[0]!}
+                    zoom={zoom}
+                    canvas={canvasRef}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        )}
-        {viewport && !current && (
-          <p className="placeholder">This project has no slides. Use Insert → New Slide.</p>
-        )}
-      </div>
+          )}
+          {viewport && !current && (
+            <p className="placeholder">This project has no slides. Use Insert → New Slide.</p>
+          )}
+        </div>
 
-      {menu && (
-        <ContextMenu
-          at={menu}
-          selection={selected}
-          onAction={onMenuAction}
-          onClose={() => setMenu(null)}
-        />
-      )}
-
-      <div className="zoom-control" role="group" aria-label="Zoom">
-        <button className="icon-button" aria-label="Zoom out" onClick={() => zoomStep(-1)}>
-          −
-        </button>
-        <span data-testid="zoom-level">{Math.round(zoom * 100)}%</span>
-        <button className="icon-button" aria-label="Zoom in" onClick={() => zoomStep(1)}>
-          +
-        </button>
-        <button
-          className="zoom-fit"
-          aria-pressed={zoomSetting === 'fit'}
-          onClick={() => editor.setZoom('fit')}
-        >
-          Fit
-        </button>
+        {menu && (
+          <ContextMenu
+            at={menu}
+            selection={selected}
+            onAction={onMenuAction}
+            onClose={() => setMenu(null)}
+          />
+        )}
       </div>
     </section>
   );

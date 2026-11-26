@@ -96,14 +96,14 @@ for (const theme of ['Dark', 'Light'] as const) {
       await page.getByTestId('panel-bottom').getByRole('tab', { name: 'States' }).click();
       await follows('[data-testid="states-panel"] select');
       await follows('[data-testid="states-panel"] input');
-      await tab(page, 'Text Format');
+      await tab(page, 'Home');
       await follows('.ribbon select[aria-label="Font"]');
       await follows('.ribbon input[aria-label="Font size"]');
       await page.getByRole('button', { name: 'Line and paragraph spacing' }).click();
       await follows('.menu-panel');
       await page.keyboard.press('Escape');
 
-      await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+      await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
       await page.getByRole('button', { name: 'New layer' }).click();
       await follows('[data-testid="layers-panel"] select');
       await page
@@ -220,9 +220,7 @@ test('a shape with no text gets the Text Format tab, and formatting gives it tex
   try {
     await chooseMenuItem(app, 'insert.shape');
     const shape = page.locator('.stage-slide > [data-object-type="shape"]').last();
-    const textTab = page
-      .getByTestId('ribbon')
-      .getByRole('tab', { name: 'Text Format', exact: true });
+    const textTab = page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true });
     await expect(textTab).toBeVisible();
     await textTab.click();
     // Nothing to make bold yet: Bold starts typing in the shape, in bold.

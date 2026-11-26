@@ -206,9 +206,11 @@ test('a dial drawn its own way turns about its pivot, by keys and by a press (B1
   await expect(pointer).toHaveAttribute('transform', 'rotate(45 20 150)');
   await expect.poll(() => variable(browserPage, 'Heat')).toBe(100);
   // A press straight below the pivot on the screen: straight up for the dial, its middle.
+  // Far from the pivot (still on the dial), so a fraction of a pixel in where a browser puts
+  // the pivot moves the angle too little to change the value (WebKit, CI).
   const pivot = (await heat.locator('.vo-dial-pivot').boundingBox())!;
   const [px, py] = [pivot.x + pivot.width / 2, pivot.y + pivot.height / 2];
-  await browserPage.mouse.click(px, py + 60);
+  await browserPage.mouse.click(px, py + 140);
   await expect.poll(() => variable(browserPage, 'Heat')).toBe(50);
   // To its right on the screen, still on the dial: its left, past its range, so its least.
   await browserPage.mouse.click(px + 15, py);

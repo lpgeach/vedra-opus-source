@@ -128,3 +128,15 @@ export async function answerDialogs(
       Promise.resolve({ response: next(message, 'message'), checkboxChecked: false });
   }, answers);
 }
+
+/**
+ * Preview this slide, this scene or the entire project, from the Preview button's menu at the
+ * end of the ribbon's tab row (B17). Start waiting for the preview window before calling this.
+ */
+export async function previewFrom(
+  page: Page,
+  scope: 'This Slide' | 'This Scene' | 'Entire Project',
+): Promise<void> {
+  await page.getByRole('button', { name: 'Preview choices', exact: true }).click();
+  await page.getByRole('menuitem', { name: scope, exact: true }).click();
+}

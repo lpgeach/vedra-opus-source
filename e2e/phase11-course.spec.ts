@@ -21,7 +21,7 @@ import {
   PIXEL_PNG,
   spShape,
 } from '../apps/desktop/src/main/import/pptx/test-deck';
-import { answerDialogs, launchApp, leavingRequests } from './launch';
+import { answerDialogs, launchApp, leavingRequests, previewFrom } from './launch';
 
 /**
  * The Phase 11 review: a course made with the whole phase, through the UI as an
@@ -323,7 +323,7 @@ test('a course using all of Phase 11 survives saving, prints, becomes a video, p
     // Preview: right to left, the deck's words.
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await expect(preview.locator('.vo-player')).toHaveAttribute('dir', 'rtl');
     await expect(preview.locator('.vo-player-stage')).toContainText('Read this first');

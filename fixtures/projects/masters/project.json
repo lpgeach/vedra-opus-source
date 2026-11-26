@@ -1,5 +1,5 @@
 {
-  "formatVersion": 40,
+  "formatVersion": 41,
   "id": "project_masters",
   "title": "Masters",
   "stage": {
@@ -155,7 +155,9 @@
               "next": true
             },
             "transition": null,
-            "focusOrder": null
+            "focusOrder": null,
+            "background": null,
+            "hideLayoutObjects": false
           },
           "triggers": [],
           "question": null,
@@ -197,7 +199,9 @@
               "next": true
             },
             "transition": null,
-            "focusOrder": null
+            "focusOrder": null,
+            "background": null,
+            "hideLayoutObjects": false
           },
           "triggers": [],
           "question": null,

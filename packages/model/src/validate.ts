@@ -324,6 +324,16 @@ export function findReferenceIssues(project: Project): ProjectIssue[] {
   const includes = (slide: Slide): string[] =>
     slide.result?.include.kind === 'chosen' ? slide.result.include.slides : [];
   for (const { slide, path } of slides) {
+    // A slide's background picture (B17).
+    const background = slide.properties.background;
+    if (background?.kind === 'image') {
+      const at = [...path, 'properties', 'background', 'asset'];
+      checkAsset(background.asset, at);
+      const meta = Object.hasOwn(project.assets, background.asset)
+        ? project.assets[background.asset]
+        : undefined;
+      if (meta && meta.kind !== 'image') report(at, 'a slide’s background must be a picture');
+    }
     const roles = [slide.question, slide.draw, slide.result].filter((each) => each !== null);
     if (roles.length > 1) report(path, 'a slide is at most one of a question, a draw and a result');
     if (!slide.result) continue;

@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { makeWebm, wav } from '../fixtures/make-media';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * The Phase 6 review (session 44): a course using the phase's features
@@ -161,7 +161,7 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await page.getByRole('button', { name: 'Video…', exact: true }).click();
     await expect(row(page, 'film')).toBeVisible();
     await page.getByRole('button', { name: 'Button', exact: true }).click();
-    await right(page, 'Layers');
+    await right(page, 'Slide Layers');
     await page.getByRole('button', { name: 'New layer' }).click();
     await ribbon(page, 'Insert');
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
@@ -212,7 +212,7 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await slideItem(page, 2).click();
     await ribbon(page, 'Transitions');
     await expect(page.getByLabel('Slide transition', { exact: true })).toHaveValue('push');
-    await right(page, 'Layers');
+    await right(page, 'Slide Layers');
     await page
       .getByTestId('layer-row')
       .filter({ hasText: 'Layer 1' })
@@ -230,7 +230,7 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await play(preview);
     await preview.close();

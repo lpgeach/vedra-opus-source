@@ -84,6 +84,28 @@ People still see Gatekeeper's warning for an app that is not notarised: they ope
 
 AppImage and deb packages are not signed; this is usual for both. Updates to the AppImage come through the updater (P11.4 part B).
 
+## Publishing the source (Luke, 2026-11-26)
+
+Work happens in the private `lpgeach/project-eloquent` (git remote `origin`). The public `lpgeach/vedra-opus-source` (remote `public`, GPL-3.0-or-later) holds **only the source of the latest release**. It is updated only when Luke asks for a new release build, never as work goes on.
+
+For a release:
+
+1. **Check nothing private is in the tree:** no client course names or content, no personal email, no keys. For example: `git grep -I -n -i -E "<client names>|@gmail|PRIVATE KEY" -- . ':!package-lock.json'`, and `git ls-files | grep -E "\.(story|pfx|p12|pem|env)$"`. Fix anything found in the private repository first.
+2. **Publish the tree as one commit** on the public repository's `master`, titled `Vedra Opus <version>`, with no private history:
+
+   ```bash
+   git fetch public
+   git checkout -B public-release public/master
+   git rm -rq . && git checkout master -- .
+   git commit -m "Vedra Opus <version>"
+   git push public public-release:master
+   ```
+
+   The commit's author is Luke's GitHub noreply address (`git config user.email`).
+
+3. **CI runs there**, on Linux, macOS and Windows. The release's installers are built from that commit, and signed there once code signing is set up.
+4. **Tag it** `v<version>` on the public repository, so each release's source can be found again.
+
 ## Where people download it
 
 **The public downloads repository** (Luke, 2026-11-24) is `lpgeach/vedra-opus-releases`: https://github.com/lpgeach/vedra-opus-releases. This repository is private, so that is the one to send people. It holds a README with download steps and no code.

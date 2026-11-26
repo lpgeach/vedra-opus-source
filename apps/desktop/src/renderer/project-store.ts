@@ -64,8 +64,13 @@ export interface OpenProject {
 }
 
 /** The ribbon's tabs. `text` is contextual: it exists only while something with text is selected. */
+export type SlidePanelTab = 'layers' | 'properties';
+/** The upper right panel's tabs (B17). */
+export type RightTab = 'triggers' | 'format' | 'check';
+
+/** The ribbon's tabs (docs/briefs/B17-ribbon-and-panels.md); text is formatted from Home. */
 export type RibbonTab =
-  'home' | 'insert' | 'design' | 'transitions' | 'animations' | 'view' | 'text';
+  'home' | 'insert' | 'slides' | 'design' | 'transitions' | 'animations' | 'view';
 
 export type EditorView = 'slide' | 'overview' | 'master';
 
@@ -93,8 +98,12 @@ export interface EditorState {
   /** Layers not drawn beneath the one being edited (the eye in the Layers panel). Not saved. */
   layersHiddenInEditor: readonly string[];
   ribbonTab: RibbonTab;
-  /** The tab to go back to when the contextual Text Format tab goes away. */
-  ribbonReturnTab: Exclude<RibbonTab, 'text'>;
+  /** The lower right panel's tab: the slide's layers or its properties (B17). */
+  slidePanelTab: SlidePanelTab;
+  /** The upper right panel's tab (B17). */
+  rightTab: RightTab;
+  /** Counts Insert → Trigger requests; the Triggers panel opens the new-trigger wizard on each. */
+  newTriggerAsked: number;
   /** The timeline playhead, in seconds. */
   playhead: number;
   /**
@@ -172,7 +181,9 @@ let state: EditorState = {
   editingLayerId: null,
   layersHiddenInEditor: [],
   ribbonTab: 'home',
-  ribbonReturnTab: 'home',
+  slidePanelTab: 'layers',
+  rightTab: 'triggers',
+  newTriggerAsked: 0,
   playhead: 0,
   timelinePreview: false,
   publishOpen: false,
@@ -603,19 +614,33 @@ export const editor = {
     });
   },
 
-  /** Editing text brings the text tools forward. */
+  /** Editing text brings the text tools forward: they are on Home (B17). */
   startEditingText(objectId: string, cell: { row: number; column: number } | null = null): void {
     setState({
       editingTextId: objectId,
       editingCell: cell,
       selection: [objectId],
-      ribbonTab: 'text',
-      ribbonReturnTab: state.ribbonTab === 'text' ? state.ribbonReturnTab : state.ribbonTab,
+      ribbonTab: 'home',
     });
   },
 
   setRibbonTab(tab: RibbonTab): void {
-    setState(tab === 'text' ? { ribbonTab: tab } : { ribbonTab: tab, ribbonReturnTab: tab });
+    setState({ ribbonTab: tab });
+  },
+
+  /** Show a tab of the lower right panel: its layers or its properties (B17). */
+  showSlidePanel(slidePanelTab: SlidePanelTab): void {
+    setState({ slidePanelTab });
+  },
+
+  /** Show a tab of the upper right panel (B17). */
+  showRightTab(rightTab: RightTab): void {
+    setState({ rightTab });
+  },
+
+  /** Insert → Trigger (B17): the Triggers tab, with the new-trigger wizard open. */
+  askNewTrigger(): void {
+    setState({ rightTab: 'triggers', newTriggerAsked: state.newTriggerAsked + 1 });
   },
 
   stopEditingText(): void {

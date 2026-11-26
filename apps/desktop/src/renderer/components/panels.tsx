@@ -47,6 +47,8 @@ import { NumericInput } from './NumericInput';
 import { CommitField } from './PlayerTabs';
 import { LayersPanel } from './LayersPanel';
 import { Tabs } from './Tabs';
+import { Splitter } from './Splitter';
+import { clampRightSplit, RIGHT_PART_MIN } from '../layout';
 import { TriggersPanel } from '../triggers/TriggersPanel';
 import { Timeline } from './Timeline';
 import { PanoramaFormat } from './PanoramaFormat';
@@ -544,8 +546,6 @@ export function BottomPanel({ open, current, size }: WithProject) {
   );
 }
 
-type RightTab = 'format' | 'triggers' | 'layers' | 'check';
-
 function readColorValue(color: unknown): { kind: 'theme' | 'literal'; value: string } {
   if (typeof color === 'string') return { kind: 'literal', value: color };
   if (color && typeof color === 'object' && 'theme' in (color as object)) {
@@ -683,12 +683,7 @@ function FormatPanel({ open, current }: { open: OpenProject; current: CurrentSli
   const { selection } = useEditor();
   const selected = selectedObjects(current?.slide, selection);
   if (selected.length === 0) {
-    return (
-      <>
-        <Placeholder>Select an object to format its appearance and position.</Placeholder>
-        {current && !current.isMaster && <SlideProperties open={open} slideId={current.slide.id} />}
-      </>
-    );
+    return <Placeholder>Select an object to format its appearance and position.</Placeholder>;
   }
   const { history, project } = open;
   const themeSlots = Object.keys(project.theme.colors);
@@ -1616,38 +1611,82 @@ function VideoProperties({
   );
 }
 
-export function RightPanel({ open, current, size }: WithProject) {
-  const label = 'Properties, triggers and layers panel';
-  const [tab, setTab] = useState<RightTab>('triggers');
+/**
+ * The right of the window (B17): two panels, one above the other. The upper has Triggers, Format
+ * and Check; the lower, Slide Layers and Slide Properties. The divider between them is dragged
+ * or moved with the arrow keys, and remembered with the rest of the layout.
+ */
+export function RightPanel({ open, current, size, height }: WithProject & { height: number }) {
+  const label = 'Triggers, format and slide panel';
+  const { slidePanelTab: lowerTab, rightTab: tab } = useEditor();
+  const setTab = editor.showRightTab;
+  const setLowerTab = editor.showSlidePanel;
+  const { rightSplit } = useSettings().layout;
+  const lower = clampRightSplit(rightSplit, height);
+  const max = clampRightSplit(Number.MAX_SAFE_INTEGER, height);
   return (
     <Panel name="right" label={label} size={size}>
-      <header className="panel-header">
-        <Tabs
-          label={t('rightPanel.tabs')}
-          tabs={[
-            { id: 'format' as const, label: t('rightPanel.format') },
-            { id: 'triggers' as const, label: t('rightPanel.triggers') },
-            { id: 'layers' as const, label: t('rightPanel.layers') },
-            { id: 'check' as const, label: t('rightPanel.check') },
-          ]}
-          active={tab}
-          onSelect={setTab}
-        />
-        <CollapseButton name="right" label={label} />
-      </header>
-      <div className="panel-body" role="tabpanel" aria-label={tab}>
-        <div hidden={tab !== 'format'}>
-          <FormatPanel open={open} current={current} />
+      <div className="right-part" data-testid="right-upper">
+        <header className="panel-header">
+          <Tabs
+            label={t('rightPanel.tabs')}
+            tabs={[
+              { id: 'triggers' as const, label: t('rightPanel.triggers') },
+              { id: 'format' as const, label: t('rightPanel.format') },
+              { id: 'check' as const, label: t('rightPanel.check') },
+            ]}
+            active={tab}
+            onSelect={setTab}
+          />
+          <CollapseButton name="right" label={label} />
+        </header>
+        <div className="panel-body" role="tabpanel" aria-label={tab}>
+          <section data-testid="triggers" hidden={tab !== 'triggers'}>
+            <TriggersPanel open={open} current={current} />
+          </section>
+          <div hidden={tab !== 'format'}>
+            <FormatPanel open={open} current={current} />
+          </div>
+          <section hidden={tab !== 'check'}>
+            {tab === 'check' && <AccessibilityCheck open={open} />}
+          </section>
         </div>
-        <section data-testid="triggers" hidden={tab !== 'triggers'}>
-          <TriggersPanel open={open} current={current} />
-        </section>
-        <section data-testid="slide-layers" hidden={tab !== 'layers'}>
-          <LayersPanel open={open} current={current} />
-        </section>
-        <section hidden={tab !== 'check'}>
-          {tab === 'check' && <AccessibilityCheck open={open} />}
-        </section>
+      </div>
+      <Splitter
+        panel="rightSplit"
+        label="Resize slide layers and properties panel"
+        size={lower}
+        min={RIGHT_PART_MIN}
+        max={max}
+        onResize={(wanted) => ui.resizeRightSplit(clampRightSplit(wanted, height))}
+        onCommit={ui.commitLayout}
+      />
+      <div className="right-part right-lower" data-testid="right-lower" style={{ height: lower }}>
+        <header className="panel-header">
+          <Tabs
+            label={t('rightPanel.lowerTabs')}
+            tabs={[
+              { id: 'layers' as const, label: t('rightPanel.layers') },
+              { id: 'properties' as const, label: t('rightPanel.properties') },
+            ]}
+            active={lowerTab}
+            onSelect={setLowerTab}
+          />
+        </header>
+        <div className="panel-body" role="tabpanel" aria-label={lowerTab}>
+          <section data-testid="slide-layers" hidden={lowerTab !== 'layers'}>
+            <LayersPanel open={open} current={current} />
+          </section>
+          <div hidden={lowerTab !== 'properties'}>
+            {current && !current.isMaster ? (
+              <SlideProperties open={open} slideId={current.slide.id} />
+            ) : (
+              <Placeholder>
+                Slide properties are set on the course’s slides, not on masters.
+              </Placeholder>
+            )}
+          </div>
+        </div>
       </div>
     </Panel>
   );

@@ -14,7 +14,7 @@ import { LABEL_KEYS, LANGUAGE_TAG } from './labels';
 import type { LabelKey } from './labels';
 import { isPathData } from './path-data';
 
-export const FORMAT_VERSION = 40;
+export const FORMAT_VERSION = 41;
 
 // ---------------------------------------------------------------- primitives
 
@@ -1608,6 +1608,13 @@ export const slideSchema = z.strictObject({
      * author's, by object id; null follows the layout, top to bottom, then left to right.
      */
     focusOrder: z.array(idSchema).max(500).nullable(),
+    /**
+     * The slide's own background (B17, format 41): a colour, gradient or picture over the
+     * whole stage, beneath its layout's and master's objects; null shows the theme's.
+     */
+    background: fillSchema.nullable(),
+    /** Leave out the objects the slide's layout and master would show beneath it (B17). */
+    hideLayoutObjects: z.boolean(),
   }),
   /** Every trigger on this slide, in evaluation order within each owner. */
   triggers: z.array(triggerSchema),

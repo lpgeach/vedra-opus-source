@@ -1,5 +1,5 @@
 {
-  "formatVersion": 40,
+  "formatVersion": 41,
   "id": "project_minimal",
   "title": "Minimal",
   "stage": {
@@ -62,7 +62,9 @@
               "next": true
             },
             "transition": null,
-            "focusOrder": null
+            "focusOrder": null,
+            "background": null,
+            "hideLayoutObjects": false
           },
           "triggers": [],
           "question": null,

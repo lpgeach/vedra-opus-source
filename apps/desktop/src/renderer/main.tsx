@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { loadSettings } from './ui-store';
 import { setLocale } from '../shared/strings';
+// Outfit, the brand's typeface, for the whole app (B18); Inter is the default for course text.
+import '@fontsource-variable/outfit';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/400-italic.css';
 import '@fontsource/inter/700.css';

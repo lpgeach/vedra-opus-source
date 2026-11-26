@@ -55,7 +55,7 @@ test('transitions: a slide’s, applied to all, and a layer’s; previewed, kept
     await expect(marks(page)).toHaveCount(2);
 
     // A layer of its own, fading.
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await page.getByRole('button', { name: 'New layer' }).click();
     await ribbon(page, 'Transitions');
     await page.getByLabel('Layer transition', { exact: true }).selectOption('fade');
@@ -79,7 +79,7 @@ test('transitions: a slide’s, applied to all, and a layer’s; previewed, kept
     await expect(page.getByLabel('Slide transition', { exact: true })).toHaveValue('push');
     await expect(page.getByLabel('Slide transition direction')).toHaveValue('left');
     await expect(page.getByLabel('Slide transition duration')).toHaveValue('1');
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await layerRow(page, 'Layer 1').click();
     await expect(page.getByLabel('Layer transition', { exact: true })).toHaveValue('fade');
 

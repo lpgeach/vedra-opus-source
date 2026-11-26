@@ -91,7 +91,7 @@ test('every part of the layout is present with its placeholder content', async (
     await expect(panel(page, 'bottom').getByLabel('Slide notes', { exact: true })).toHaveValue('');
 
     await expect(page.getByTestId('triggers')).toContainText('No triggers on this slide');
-    await tab(page, 'Layers').click();
+    await tab(page, 'Slide Layers').click();
     await expect(page.getByTestId('slide-layers')).toContainText('Base Layer');
     await expect(page.getByTestId('project-status')).toContainText('Slide 1 of 1');
   } finally {
@@ -254,7 +254,9 @@ test('a damaged settings file is ignored and the app starts with the defaults', 
   try {
     await newProject(page);
     await expect(page.getByTestId('collapse-left')).toBeVisible();
-    await expect(tab(page, 'Slides')).toHaveAttribute('aria-selected', 'true');
+    await expect(
+      page.getByTestId('panel-left').getByRole('tab', { name: 'Slides', exact: true }),
+    ).toHaveAttribute('aria-selected', 'true');
     await expect(tab(page, 'Timeline')).toHaveAttribute('aria-selected', 'true');
     await tab(page, 'View').click();
     await expect(page.getByRole('radio', { name: 'System' })).toBeChecked();
@@ -327,9 +329,10 @@ test('New Slide adds a slide after the current one and makes it current; undo ta
   }
 });
 
-test('a narrow window scrolls the ribbon, not the whole editor, and its menus still open whole', async () => {
-  // Found in the Phase 9 review: a click on a command past the window's edge
-  // scrolled the whole page sideways and moved the stage half out of the window.
+test('a narrow window keeps the ribbon inside it, not scrolling the editor, and its menus open whole', async () => {
+  // Found in the Phase 9 review: a click on a command past the window's edge scrolled the whole
+  // page sideways. Since B17 the ribbon folds groups into drop-downs instead of running off the
+  // side, so nothing is past the edge.
   const { app, page } = await launchApp();
   try {
     await answerDialogs(app, { message: [DONT_SAVE] });
@@ -337,11 +340,12 @@ test('a narrow window scrolls the ribbon, not the whole editor, and its menus st
     await newProject(page);
     await tab(page, 'Insert').click();
     const commands = page.getByTestId('ribbon').locator('.ribbon-commands');
-    // (Headless Linux keeps its windows 960 wide, which is narrow enough.)
     await expect
-      .poll(() => commands.evaluate((row) => row.scrollWidth > row.clientWidth))
+      .poll(() => commands.evaluate((row) => row.scrollWidth <= row.clientWidth))
       .toBe(true);
-    // A command at the far end: the row scrolls to it, the page does not move.
+    // The last group is folded; its Data Entry menu opens whole, inside the window.
+    const folded = page.getByTestId('ribbon').locator('.ribbon-group-folded').last();
+    await folded.locator('button').first().click();
     await page.getByRole('button', { name: 'Data Entry', exact: true }).click();
     const menu = page.getByRole('menu', { name: 'Data Entry' });
     await expect(menu).toBeVisible();

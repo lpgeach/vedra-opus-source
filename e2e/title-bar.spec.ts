@@ -6,8 +6,8 @@ const DONT_SAVE = 1;
 
 /**
  * One title bar (docs/briefs/B1-title-bar.md): the menu behind a hamburger, the
- * common commands as icons, the title, Publish and the views, and the window's
- * own buttons at the end of the same row.
+ * common commands as icons, the title and the views, and the window's own buttons
+ * at the end of the same row. Preview and Publish moved to the ribbon's tab row (B17).
  */
 
 /** Record the application menu's pop-ups instead of showing them on the desktop. */
@@ -24,7 +24,7 @@ async function recordMenuPopups(app: ElectronApplication) {
 const popups = (app: ElectronApplication) =>
   app.evaluate(() => (globalThis as unknown as { voPopups: unknown[] }).voPopups);
 
-test('the bar holds the menu, the commands, the title, Publish and the views, on one row with the window’s buttons', async () => {
+test('the bar holds the menu, the commands, the title and the views, on one row with the window’s buttons', async () => {
   const { app, page } = await launchApp();
   try {
     // The new slide below leaves changes: closing asks, and Don't Save answers (unanswered, a
@@ -47,8 +47,12 @@ test('the bar holds the menu, the commands, the title, Publish and the views, on
 
     await page.getByRole('button', { name: 'New Project', exact: true }).click();
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
-    for (const name of ['Menu', 'Save', 'Undo', 'Redo', 'Preview', 'Publish']) {
+    for (const name of ['Menu', 'Save', 'Undo', 'Redo']) {
       await expect(bar.getByRole('button', { name, exact: true })).toBeVisible();
+    }
+    // Preview and Publish are at the end of the ribbon's tab row now (B17), not here.
+    for (const name of ['Preview', 'Publish']) {
+      await expect(bar.getByRole('button', { name, exact: true })).toHaveCount(0);
     }
     await expect(bar.getByTestId('project-title')).toHaveValue('Untitled Project');
     const views = bar.getByRole('group', { name: 'View', exact: true });
@@ -58,7 +62,7 @@ test('the bar holds the menu, the commands, the title, Publish and the views, on
     const box = (await bar.boundingBox())!;
     expect(box.y).toBe(0);
     expect(box.height).toBe(40);
-    for (const name of ['Menu', 'Publish']) {
+    for (const name of ['Menu', 'Save']) {
       const button = (await bar.getByRole('button', { name, exact: true }).boundingBox())!;
       expect(button.y).toBeGreaterThanOrEqual(0);
       expect(button.y + button.height).toBeLessThanOrEqual(40);
@@ -75,20 +79,19 @@ test('the bar holds the menu, the commands, the title, Publish and the views, on
     // With no screen at all (Linux, run headless here) there is no frame and so no overlay;
     // under a real display, CI's included, it is there.
     expect(overlay.visible).toBe(!windowsHidden);
-    const publish = (await bar
-      .getByRole('button', { name: 'Publish', exact: true })
-      .boundingBox())!;
     const masterView = (await views.getByRole('button', { name: 'Master View' }).boundingBox())!;
-    expect(publish.x).toBeLessThan(masterView.x);
     if (process.platform !== 'darwin' && !windowsHidden) {
       // The system's buttons take the right end: the views stop short of it.
       expect(masterView.x + masterView.width).toBeLessThan(overlay.width - 100);
     }
 
-    // Preview from the bar.
+    // Preview, from the ribbon's tab row.
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      bar.getByRole('button', { name: 'Preview', exact: true }).click(),
+      page
+        .getByTestId('ribbon-tab-row')
+        .getByRole('button', { name: 'Preview', exact: true })
+        .click(),
     ]);
     await expect(preview.locator('.vo-player')).toBeVisible();
     await preview.close();

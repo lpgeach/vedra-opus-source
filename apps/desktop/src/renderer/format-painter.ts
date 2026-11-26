@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import type { Appearance, SceneObject } from '@vedraopus/model';
+import type { Animations, Appearance, SceneObject } from '@vedraopus/model';
 
 interface CopiedFormat {
   appearance?: Appearance;
@@ -7,16 +7,18 @@ interface CopiedFormat {
   opacity?: number;
   autofit?: 'none' | 'shrinkText' | 'growShape';
   padding?: number;
+  /** The Animation Painter's copy (B17): an object's entrance and exit. */
+  animations?: Pick<Animations, 'entrance' | 'exit'>;
 }
 
 let copied: CopiedFormat | null = null;
 let armed = false;
 let locked = false;
-let snapshot = { copied: false, armed: false, locked: false };
+let snapshot = { copied: false, armed: false, locked: false, animations: false };
 const listeners = new Set<() => void>();
 
 function emit(): void {
-  snapshot = { copied: copied !== null, armed, locked };
+  snapshot = { copied: copied !== null, armed, locked, animations: armed && !!copied?.animations };
   for (const l of listeners) l();
 }
 
@@ -25,8 +27,26 @@ export function subscribeFormatPainter(l: () => void): () => void {
   return () => listeners.delete(l);
 }
 
-export function getFormatPainterState(): { copied: boolean; armed: boolean; locked: boolean } {
+export function getFormatPainterState(): {
+  copied: boolean;
+  armed: boolean;
+  locked: boolean;
+  /** Armed with animations (the Animation Painter), not formatting. */
+  animations: boolean;
+} {
   return snapshot;
+}
+
+/**
+ * The Animation Painter (B17): copy an object's entrance and exit, to put on the next object
+ * clicked; `lock` (a double-click) keeps it on until Escape, as the Format Painter does.
+ */
+export function pickAnimations(object: SceneObject, lock = false): void {
+  const { entrance, exit } = object.animations;
+  copied = { animations: structuredClone({ entrance, exit }) };
+  armed = true;
+  locked = lock;
+  emit();
 }
 
 export function useFormatPainter() {
@@ -84,7 +104,9 @@ export function clearFormatPainter(): void {
 export function consumeFormatFor(object: SceneObject): Record<string, unknown> | null {
   if (!armed || !copied) return null;
   let changes: Record<string, unknown> | null = null;
-  if ((object.type === 'shape' || object.type === 'button') && copied.appearance) {
+  if (copied.animations) {
+    changes = { animations: { ...object.animations, ...structuredClone(copied.animations) } };
+  } else if ((object.type === 'shape' || object.type === 'button') && copied.appearance) {
     const props: Record<string, unknown> = { appearance: structuredClone(copied.appearance) };
     if (object.type === 'button' && copied.cornerRadius !== undefined) {
       props.cornerRadius = copied.cornerRadius;

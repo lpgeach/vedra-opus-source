@@ -729,6 +729,53 @@ describe('masters and layouts', () => {
     expect(html.indexOf(logo.id)).toBeLessThan(html.indexOf(own.id));
   });
 
+  it('draws a slide’s own background beneath its layout, and leaves the layout out when asked (B17)', () => {
+    const { history, logo, ids, markup } = setup();
+    const own = createShapeObject({ kind: 'rect' });
+    history.execute('object.add', {
+      layerId: history.project.scenes[0]!.slides[0]!.baseLayer.id,
+      object: own,
+    });
+    expect(markup(ids[0])).not.toContain('vo-slide-background');
+    history.execute('slide.setProperties', {
+      slideId: ids[0],
+      properties: { background: { kind: 'solid', color: '#123456' } },
+    });
+    let html = markup(ids[0]);
+    // Background, then the master's logo, then the slide's own shape.
+    expect(html).toContain('fill="#123456"');
+    expect(html.indexOf('vo-slide-background')).toBeLessThan(html.indexOf(logo.id));
+    expect(html.indexOf(logo.id)).toBeLessThan(html.indexOf(own.id));
+    // A gradient is drawn by its own definition, named for the slide.
+    history.execute('slide.setProperties', {
+      slideId: ids[0],
+      properties: {
+        background: {
+          kind: 'gradient',
+          angle: 0,
+          stops: [
+            { offset: 0, color: '#000000' },
+            { offset: 1, color: '#ffffff' },
+          ],
+        },
+      },
+    });
+    html = markup(ids[0]);
+    expect(html).toContain(`<linearGradient id="vo-background-${ids[0]}"`);
+    expect(html).toContain(`fill="url(#vo-background-${ids[0]})"`);
+    // Hidden layout objects: the background and the slide's own shape stay; the logo goes,
+    // on this slide only.
+    history.execute('slide.setProperties', {
+      slideId: ids[0],
+      properties: { hideLayoutObjects: true },
+    });
+    html = markup(ids[0]);
+    expect(html).not.toContain(logo.id);
+    expect(html).toContain('vo-slide-background');
+    expect(html).toContain(own.id);
+    expect(markup(ids[1])).toContain(logo.id);
+  });
+
   it('editing the master changes every slide that uses it; a blank slide has none', () => {
     const { history, master, logo, ids, markup } = setup();
     history.execute('object.update', { objectId: logo.id, changes: { frame: { x: 77 } } });

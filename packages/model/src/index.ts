@@ -15,6 +15,16 @@ export * from './translation-text';
 export { shapePreset, shapePresetLabel, shapePresetNames } from './shapes';
 export { isPathData, parsePathData, writePathData } from './path-data';
 export type { PathCommand } from './path-data';
+export {
+  CALLOUT_KINDS,
+  calloutGeometry,
+  cloud,
+  outlinesToGeometry,
+  Pen,
+  wedgeEllipse,
+  wedgeRect,
+} from './callouts';
+export type { CalloutKind, PathOutline, Pt } from './callouts';
 export type { ShapePresetName } from './shapes';
 export { createId } from './ids';
 export { DEFAULT_LABELS, isRightToLeft, LABEL_KEYS, LANGUAGE_TAG, labelText } from './labels';

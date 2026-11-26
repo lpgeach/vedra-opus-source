@@ -4,10 +4,12 @@
  * once below as light-dark(light, dark). Which applies comes from
  * `color-scheme`: both by default, so the system decides, or one of them when
  * the author picks a theme on the View tab (ui-store sets `data-theme`).
+ * The typeface is Outfit, the brand's (B18), bundled so it is the same on every system.
  */
 :root {
   color-scheme: light dark;
   font-family:
+    'Outfit Variable',
     system-ui,
     -apple-system,
     'Segoe UI',
@@ -231,6 +233,21 @@ button.link {
   font-weight: 600;
 }
 
+/* The Vedra Opus logo (brand/), drawn in the text colour. */
+.welcome-logo {
+  margin-bottom: 8px;
+}
+
+.welcome-logo span {
+  display: block;
+  width: 120px;
+  aspect-ratio: 369.5 / 471.04;
+  background-color: var(--fg);
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
 .welcome h2 {
   margin-bottom: 8px;
   font-size: 14px;
@@ -392,19 +409,166 @@ button.link {
 
 .ribbon {
   flex: none;
+  position: relative;
   background: var(--chrome);
   border-bottom: 1px solid var(--border);
 }
 
-.ribbon-tabs {
-  height: 28px;
-  padding: 0 8px;
+/* The tabs, then Preview, Publish and the collapse button at the row's end (B17). */
+.ribbon-tab-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding-right: 8px;
   border-bottom: 1px solid var(--border);
+}
+
+.ribbon-collapsed .ribbon-tab-row {
+  border-bottom: none;
+}
+
+.ribbon-tabs {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px;
+}
+
+.ribbon-preview {
+  display: flex;
+}
+
+.ribbon-preview-main,
+.ribbon-publish {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.ribbon-preview-main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.ribbon-preview-more {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 4px;
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Design → ready-made themes (B17): each a swatch of its background and first accents. */
+.theme-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
+  gap: 4px;
+  align-content: center;
+}
+
+.theme-preset {
+  display: flex;
+  gap: 2px;
+  height: 24px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.theme-preset span {
+  flex: 1;
+  border-radius: 1px;
+}
+
+.theme-preset[aria-checked='true'] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Design → Background (B17). */
+.background-popover {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+  padding: 8px;
+}
+
+/* Home → Find and Replace (B17). */
+.find-replace {
+  width: 460px;
+}
+
+.find-results {
+  max-height: 220px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.find-results .menu-item {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Insert → Symbol's characters (B17). */
+.symbol-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 28px);
+  gap: 2px;
+  padding: 4px;
+}
+
+.symbol-cell {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 15px;
+}
+
+.link-hint {
+  max-width: 240px;
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+/* Font and Paragraph on Home with no text selected: in place, dimmed (B17). */
+.ribbon-fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+  opacity: 0.45;
+}
+
+/* Collapsed, a tab's commands show over the stage until one is used. */
+.ribbon-commands-over {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  background: var(--chrome);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
 }
 
 .ribbon-commands {
   display: flex;
-  height: 76px;
+  /* Three stacked small commands and the group's name (B17). */
+  height: 86px;
   padding: 4px 8px;
   /*
    * A narrow window scrolls the commands sideways, not the whole window (Phase 9
@@ -420,7 +584,7 @@ button.link {
   flex: none;
   display: flex;
   flex-direction: column;
-  padding: 0 8px;
+  padding: 0 6px;
   border-right: 1px solid var(--border);
 }
 
@@ -447,8 +611,8 @@ button.link {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  min-width: 56px;
-  padding: 6px 8px;
+  min-width: 48px;
+  padding: 6px 6px;
   border-color: transparent;
   background: none;
   font-size: 12px;
@@ -457,6 +621,51 @@ button.link {
 
 .ribbon-button[aria-pressed='true'] {
   background: var(--active);
+}
+
+/*
+ * The compact ribbon (B17): a group's main command large, the rest small, three to a column,
+ * as authoring tools lay theirs out, so the ribbon fits the window.
+ */
+.ribbon-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  align-self: stretch;
+}
+
+.ribbon-button.compact {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 6px;
+  min-width: 0;
+  height: 21px;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.ribbon-button.compact[aria-checked='true'] {
+  background: var(--active);
+}
+
+.ribbon-stack-select {
+  max-width: 150px;
+  height: 21px;
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+/* A group folded into a drop-down when the window is too narrow for the tab (B17). */
+.ribbon-group-panel {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+}
+
+.ribbon-group-panel .ribbon-stack {
+  align-self: center;
 }
 
 /* ---------- Slide View workspace ---------- */
@@ -504,6 +713,17 @@ button.link {
   flex: 1;
   min-height: 0;
   overflow: auto;
+}
+
+.right-part {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-lower {
+  flex: none;
 }
 
 .panel-section {
@@ -700,6 +920,9 @@ button.link {
   flex: 1;
   min-height: 0;
   position: relative;
+  /* The toolbar above, the stage's body (rulers and viewport) under it (B17). */
+  display: flex;
+  flex-direction: column;
 }
 
 .stage-viewport {
@@ -904,25 +1127,57 @@ button.link {
   pointer-events: none;
 }
 
+/* The bar above the stage (B17): the slide, its layer, its size and the zoom. */
+.stage-toolbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--chrome);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.stage-toolbar-slide {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.stage-toolbar-gap {
+  flex: 1;
+}
+
+.stage-toolbar-select {
+  max-width: 180px;
+  padding: 2px 4px;
+}
+
+.stage-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
 .zoom-control {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 2px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
 }
 
-.zoom-control span {
-  min-width: 40px;
-  text-align: center;
+.zoom-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 56px;
+  justify-content: center;
+  padding: 2px 4px;
+  border-color: transparent;
+  background: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .zoom-fit {
@@ -933,6 +1188,28 @@ button.link {
 
 .zoom-fit[aria-pressed='true'] {
   background: var(--active);
+}
+
+/* The selection's name and size on the stage (B17): for the author only. */
+.selection-tag {
+  position: absolute;
+  z-index: 3;
+  transform: translateY(calc(-100% - 4px));
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 11px;
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.selection-size {
+  transform: translate(-100%, 4px);
+  background: var(--fg);
+  color: var(--surface);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Galleries ---------- */

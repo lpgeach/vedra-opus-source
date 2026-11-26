@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * The Phase 9 review: a course using the whole phase, built through the UI
@@ -26,8 +26,11 @@ const ofType = (page: Page, type: string) => canvas(page).locator(`[data-object-
 const slides = (page: Page) => page.getByTestId('slide-list').locator('.slide-item');
 const format = (page: Page) => page.getByRole('tab', { name: 'Format', exact: true }).click();
 
+/** Commands on the Slides tab (B17); the rest are on Insert. */
+const ON_SLIDES = ['Question', 'Survey', 'Convert Slide', 'Question Bank', 'Screen Recording…'];
+
 async function insert(page: Page, button: string, item?: string) {
-  await ribbon(page, 'Insert');
+  await ribbon(page, ON_SLIDES.includes(button) ? 'Slides' : 'Insert');
   await page.getByRole('button', { name: button, exact: true }).click();
   if (item) await page.getByRole('menuitem', { name: item, exact: true }).click();
 }
@@ -216,7 +219,7 @@ test('a course using all of Phase 9 survives saving, plays in Preview and publis
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     const previewStage = preview.locator('.vo-player-stage');
     await expect(previewStage.getByRole('table')).toContainText('Level 2');

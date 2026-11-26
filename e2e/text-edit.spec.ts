@@ -73,24 +73,26 @@ test('leaving the text box by another route, such as switching view, keeps what 
 const tabNamed = (page: Page, name: string) =>
   page.getByTestId('ribbon').getByRole('tab', { name, exact: true });
 
-test('the Text Format tab appears for text, opens on edit, and font size can be typed', async () => {
+test('Font and Paragraph are on Home, dimmed with no text; editing opens Home; font size can be typed (B17)', async () => {
   const { app, page } = await launchApp();
   try {
     await answerDialogs(app, { message: [1] });
     await page.getByRole('button', { name: 'New Project' }).click();
+    // No Text Format tab any more (B17): Home has the text tools, dimmed while there is no text.
     await expect(tabNamed(page, 'Text Format')).toHaveCount(0);
+    await expect(page.getByLabel('Font size')).toBeDisabled();
 
     await page.getByRole('tab', { name: 'Insert' }).click();
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
     const box = page.locator('.stage-slide > [data-object-type="text"]');
-    // Selected: the tab is offered, but the ribbon stays where the author was.
-    await expect(tabNamed(page, 'Text Format')).toBeVisible();
+    // Selected: the ribbon stays where the author was.
     await expect(tabNamed(page, 'Insert')).toHaveAttribute('aria-selected', 'true');
 
-    // Editing: the text tools come forward by themselves.
+    // Editing: Home, with the text tools, comes forward by itself.
     await box.dblclick();
     await expect(page.getByTestId('text-editor')).toBeVisible();
-    await expect(tabNamed(page, 'Text Format')).toHaveAttribute('aria-selected', 'true');
+    await expect(tabNamed(page, 'Home')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByLabel('Font size')).toBeEnabled();
     await page.keyboard.press('ControlOrMeta+a');
     await page.keyboard.type('Big words');
     await page.keyboard.press('ControlOrMeta+a');
@@ -116,11 +118,11 @@ test('the Text Format tab appears for text, opens on edit, and font size can be 
     ).toContainText('Big words');
     await expect(box.locator('strong')).toContainText('Big words');
 
-    // Nothing with text selected: the tab goes and the ribbon returns to where it was.
+    // Nothing with text selected: the text tools stay in place, dimmed.
     const canvas = (await page.getByTestId('stage-canvas').boundingBox())!;
     await page.mouse.click(canvas.x + 20, canvas.y + 20);
-    await expect(tabNamed(page, 'Text Format')).toHaveCount(0);
-    await expect(tabNamed(page, 'Insert')).toHaveAttribute('aria-selected', 'true');
+    await expect(tabNamed(page, 'Home')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByLabel('Font size')).toBeDisabled();
   } finally {
     await app.close();
   }
@@ -134,7 +136,7 @@ test('a selected text box can be formatted as a whole without editing it', async
     await page.getByRole('tab', { name: 'Insert' }).click();
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
     const box = page.locator('.stage-slide > [data-object-type="text"]');
-    await tabNamed(page, 'Text Format').click();
+    await tabNamed(page, 'Home').click();
     await expect(page.getByRole('group', { name: 'Font (whole box)' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Italic', exact: true }).click();
@@ -167,7 +169,7 @@ test('the icon tools: alignment, lists, spacing, link and fit', async () => {
     await page.getByRole('tab', { name: 'Insert' }).click();
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
     const box = page.locator('.stage-slide > [data-object-type="text"]');
-    await tabNamed(page, 'Text Format').click();
+    await tabNamed(page, 'Home').click();
     const button = (name: string) => page.getByRole('button', { name, exact: true });
 
     // Alignment is one-of-four.
@@ -247,7 +249,7 @@ test('a grow-to-fit box follows its text, growing and shrinking, without being e
       // Leave the field, which ends the step.
       await size.press('Enter');
     };
-    await tabNamed(page, 'Text Format').click();
+    await tabNamed(page, 'Home').click();
     const start = await height();
 
     // Fixed size: a big font overflows and the box stays as it was.
@@ -301,7 +303,7 @@ test('a grow-to-fit box fits what was typed when editing ends, including when te
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
     const box = page.locator('.stage-slide > [data-object-type="text"]');
     const height = () => box.evaluate((e: HTMLElement) => parseFloat(e.style.height));
-    await tabNamed(page, 'Text Format').click();
+    await tabNamed(page, 'Home').click();
     await page.getByRole('button', { name: 'Grow box to fit', exact: true }).click();
     const oneLine = await height();
     // At the test window's zoom a one-line box is a few pixels tall and its resize

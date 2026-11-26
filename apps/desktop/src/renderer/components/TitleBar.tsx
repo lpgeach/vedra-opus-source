@@ -16,7 +16,8 @@ export function toHex(rgb: string): string | null {
 
 /**
  * The window's one bar at the top (docs/briefs/B1-title-bar.md): the menu,
- * the common commands, the project's title, Publish and the views. The
+ * the common commands, the project's title and the views. Preview and Publish are at the
+ * end of the ribbon's tab row (B17). The
  * system's own buttons sit at its end; the bar is the window's handle.
  */
 export function TitleBar({ open, view }: { open: OpenProject | null; view: EditorView }) {
@@ -90,14 +91,6 @@ export function TitleBar({ open, view }: { open: OpenProject | null; view: Edito
             >
               <Icon name="redo" />
             </button>
-            <button
-              className="icon-button"
-              aria-label={t('titleBar.preview')}
-              title={t('titleBar.preview')}
-              onClick={() => void editor.preview('project')}
-            >
-              <Icon name="play" />
-            </button>
           </>
         )}
       </div>
@@ -127,9 +120,6 @@ export function TitleBar({ open, view }: { open: OpenProject | null; view: Edito
         </button>
         {open && (
           <>
-            <button className="top-bar-button" onClick={() => editor.setPublishOpen(true)}>
-              {t('topBar.publish')}
-            </button>
             <div className="segmented" role="group" aria-label={t('topBar.views')}>
               <button aria-pressed={view === 'overview'} onClick={() => editor.setView('overview')}>
                 <Icon name="overview" />

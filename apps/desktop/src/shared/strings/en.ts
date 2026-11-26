@@ -36,14 +36,18 @@ export const en = {
   // The ribbon's tabs.
   'ribbon.tab.home': 'Home',
   'ribbon.tab.insert': 'Insert',
+  'ribbon.tab.slides': 'Slides',
   'ribbon.tab.design': 'Design',
   'ribbon.tab.transitions': 'Transitions',
   'ribbon.tab.animations': 'Animations',
   'ribbon.tab.view': 'View',
-  'ribbon.tab.text': 'Text Format',
 
   // The Home and Insert tabs: their groups and commands.
   'ribbon.preview': 'Preview',
+  'ribbon.previewChoices': 'Preview choices',
+  'ribbon.publish': 'Publish',
+  'ribbon.collapse': 'Collapse the ribbon',
+  'ribbon.expand': 'Expand the ribbon',
   'ribbon.thisSlide': 'This Slide',
   'ribbon.thisScene': 'This Scene',
   'ribbon.entireProject': 'Entire Project',
@@ -68,7 +72,25 @@ export const en = {
   'ribbon.screenRecording': 'Screen Recording…',
   'ribbon.textToSpeech': 'Text to Speech…',
   'ribbon.importMedia': 'Import Media…',
-  'ribbon.objects': 'Objects',
+  'ribbon.slide': 'Slide',
+  'ribbon.text': 'Text',
+  'ribbon.interactiveObjects': 'Interactive Objects',
+  'ribbon.slideLayer': 'Slide Layer',
+  'ribbon.trigger': 'Trigger',
+  'ribbon.symbol': 'Symbol',
+  'ribbon.caption': 'Caption',
+  'ribbon.editing': 'Editing',
+  'ribbon.findReplace': 'Find and Replace…',
+  'ribbon.hyperlink': 'Hyperlink',
+  'ribbon.duplicateSlide': 'Duplicate Slide',
+  'ribbon.tabOrder': 'Tab Order',
+  'ribbon.newFromTemplate': 'From Template…',
+  'ribbon.importSlides': 'Import Slides…',
+  'ribbon.questionBank': 'Question Bank',
+  'ribbon.quizzing': 'Quizzing',
+  'ribbon.record': 'Record',
+  'ribbon.views': 'Views',
+  'ribbon.feedbackMaster': 'Feedback Master',
   'ribbon.textBox': 'Text Box',
   'ribbon.icons': 'Icons…',
   'ribbon.table': 'Table',
@@ -80,11 +102,9 @@ export const en = {
   'ribbon.scrollingPanel': 'Scrolling Panel',
   'ribbon.webObject': 'Web Object',
   'ribbon.dataEntry': 'Data Entry',
-  'ribbon.questions': 'Questions',
   'ribbon.question': 'Question',
   'ribbon.convertSlide': 'Convert Slide',
   'ribbon.survey': 'Survey',
-  'ribbon.interactivity': 'Interactivity',
   'ribbon.variables': 'Variables',
 
   // The top bar.
@@ -92,7 +112,6 @@ export const en = {
   'topBar.undo': 'Undo',
   'topBar.redo': 'Redo',
   'topBar.projectTitle': 'Project title',
-  'topBar.publish': 'Publish',
   'topBar.views': 'View',
   'topBar.overview': 'Overview',
   'topBar.slideView': 'Slide View',
@@ -100,9 +119,11 @@ export const en = {
 
   // The right panel's tabs.
   'rightPanel.tabs': 'Right panel',
+  'rightPanel.lowerTabs': 'Lower right panel',
   'rightPanel.format': 'Format',
   'rightPanel.triggers': 'Triggers',
-  'rightPanel.layers': 'Layers',
+  'rightPanel.layers': 'Slide Layers',
+  'rightPanel.properties': 'Slide Properties',
   'rightPanel.check': 'Check',
 
   // The Welcome screen.
@@ -272,7 +293,6 @@ export const en = {
 
   // The title bar (B1).
   'titleBar.menu': 'Menu',
-  'titleBar.preview': 'Preview',
 
   // Help → Third-Party Notices… (R2).
   'menu.help.thirdPartyNotices': 'Third-Party Notices…',

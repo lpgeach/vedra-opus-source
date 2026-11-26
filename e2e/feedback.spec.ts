@@ -61,7 +61,7 @@ test('the feedback master’s layouts make a question’s layers; Form View edit
     await page.getByRole('button', { name: 'Slide View', exact: true }).click();
 
     // A multiple-choice question: its layers' words in Form View.
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Question', exact: true }).click();
     await page.getByRole('menuitem', { name: 'Multiple Choice', exact: true }).click();
     await expect(form(page).getByLabel('Correct feedback', { exact: true })).toHaveValue(
@@ -77,7 +77,7 @@ test('the feedback master’s layouts make a question’s layers; Form View edit
     );
     // The Incorrect layer deleted on the slide, then made again from Form View.
     await page.getByRole('button', { name: 'Slide', exact: true }).click();
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await page.getByRole('button', { name: 'Delete Incorrect', exact: true }).click();
     await page.getByRole('button', { name: 'Form', exact: true }).click();
     await form(page).getByRole('button', { name: 'Make the Incorrect layer', exact: true }).click();
@@ -101,7 +101,7 @@ test('the feedback master’s layouts make a question’s layers; Form View edit
     );
     // Kept: three layers; the Correct one has the master's rectangle with its four parts.
     await page.getByRole('button', { name: 'Slide', exact: true }).click();
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     // Names by their own Delete buttons: "Correct" is also in "Incorrect".
     const rowOf = (name: string) =>
       page.getByTestId('layer-row').filter({
@@ -161,7 +161,7 @@ test('review: a button made a Review the quiz trigger in the wizard, published, 
     await answerDialogs(app.app, { open: [[out]], message: [1, 1] });
     await page.getByRole('button', { name: 'New Project' }).click();
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Question', exact: true }).click();
     await page.getByRole('menuitem', { name: 'Multiple Choice', exact: true }).click();
     await expect(form(page)).toBeVisible();

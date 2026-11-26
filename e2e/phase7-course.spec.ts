@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * Phase 7 from end to end, with everything made in the app: a graded question
@@ -15,8 +15,10 @@ import { answerDialogs, launchApp } from './launch';
 
 const ribbon = (page: Page, name: string) =>
   page.getByTestId('ribbon').getByRole('tab', { name, exact: true }).click();
+/** Commands on the Slides tab (B17); the rest are on Insert. */
+const ON_SLIDES = ['Question', 'Survey', 'Convert Slide', 'Question Bank', 'Screen Recording…'];
 const insert = async (page: Page, menu: string, item: string) => {
-  await ribbon(page, 'Insert');
+  await ribbon(page, ON_SLIDES.includes(menu) ? 'Slides' : 'Insert');
   await page.getByRole('button', { name: menu, exact: true }).click();
   await page.getByRole('menuitem', { name: item, exact: true }).click();
 };
@@ -142,7 +144,7 @@ test('a course using all of Phase 7 survives saving and plays in preview and pub
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await play(preview);
     await preview.close();

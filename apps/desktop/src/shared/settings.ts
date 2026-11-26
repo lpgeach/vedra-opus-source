@@ -54,7 +54,17 @@ export interface ViewSettings {
 
 export interface Settings {
   theme: ThemeChoice;
-  layout: Record<PanelName, PanelState> & { leftTab: LeftTab; bottomTab: BottomTab };
+  layout: Record<PanelName, PanelState> & {
+    leftTab: LeftTab;
+    bottomTab: BottomTab;
+    /**
+     * Height of the lower of the right side's two panels (Slide Layers, Slide Properties), in
+     * CSS pixels; the upper one (Triggers, Format, Check) has the rest (B17).
+     */
+    rightSplit: number;
+    /** The ribbon shows only its tab row until a tab is clicked (B17). */
+    ribbonCollapsed: boolean;
+  };
   view: ViewSettings;
   /** Saved looks for the course player (P8.3), for any project on this machine. */
   playerPresets: PlayerPreset[];
@@ -75,6 +85,8 @@ export const DEFAULT_SETTINGS: Settings = {
     bottom: { size: 220, collapsed: false },
     leftTab: 'slides',
     bottomTab: 'timeline',
+    rightSplit: 260,
+    ribbonCollapsed: false,
   },
   view: {
     rulers: false,
@@ -104,6 +116,8 @@ export const settingsSchema: z.ZodType<Settings> = z.object({
     bottom: panel,
     leftTab: z.enum(LEFT_TABS),
     bottomTab: z.enum(BOTTOM_TABS),
+    rightSplit: z.number().int().min(0).max(10_000),
+    ribbonCollapsed: z.boolean(),
   }),
   view: z.object({
     rulers: z.boolean(),
@@ -141,6 +155,9 @@ const lenientSchema = z.object({
       bottom: panel.catch(defaults.bottom),
       leftTab: z.enum(LEFT_TABS).catch(defaults.leftTab),
       bottomTab: z.enum(BOTTOM_TABS).catch(defaults.bottomTab),
+      // Settings from before B17 have none.
+      rightSplit: z.number().int().min(0).max(10_000).catch(defaults.rightSplit),
+      ribbonCollapsed: z.boolean().catch(defaults.ribbonCollapsed),
     })
     .catch(defaults),
   view: lenientView.catch(viewDefaults),
@@ -176,11 +193,19 @@ export function parseSettings(raw: unknown): Settings {
 }
 
 function structuredDefaults(): Settings {
-  const { left, right, bottom, leftTab, bottomTab } = defaults;
+  const { left, right, bottom, leftTab, bottomTab, rightSplit, ribbonCollapsed } = defaults;
   const { guideX, guideY } = viewDefaults;
   return {
     theme: DEFAULT_SETTINGS.theme,
-    layout: { left: { ...left }, right: { ...right }, bottom: { ...bottom }, leftTab, bottomTab },
+    layout: {
+      left: { ...left },
+      right: { ...right },
+      bottom: { ...bottom },
+      leftTab,
+      bottomTab,
+      rightSplit,
+      ribbonCollapsed,
+    },
     view: { ...viewDefaults, guideX: [...guideX], guideY: [...guideY] },
     playerPresets: [],
     keepCrashReports: DEFAULT_SETTINGS.keepCrashReports,

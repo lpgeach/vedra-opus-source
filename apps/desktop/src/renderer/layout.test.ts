@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { PanelLayout } from './layout';
 import {
   clampPanelSize,
+  clampRightSplit,
+  RIGHT_PART_MIN,
   fitLayout,
   maxPanelSize,
   PANEL_MIN,
@@ -105,5 +107,22 @@ describe('fitLayout', () => {
     const remembered = layout(900, 900, 900);
     fitLayout(remembered, { width: 960, height: 500 });
     expect(remembered).toEqual(layout(900, 900, 900));
+  });
+});
+
+describe('clampRightSplit (B17)', () => {
+  it('keeps the height asked for when both right panels have room', () => {
+    expect(clampRightSplit(260, 800)).toBe(260);
+    expect(clampRightSplit(260.4, 800)).toBe(260);
+  });
+
+  it('leaves each of the two panels at least its minimum', () => {
+    expect(clampRightSplit(10, 800)).toBe(RIGHT_PART_MIN);
+    expect(clampRightSplit(5000, 800)).toBe(800 - RIGHT_PART_MIN - SPLITTER);
+  });
+
+  it('gives the lower panel its minimum in a right side too short for both, and for nonsense', () => {
+    expect(clampRightSplit(260, 150)).toBe(RIGHT_PART_MIN);
+    expect(clampRightSplit(Number.NaN, 800)).toBe(RIGHT_PART_MIN);
   });
 });

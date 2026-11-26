@@ -46,10 +46,10 @@ test('the author’s Tab order is kept and followed in the course', async () => 
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
     await buttonAt(page, 'Left', 100);
     await buttonAt(page, 'Right', 900);
-    // Nothing selected: the Format tab shows the Slide panel.
+    // The slide's own settings, on the Slide Properties tab (B17).
     await page.getByTestId('stage-canvas').click({ position: { x: 4, y: 4 } });
     await expect(page.getByTestId('project-status')).not.toContainText('selected');
-    await page.getByRole('tab', { name: 'Format', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Properties', exact: true }).click();
     await expect(items(page)).toHaveCount(2);
     const ids = () =>
       items(page).evaluateAll((rows) => rows.map((row) => row.getAttribute('data-tab-object')));
@@ -75,7 +75,7 @@ test('the author’s Tab order is kept and followed in the course', async () => 
     const { app, page } = second;
     await answerDialogs(app, { open: [[out]], message: [1] });
     await page.getByTestId('slide-list').locator('.slide-item').first().click();
-    await page.getByRole('tab', { name: 'Format', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Properties', exact: true }).click();
     await expect(page.getByLabel('Tab order', { exact: true })).toHaveValue('own');
     const order = await items(page).evaluateAll((rows) =>
       rows.map((row) => row.getAttribute('data-tab-object') ?? ''),

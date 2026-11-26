@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 test('a Run JavaScript trigger made in the wizard runs in preview, not in the editor', async () => {
   const { app, page } = await launchApp();
@@ -46,7 +46,7 @@ test('a Run JavaScript trigger made in the wizard runs in preview, not in the ed
     await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     const errors: string[] = [];
     preview.on('pageerror', (error) => errors.push(error.message));

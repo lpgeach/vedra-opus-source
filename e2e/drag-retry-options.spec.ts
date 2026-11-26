@@ -42,7 +42,7 @@ test('one item per target, drop states after Submit and retrying wrong answers: 
     await answerDialogs(app, { save: [file], message: [1] });
     await page.getByRole('button', { name: 'New Project' }).click();
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Convert Slide', exact: true }).click();
     await page.getByRole('menuitem', { name: 'Drag and Drop', exact: true }).click();
     await expect(onePerTarget(page)).not.toBeChecked();
@@ -51,7 +51,7 @@ test('one item per target, drop states after Submit and retrying wrong answers: 
     await expect(onePerTarget(page)).toBeChecked();
     await expect(afterSubmit(page)).toBeChecked();
 
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Question', exact: true }).click();
     await page.getByRole('menuitem', { name: 'Result Slide', exact: true }).click();
     await expect(retryWrong(page)).not.toBeChecked();

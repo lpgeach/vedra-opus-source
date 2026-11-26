@@ -55,6 +55,24 @@ const migrations: Record<number, (doc: RawDocument) => RawDocument> = {
   // v8 added captions to audio and video objects: none yet on any of them.
   // v14 added more kinds of question and two input objects: nothing to change.
   // v38 (docs/briefs/B12-storyline-leftovers.md) added the ignore-case comparisons: a v37 file is valid as it is.
+  40: (doc) => {
+    // v41 (docs/briefs/B17-ribbon-and-panels.md): a slide may have its own background and
+    // leave out its layout's objects. Older slides have neither, which is how they looked.
+    const copy = structuredCloneJson(doc);
+    for (const key of ['scenes', 'banks']) {
+      const groups = copy[key];
+      if (!Array.isArray(groups)) continue;
+      for (const group of groups) {
+        const slides = isRecord(group) && Array.isArray(group['slides']) ? group['slides'] : [];
+        for (const slide of slides) {
+          if (!isRecord(slide) || !isRecord(slide['properties'])) continue;
+          slide['properties']['background'] ??= null;
+          slide['properties']['hideLayoutObjects'] ??= false;
+        }
+      }
+    }
+    return copy;
+  },
   39: (doc) => {
     // v40 (docs/briefs/B16-dial-looks-and-paths.md): a dial may be drawn its own way; every
     // older one is drawn as ours, as before.

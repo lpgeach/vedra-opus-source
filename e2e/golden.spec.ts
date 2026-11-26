@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 import { readGolden } from '../fixtures/golden';
 import type { GoldenSnapshot } from '../fixtures/golden';
 import { packFixture } from './fixture';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 const FIXTURE = 'states-and-triggers';
 const project: Project = parseProject(
@@ -102,7 +102,7 @@ test('the states-and-triggers golden run plays identically in preview and in a p
     // Preview.
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await playGolden(preview);
     await preview.close();

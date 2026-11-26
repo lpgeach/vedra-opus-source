@@ -18,6 +18,9 @@ describe('parseSettings', () => {
         bottom: { size: 150, collapsed: true },
         leftTab: 'media',
         bottomTab: 'notes',
+        // Since B17.
+        rightSplit: 333,
+        ribbonCollapsed: true,
       },
       view: {
         rulers: true,
@@ -80,6 +83,22 @@ describe('parseSettings', () => {
     expect(parseSettings({ view: { offSlide: 'blur' } }).view.offSlide).toBe('dim');
     expect(parseSettings({ view: { offSlide: 'hide' } }).view.offSlide).toBe('hide');
     expect(parseSettings({ view: { offSlide: 'show' } }).view.offSlide).toBe('show');
+  });
+
+  it('gives the lower right panel its default height, and the ribbon its commands, for a settings file from before B17 or a damaged value', () => {
+    const before = { left: { size: 333, collapsed: false }, leftTab: 'media' };
+    expect(parseSettings({ layout: before }).layout).toMatchObject({
+      leftTab: 'media',
+      rightSplit: 260,
+      ribbonCollapsed: false,
+    });
+    expect(parseSettings({ layout: { ...before, ribbonCollapsed: 'yes' } }).layout).toMatchObject({
+      ribbonCollapsed: false,
+    });
+    expect(parseSettings({ layout: { ...before, rightSplit: 'tall' } }).layout.rightSplit).toBe(
+      260,
+    );
+    expect(parseSettings({ layout: { ...before, rightSplit: 400 } }).layout.rightSplit).toBe(400);
   });
 
   it('replaces only the parts it cannot use', () => {

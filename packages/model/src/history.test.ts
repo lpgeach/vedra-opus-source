@@ -949,6 +949,8 @@ describe('slide properties and links', () => {
       controls: { previous: true, next: false },
       transition: null,
       focusOrder: null,
+      background: null,
+      hideLayoutObjects: false,
     });
     history.undo();
     expect(stored().controls.next).toBe(true);

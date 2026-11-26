@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { AppInfo, RecentFile, RecoverableProject } from '../../shared/ipc';
 import { editor } from '../project-store';
 import { t } from '../../shared/strings';
+import logo from '../../../../../brand/vedra-opus-logo-dark.svg';
 
 /** What the window shows with no project open: start one, open one, or pick up where a crash left off. */
 export function Welcome() {
@@ -23,7 +24,10 @@ export function Welcome() {
 
   return (
     <main className="welcome">
-      <h1>Vedra Opus</h1>
+      {/* The logo in the theme's text colour: its shape is a mask, so one file serves both themes. */}
+      <h1 className="welcome-logo" data-testid="welcome-logo">
+        <span role="img" aria-label="Vedra Opus" style={{ maskImage: `url("${logo}")` }} />
+      </h1>
       <p>{t('welcome.tagline')}</p>
       <div className="actions">
         <button className="primary" onClick={() => void editor.newProject()}>

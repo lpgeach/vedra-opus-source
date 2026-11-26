@@ -17,7 +17,8 @@ import {
 } from '../project-store';
 import type { OpenProject } from '../project-store';
 import { NumericInput } from './NumericInput';
-import { Group } from './ribbon-parts';
+import { Command, Group } from './ribbon-parts';
+import { cancelFormatPainter, pickAnimations, useFormatPainter } from '../format-painter';
 
 const EFFECT_NAMES: Record<EffectKind, string> = {
   fade: 'Fade',
@@ -99,6 +100,28 @@ const hasText = (object: SceneObject) =>
  * The Animations ribbon tab (docs/briefs/P6.5-animations.md): the entrance,
  * exit and motion paths of the one selected object.
  */
+/**
+ * The Animation Painter (B17): copies the selected object's entrance and exit to the next object
+ * clicked. A double-click keeps it on until Escape or a second click here, as the Format Painter.
+ */
+function AnimationPainter({ object }: { object: SceneObject | null }) {
+  const painter = useFormatPainter();
+  const armed = painter.armed && painter.animations;
+  return (
+    <Group label="Copy">
+      <Command
+        icon="entrance"
+        label={armed ? 'Cancel Painter' : 'Animation Painter'}
+        pressed={armed}
+        onClick={
+          armed ? cancelFormatPainter : object ? () => pickAnimations(object, false) : undefined
+        }
+        onDoubleClick={object && !armed ? () => pickAnimations(object, true) : undefined}
+      />
+    </Group>
+  );
+}
+
 export function AnimationsTab() {
   const {
     open,
@@ -119,15 +142,18 @@ export function AnimationsTab() {
   const object = partOf(top ?? undefined, groupPart) ?? null;
   if (!open || !current || !object || current.isMaster || getEditorState().stateEdit) {
     return (
-      <Group label="Animation">
-        <p className="ribbon-hint" data-testid="animations-hint">
-          {current?.isMaster
-            ? 'Animations play on slides, not on masters and layouts.'
-            : getEditorState().stateEdit
-              ? 'Animations belong to the object, not to one of its states.'
-              : 'Select one object on the slide to animate it.'}
-        </p>
-      </Group>
+      <>
+        <AnimationPainter object={null} />
+        <Group label="Animation">
+          <p className="ribbon-hint" data-testid="animations-hint">
+            {current?.isMaster
+              ? 'Animations play on slides, not on masters and layouts.'
+              : getEditorState().stateEdit
+                ? 'Animations belong to the object, not to one of its states.'
+                : 'Select one object on the slide to animate it.'}
+          </p>
+        </Group>
+      </>
     );
   }
   const { animations } = object;
@@ -146,6 +172,7 @@ export function AnimationsTab() {
 
   return (
     <>
+      <AnimationPainter object={object} />
       {top?.type === 'group' && <PartChooser group={top} part={object.id} />}
       {(['entrance', 'exit'] as const).map((phase) => (
         <EffectGroup

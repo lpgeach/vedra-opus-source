@@ -47,7 +47,10 @@ test('a .story course imports from the Welcome screen, with its report, and play
     // It plays: the title, the button, and the master's own text.
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByTestId('title-bar').getByRole('button', { name: 'Preview', exact: true }).click(),
+      page
+        .getByTestId('ribbon-tab-row')
+        .getByRole('button', { name: 'Preview', exact: true })
+        .click(),
     ]);
     const stage = preview.locator('.vo-player-stage');
     await expect(stage).toContainText('Welcome aboard');

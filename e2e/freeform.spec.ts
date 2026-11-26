@@ -30,7 +30,7 @@ async function shapeAt(page: Page, label: string, x: number) {
 }
 
 async function convert(page: Page, kind: string) {
-  await ribbon(page, 'Insert');
+  await ribbon(page, 'Slides');
   await page.getByRole('button', { name: 'Convert Slide', exact: true }).click();
   await page.getByRole('menuitem', { name: kind, exact: true }).click();
   await expect(form(page)).toBeVisible();

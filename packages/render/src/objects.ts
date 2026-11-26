@@ -1512,11 +1512,47 @@ export function renderLayer(layer: Layer, context: RenderContext): RenderNode {
 }
 
 /**
- * What a slide inherits, back to front: its master's layer, then its layout's
- * layer. A layout's placeholders only prompt in Master View; the slide has its
- * own copies, so they are left out here. Empty when the slide has no layout.
+ * A slide's own background (B17): its colour, gradient or picture over the whole stage, as a
+ * shape's fill is drawn. Null when it has none and the theme's shows.
+ */
+export function renderSlideBackground(slide: Slide, context: RenderContext): RenderNode | null {
+  const fill = slide.properties.background;
+  if (!fill || fill.kind === 'none') return null;
+  const { width, height } = context.stage;
+  const look = paint(fill, `vo-background-${slide.id}`, width, height, context);
+  return h(
+    'svg',
+    {
+      attrs: {
+        class: 'vo-slide-background',
+        width,
+        height,
+        viewBox: `0 0 ${width} ${height}`,
+        'aria-hidden': 'true',
+      },
+      style: { position: 'absolute', left: '0', top: '0' },
+    },
+    [
+      ...(look.def ? [h('defs', {}, [look.def])] : []),
+      h('rect', { attrs: { width, height, fill: look.fill } }),
+    ],
+  );
+}
+
+/**
+ * What a slide shows beneath its own layers, back to front: its background (B17), then its
+ * master's layer and its layout's layer, unless it hides its layout's objects. A layout's
+ * placeholders only prompt in Master View; the slide has its own copies, so they are left out
+ * here.
  */
 export function renderInheritedLayers(slide: Slide, context: RenderContext): RenderNode[] {
+  const background = renderSlideBackground(slide, context);
+  const layers = slide.properties.hideLayoutObjects ? [] : layoutLayers(slide, context);
+  return background ? [background, ...layers] : layers;
+}
+
+/** The master's and layout's layers a slide shows; none when it has no layout. */
+function layoutLayers(slide: Slide, context: RenderContext): RenderNode[] {
   if (slide.layoutId === null) return [];
   for (const master of context.masters) {
     const layout = master.layouts.find((each) => each.id === slide.layoutId);

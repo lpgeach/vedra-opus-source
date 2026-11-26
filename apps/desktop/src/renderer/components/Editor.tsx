@@ -29,7 +29,7 @@ import { everySlide } from '@vedraopus/model';
 
 const SPLITTER_LABELS: Record<PanelName, string> = {
   left: 'Resize slides and media panel',
-  right: 'Resize triggers and layers panel',
+  right: 'Resize triggers, format and slide panel',
   bottom: 'Resize timeline, states and notes panel',
 };
 
@@ -196,7 +196,7 @@ function SlideView({
 
   return (
     <div className="workspace" ref={workspaceRef}>
-      {sizes && (
+      {sizes && workspace && (
         <>
           {master ? (
             <MasterPanel open={open} size={sizes.left} />
@@ -210,7 +210,7 @@ function SlideView({
             <BottomPanel open={open} current={current} size={sizes.bottom} />
           </div>
           {splitter('right')}
-          <RightPanel open={open} current={current} size={sizes.right} />
+          <RightPanel open={open} current={current} size={sizes.right} height={workspace.height} />
         </>
       )}
     </div>

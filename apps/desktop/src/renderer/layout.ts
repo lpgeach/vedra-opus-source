@@ -47,6 +47,20 @@ export function maxPanelSize(panel: PanelName, layout: PanelLayout, workspace: S
   return Math.max(PANEL_MIN[panel], Math.floor(available));
 }
 
+/** Smallest useful height of each of the right side's two panels (B17). */
+export const RIGHT_PART_MIN = 100;
+
+/**
+ * The height to draw the lower right panel at, in a right side `height` tall: as asked, but
+ * leaving each of the two panels at least its minimum. Like the panels' sizes, the remembered
+ * height is kept and only shrunk for display.
+ */
+export function clampRightSplit(wanted: number, height: number): number {
+  const max = Math.max(RIGHT_PART_MIN, Math.floor(height - RIGHT_PART_MIN - SPLITTER));
+  if (!Number.isFinite(wanted)) return Math.min(max, RIGHT_PART_MIN);
+  return Math.min(max, Math.max(RIGHT_PART_MIN, Math.round(wanted)));
+}
+
 /** The nearest allowed size to the one asked for. */
 export function clampPanelSize(
   panel: PanelName,

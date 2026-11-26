@@ -30,6 +30,10 @@ case "$TARGET" in
     ;;
 esac
 [ -n "$OUT" ] || { echo "usage: build-ffmpeg.sh <mac|linux|win> <output folder>" >&2; exit 2; }
+# As a full path: the build changes into its own folder before writing here, and a relative
+# path would then land the build in that folder, deleted at the end (CI passes one).
+mkdir -p "$OUT"
+OUT=$(cd "$OUT" && pwd)
 
 JOBS=$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/vedraopus-ffmpeg-build.XXXXXX")

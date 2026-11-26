@@ -124,6 +124,8 @@ export function createSlide(title = 'Untitled Slide'): Slide {
       controls: { previous: true, next: true },
       transition: null,
       focusOrder: null,
+      background: null,
+      hideLayoutObjects: false,
     },
     triggers: [],
     question: null,

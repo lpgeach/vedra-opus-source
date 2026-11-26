@@ -1,5 +1,5 @@
 {
-  "formatVersion": 40,
+  "formatVersion": 41,
   "id": "project_states_and_triggers",
   "title": "States and Triggers",
   "stage": {
@@ -778,7 +778,9 @@
               "next": true
             },
             "transition": null,
-            "focusOrder": null
+            "focusOrder": null,
+            "background": null,
+            "hideLayoutObjects": false
           },
           "triggers": [
             {
@@ -1163,7 +1165,9 @@
               "next": true
             },
             "transition": null,
-            "focusOrder": null
+            "focusOrder": null,
+            "background": null,
+            "hideLayoutObjects": false
           },
           "triggers": [],
           "question": null,

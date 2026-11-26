@@ -59,7 +59,7 @@ test('a screen recording is chosen, recorded, watched back and inserted as a vid
 
     await page.getByRole('button', { name: 'New Project' }).click();
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Screen Recording…', exact: true }).click();
     const dialog = page.getByTestId('screen-record-dialog');
     await expect(dialog.getByRole('button', { name: 'Record', exact: true })).toBeDisabled();

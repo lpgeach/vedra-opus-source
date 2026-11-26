@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { serveFolder } from '../packages/publish/browser/serve';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * Web objects (docs/briefs/P9.6-web-objects.md), made in the app: one from a
@@ -81,7 +81,7 @@ test('web objects made in the app survive saving and work in the published cours
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await expect(preview.frameLocator('.vo-player-stage iframe.vo-web').locator('#out')).toHaveText(
       'game on',

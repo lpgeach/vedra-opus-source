@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { packTwoSlides } from './fixture';
-import { answerDialogs, launchApp, leavingRequests } from './launch';
+import { answerDialogs, launchApp, leavingRequests, previewFrom } from './launch';
 
 /**
  * Crash reports and telemetry (docs/briefs/P11.5-hardening.md, part C): crash
@@ -119,7 +119,7 @@ test('a session of editing, previewing and publishing makes no request that leav
     // Preview the project, then close it.
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await expect(preview.locator('.vo-player-position')).toBeVisible();
     await preview.close();

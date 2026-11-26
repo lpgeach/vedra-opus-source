@@ -4,7 +4,7 @@ import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { packTwoSlides } from './fixture';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const file = await packTwoSlides(mkdtempSync(join(tmpdir(), 'vedraopus-e2e-preview-')));
@@ -15,11 +15,12 @@ async function start(): Promise<{ app: ElectronApplication; page: Page }> {
 }
 
 /** Click a Preview command and return the preview window's page. */
-async function openPreview(app: ElectronApplication, page: Page, name: string): Promise<Page> {
-  const [preview] = await Promise.all([
-    app.waitForEvent('window'),
-    page.getByRole('button', { name, exact: true }).click(),
-  ]);
+async function openPreview(
+  app: ElectronApplication,
+  page: Page,
+  name: 'This Slide' | 'This Scene' | 'Entire Project',
+): Promise<Page> {
+  const [preview] = await Promise.all([app.waitForEvent('window'), previewFrom(page, name)]);
   await expect(preview.locator('.vo-player-position')).toBeVisible();
   return preview;
 }

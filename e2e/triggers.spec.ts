@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { ElectronApplication, Page } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const { app, page } = await launchApp();
@@ -60,7 +60,7 @@ test('click to reveal: built with the trigger wizard, played in preview', async 
     await ribbonTab(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     const box = preview.locator('[data-object-type="shape"]');
     const shown = () => box.evaluate((e: HTMLElement) => e.style.display !== 'none');

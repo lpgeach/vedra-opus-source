@@ -59,6 +59,19 @@ export const ui = {
 
   commitLayout: persist,
 
+  /** Show the ribbon's commands, or only its tab row (B17). */
+  setRibbonCollapsed(ribbonCollapsed: boolean): void {
+    if (settings.layout.ribbonCollapsed === ribbonCollapsed) return;
+    setLayout({ ribbonCollapsed });
+    persist();
+  },
+
+  /** Set the height of the lower right panel while its divider is dragged (B17). */
+  resizeRightSplit(rightSplit: number): void {
+    if (settings.layout.rightSplit === rightSplit) return;
+    setLayout({ rightSplit });
+  },
+
   setCollapsed(panel: PanelName, collapsed: boolean): void {
     if (settings.layout[panel].collapsed === collapsed) return;
     setLayout({ [panel]: { ...settings.layout[panel], collapsed } });

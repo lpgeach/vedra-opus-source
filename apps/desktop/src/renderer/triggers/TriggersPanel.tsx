@@ -1,6 +1,6 @@
 import { createId, findSlide } from '@vedraopus/model';
 import type { Slide, Trigger } from '@vedraopus/model';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { editor, useEditor } from '../project-store';
 import type { CurrentSlide, OpenProject } from '../project-store';
 import { describeTrigger, namesFor } from './describe';
@@ -45,9 +45,16 @@ export function TriggersPanel({
   open: OpenProject;
   current: CurrentSlide | undefined;
 }) {
-  const { selection } = useEditor();
+  const { selection, newTriggerAsked } = useEditor();
   const [editing, setEditing] = useState<Trigger | 'new' | null>(null);
   const [, setPasteable] = useState(copied !== null);
+  // Insert → Trigger (B17) asks for the wizard from outside the panel.
+  const asked = useRef(newTriggerAsked);
+  useEffect(() => {
+    if (newTriggerAsked === asked.current) return;
+    asked.current = newTriggerAsked;
+    setEditing('new');
+  }, [newTriggerAsked]);
   if (!current || current.isMaster) {
     return <p className="placeholder">Triggers are added on slides, in Slide View.</p>;
   }

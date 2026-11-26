@@ -71,6 +71,13 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
+      # The end-to-end tests open published courses in Chromium (Playwright's own build).
+      - name: Install Chromium for the end-to-end tests (Linux)
+        if: runner.os == 'Linux'
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium for the end-to-end tests
+        if: runner.os != 'Linux'
+        run: npx playwright install chromium
       - name: End-to-end tests (Linux, under a virtual display)
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum npm run e2e

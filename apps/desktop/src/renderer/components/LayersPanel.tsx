@@ -1,7 +1,7 @@
 import { cloneLayer, createLayer, findSlide } from '@vedraopus/model';
 import type { Layer } from '@vedraopus/model';
 import { useState } from 'react';
-import { editor, useEditor } from '../project-store';
+import { currentSlide, editor, getEditorState, useEditor } from '../project-store';
 import type { CurrentSlide, OpenProject } from '../project-store';
 
 const PROPERTIES: {
@@ -26,6 +26,22 @@ function freeName(layers: readonly Layer[]): string {
  * one edits it on the stage (with the layers below it drawn beneath, dimmed,
  * unless their eye is closed). The chosen overlay's properties are below.
  */
+/**
+ * Add a layer to the slide being edited and edit it: the Slide Layers panel's New layer, and
+ * Insert → Slide Layer (B17). Undoable; nothing happens in Master View or with no slide.
+ */
+export function addSlideLayer(): void {
+  const { open, view, selectedSlideId } = getEditorState();
+  if (!open || view !== 'slide') return;
+  // The slide shown: the first, until another is chosen.
+  const slide = currentSlide(open.project, selectedSlideId)?.slide;
+  if (!slide) return;
+  const layer = createLayer(freeName(slide.layers));
+  open.history.execute('layer.add', { slideId: slide.id, layer });
+  editor.editLayer(layer.id);
+  editor.showSlidePanel('layers');
+}
+
 export function LayersPanel({
   open,
   current,
@@ -142,15 +158,7 @@ export function LayersPanel({
   return (
     <div className="layers-panel" data-testid="layers-panel">
       <div className="panel-actions">
-        <button
-          onClick={() => {
-            const layer = createLayer(freeName(overlays));
-            history.execute('layer.add', { slideId: slide.id, layer });
-            editor.editLayer(layer.id);
-          }}
-        >
-          New layer
-        </button>
+        <button onClick={addSlideLayer}>New layer</button>
       </div>
       <ul className="layer-list">
         {[...overlays].reverse().map((layer) => row(layer, false))}

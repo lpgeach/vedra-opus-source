@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { ElectronApplication, Page } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const { app, page } = await launchApp();
@@ -28,7 +28,7 @@ const rename = async (page: Page, row: number, name: string) => {
 async function boxShowing(page: Page, name: string) {
   await page.getByTestId('ribbon').getByRole('tab', { name: 'Insert', exact: true }).click();
   await page.getByRole('button', { name: 'Text Box', exact: true }).click();
-  await page.getByTestId('ribbon').getByRole('tab', { name: 'Text Format', exact: true }).click();
+  await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
   await page.getByRole('button', { name: 'Insert variable', exact: true }).click();
   await page.getByRole('menuitemcheckbox', { name: `%${name}%`, exact: true }).click();
   await expect(page.getByTestId('text-editor')).toContainText(`%${name}%`);
@@ -124,7 +124,7 @@ test('preview shows variables’ values, built-in ones included', async () => {
     await rows(page).first().getByLabel('Default value').press('Enter');
     await close(page);
     await boxShowing(page, 'Learner');
-    await page.getByTestId('ribbon').getByRole('tab', { name: 'Text Format', exact: true }).click();
+    await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
     await page.getByRole('button', { name: 'Insert variable', exact: true }).click();
     await page.getByRole('menuitemcheckbox', { name: '%SlideCount%', exact: true }).click();
     // As in `boxShowing`: the edit starts on the next render, so wait for it before Escape.
@@ -136,7 +136,7 @@ test('preview shows variables’ values, built-in ones included', async () => {
     await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     await expect(preview.locator('[data-object-type="text"]')).toContainText('Ada1');
     await preview.close();

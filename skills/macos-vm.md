@@ -17,8 +17,9 @@ Use the VM when a change needs a real macOS x86_64 environment:
 This is supplementary. The standing rule in `docs/HANDOVER.md` is **Linux only
 until December 2026**: Linux checks remain the baseline, and a work package is
 not blocked because macOS or Windows is unverified. Say once in the log and PR
-that the other systems were or were not checked. CI runs on every push again
-(from 2026-11-26), and covers macOS on GitHub's own runners.
+that the other systems were or were not checked. The private repository's
+commits keep `[skip ci]`; CI runs on the public repository when a release's
+source is published there, and covers macOS on GitHub's own runners.
 
 Do not use it for everyday Windows work. Do not use it as a reason to open
 an app window on Luke's desktop: the VM has no GUI session. Starting `wsm gui`

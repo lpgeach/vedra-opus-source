@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { ElectronApplication, Page } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const { app, page } = await launchApp();
@@ -11,7 +11,8 @@ async function start(): Promise<{ app: ElectronApplication; page: Page }> {
 }
 
 const props = (page: Page) => page.getByTestId('slide-properties');
-const showFormat = (page: Page) => page.getByRole('tab', { name: 'Format', exact: true }).click();
+const showProperties = (page: Page) =>
+  page.getByRole('tab', { name: 'Slide Properties', exact: true }).click();
 const slideItems = (page: Page) => page.getByTestId('slide-list').locator('.slide-item');
 
 test('slide properties: moving on, revisiting and the player buttons, shown in preview', async () => {
@@ -19,7 +20,7 @@ test('slide properties: moving on, revisiting and the player buttons, shown in p
   try {
     await page.getByRole('button', { name: 'New Slide' }).click();
     await slideItems(page).first().click();
-    await showFormat(page);
+    await showProperties(page);
     await expect(props(page)).toBeVisible();
     await expect(props(page).getByLabel('Moves on')).toHaveValue('user');
     await props(page).getByLabel('When revisited').selectOption('resume');
@@ -32,7 +33,7 @@ test('slide properties: moving on, revisiting and the player buttons, shown in p
     await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await expect(preview.locator('.vo-player-position')).toHaveText('Slide 1 of 2');
     await expect(preview.getByRole('button', { name: 'Next' })).toBeHidden();
@@ -54,7 +55,7 @@ test('Overview draws an arrow for a jump and flags a slide nothing reaches', asy
     // No player buttons on any slide: only triggers move the learner on.
     for (const index of [0, 1, 2]) {
       await slideItems(page).nth(index).click();
-      await showFormat(page);
+      await showProperties(page);
       await props(page).getByLabel('Previous').uncheck();
       await props(page).getByLabel('Next').uncheck();
     }

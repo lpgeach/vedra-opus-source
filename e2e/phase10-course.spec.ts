@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * The Phase 10 review: a course using the whole phase, built through the UI as
@@ -27,10 +27,7 @@ const DONT_SAVE = 1;
 const ribbon = (page: Page, name: string) =>
   page.getByTestId('ribbon').getByRole('tab', { name, exact: true }).click();
 const rightTab = (page: Page, name: string) =>
-  page
-    .getByRole('tablist', { name: 'Right panel' })
-    .getByRole('tab', { name, exact: true })
-    .click();
+  page.getByTestId('panel-right').getByRole('tab', { name, exact: true }).click();
 const canvas = (page: Page) => page.getByTestId('stage-canvas');
 const alt = (page: Page) => page.getByTestId('format-a11y').getByLabel('Alt text', { exact: true });
 
@@ -83,7 +80,7 @@ test('a course using all of Phase 10 survives saving, is translated, plays in Pr
 
     // The author's Tab order: the right-hand button first.
     await canvas(page).click({ position: { x: 4, y: 4 } });
-    await rightTab(page, 'Format');
+    await rightTab(page, 'Slide Properties');
     await page.getByLabel('Tab order', { exact: true }).selectOption('own');
     const rows = page.getByTestId('tab-order').getByTestId('tab-order-item');
     await expect(rows).toHaveCount(2);
@@ -123,7 +120,7 @@ test('a course using all of Phase 10 survives saving, is translated, plays in Pr
     await expect(canvas(page)).toBeVisible();
 
     // Everything came back.
-    await rightTab(page, 'Format');
+    await rightTab(page, 'Slide Properties');
     await expect(page.getByLabel('Tab order', { exact: true })).toHaveValue('own');
     await expect(page.getByTestId('tab-order').getByTestId('tab-order-item').first()).toContainText(
       'Right',
@@ -161,7 +158,7 @@ test('a course using all of Phase 10 survives saving, is translated, plays in Pr
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'Entire Project', exact: true }).click(),
+      previewFrom(page, 'Entire Project'),
     ]);
     await expect(preview.locator('.vo-player')).toHaveAttribute('dir', 'rtl');
     await expect(

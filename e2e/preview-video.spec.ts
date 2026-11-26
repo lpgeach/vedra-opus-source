@@ -5,7 +5,7 @@ import { cpSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { vendorFfmpeg } from '../fixtures/make-media';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 /**
  * A video plays in Preview (found by Luke testing alpha 1, 2026-11-23): an mp4 is
@@ -28,7 +28,7 @@ async function previewPlays(file: string) {
     await ribbon(page, 'Home');
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     const video = preview.locator('.vo-player-stage video');
     await expect(video).toHaveCount(1);

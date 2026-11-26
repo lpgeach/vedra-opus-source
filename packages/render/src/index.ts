@@ -25,6 +25,7 @@ export {
   panoramaDirection,
   panoramaPoint,
   renderInheritedLayers,
+  renderSlideBackground,
   renderLayer,
   renderObject,
   renderSlide,

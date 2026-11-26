@@ -4,6 +4,7 @@
  * Everything here goes through history commands, so everything is undoable.
  */
 import {
+  calloutGeometry,
   createAudioObject,
   createButtonObject,
   createGroupObject,
@@ -26,6 +27,7 @@ import {
   forEachObject,
 } from '@vedraopus/model';
 import type {
+  CalloutKind,
   GraphicItem,
   AssetHash,
   Frame,
@@ -193,6 +195,19 @@ export const stage = {
 
   insertShape(geometry: ShapeGeometry, name: string): void {
     stage.insert(createShapeObject(geometry, {}, name));
+  },
+
+  /** Insert → Caption (B17): a callout, its tail pointing below, ready for text. */
+  insertCallout(kind: CalloutKind): void {
+    const [width, height] = [240, 120];
+    const label = { rounded: 'Rounded', square: 'Square', oval: 'Oval', cloud: 'Cloud' }[kind];
+    stage.insert(
+      createShapeObject(
+        calloutGeometry(kind, width, height),
+        { width, height },
+        `${label} Callout`,
+      ),
+    );
   },
 
   insertTextBox(): void {

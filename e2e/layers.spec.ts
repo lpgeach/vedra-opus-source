@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test';
 import type { ElectronApplication, Page } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const { app, page } = await launchApp();
   await answerDialogs(app, { message: [1] });
   await page.getByRole('button', { name: 'New Project' }).click();
   await expect(page.getByTestId('stage-canvas')).toBeVisible();
-  await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+  await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
   return { app, page };
 }
 
@@ -25,7 +25,7 @@ test('layers: add, edit on the stage with the base beneath, rename, eye, propert
   const { app, page } = await start();
   try {
     await insert(page, 'Button');
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await expect(rows(page)).toHaveCount(1);
     await expect(row(page, 'Base Layer')).toHaveAttribute('aria-current', 'true');
 
@@ -44,7 +44,7 @@ test('layers: add, edit on the stage with the base beneath, rename, eye, propert
     await expect(page.getByTestId('timeline-row')).toContainText('Text Box');
 
     // The eye takes the base layer away from beneath.
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await page.getByRole('button', { name: 'Hide Base Layer beneath other layers' }).click();
     await expect(beneath(page)).toHaveCount(0);
     await page.getByRole('button', { name: 'Show Base Layer beneath other layers' }).click();
@@ -77,10 +77,10 @@ test('layers: duplicate, reorder, delete with undo, and a trigger that shows one
   const { app, page } = await start();
   try {
     await insert(page, 'Button');
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
     await page.getByRole('button', { name: 'New layer' }).click();
     await insert(page, 'Text Box');
-    await page.getByRole('tab', { name: 'Layers', exact: true }).click();
+    await page.getByRole('tab', { name: 'Slide Layers', exact: true }).click();
 
     await page.getByRole('button', { name: 'Duplicate Layer 1' }).click();
     await expect(rows(page).first()).toContainText('Layer 1 copy');
@@ -113,7 +113,7 @@ test('layers: duplicate, reorder, delete with undo, and a trigger that shows one
     await page.getByTestId('ribbon').getByRole('tab', { name: 'Home', exact: true }).click();
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     const text = preview.locator('[data-object-type="text"]');
     const shown = () =>

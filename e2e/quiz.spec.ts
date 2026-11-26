@@ -37,7 +37,7 @@ test('a multiple-choice question: made in Form View, seen in Slide View, kept, a
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
 
     // Slide 2 is the question; slide 3 follows it.
-    await ribbon(page, 'Insert');
+    await ribbon(page, 'Slides');
     await page.getByRole('button', { name: 'Question', exact: true }).click();
     await page.getByRole('menuitem', { name: 'Multiple Choice', exact: true }).click();
     await expect(form(page)).toBeVisible();

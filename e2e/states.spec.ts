@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { ElectronApplication, Page } from '@playwright/test';
-import { answerDialogs, launchApp } from './launch';
+import { answerDialogs, launchApp, previewFrom } from './launch';
 
 async function start(): Promise<{ app: ElectronApplication; page: Page }> {
   const { app, page } = await launchApp();
@@ -69,7 +69,7 @@ test('editing a state changes only that state, and the course shows it on hover'
     await page.getByRole('tab', { name: 'Home' }).click();
     const [preview] = await Promise.all([
       app.waitForEvent('window'),
-      page.getByRole('button', { name: 'This Slide', exact: true }).click(),
+      previewFrom(page, 'This Slide'),
     ]);
     const played = preview.locator('[data-object-type="button"]');
     await expect(played).toBeVisible();

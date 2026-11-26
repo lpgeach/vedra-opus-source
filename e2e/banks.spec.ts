@@ -12,7 +12,7 @@ import { answerDialogs, launchApp } from './launch';
 const ribbon = (page: Page, name: string) =>
   page.getByTestId('ribbon').getByRole('tab', { name, exact: true }).click();
 const insertQuestion = async (page: Page, kind: string) => {
-  await ribbon(page, 'Insert');
+  await ribbon(page, 'Slides');
   await page.getByRole('button', { name: 'Question', exact: true }).click();
   await page.getByRole('menuitem', { name: kind, exact: true }).click();
 };

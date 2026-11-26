@@ -36,6 +36,9 @@ fileAssociations:
     role: Editor
 linux:
   executableName: vedraopus
+  # The VO mark (brand/vedra-opus-icon.svg, drawn at 1024 px); electron-builder makes each
+  # platform's sizes and formats from it.
+  icon: icons/icon.png
   # Required by the deb target. Placeholder: replace with a real contact before any public release.
   maintainer: Vedra Opus contributors <maintainers@vedraopus.invalid>
   category: Education
@@ -50,6 +53,7 @@ linux:
     - from: ../../vendor/libreoffice/linux-${arch}
       to: libreoffice
 mac:
+  icon: icons/icon.png
   category: public.app-category.education
   # Notarisation needs the hardened runtime; its exceptions are in the entitlements.
   hardenedRuntime: true
@@ -71,6 +75,7 @@ mac:
       to: libreoffice
 win:
   executableName: Vedra Opus
+  icon: icons/icon.png
   target:
     - nsis
   # Signed when CSC_LINK and CSC_KEY_PASSWORD are set: SHA-256 only, which current Windows

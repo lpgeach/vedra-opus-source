@@ -406,6 +406,16 @@ const paths = {
   chevronRight: <path d="M6.25 3.75 10.5 8l-4.25 4.25" />,
   chevronDown: <path d="M3.75 6.25 8 10.5l4.25-4.25" />,
   chevronUp: <path d="M3.75 9.75 8 5.5l4.25 4.25" />,
+  // Caption (B17): a speech bubble with its tail below.
+  caption: <path d="M2.75 3.25h10.5v7H7l-2.75 2.5v-2.5H2.75z" />,
+  // Find and Replace (B17): a magnifying glass.
+  find: <path d="M6.75 2.75a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM9.6 9.6l3.65 3.65" />,
+  // Symbol (B17): an omega.
+  symbol: <path d="M4 13.25h2.5v-1.6A4.5 4.5 0 1 1 9.5 11.65v1.6H12" />,
+  // Clear formatting (B17): an A with a stroke through it.
+  clearFormat: <path d="M3.5 12.5 7 3.25h1L11.5 12.5M5 8.75h5M2.75 2.75l10.5 10.5" />,
+  // Publish (B17): an arrow rising out of a tray.
+  publish: <path d="M8 10.25V2.75M5 5.5l3-2.75 3 2.75M2.75 9.5v3.75h10.5V9.5" />,
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof paths;
