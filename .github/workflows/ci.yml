@@ -180,6 +180,14 @@ jobs:
         run: npx playwright test --grep-invert "200-slide project"
         env:
           VEDRAOPUS_E2E_EXECUTABLE: ${{ matrix.executable }}
+      # When the smoke test fails, its report and traces, as the checks keep theirs.
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: smoke-report-${{ matrix.os }}
+          path: |
+            playwright-report
+            test-results
       - uses: actions/upload-artifact@v4
         with:
           name: vedraopus-${{ matrix.os }}
