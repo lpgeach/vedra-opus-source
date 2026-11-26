@@ -92,36 +92,6 @@ jobs:
             playwright-report
             test-results
 
-  visual:
-    name: Browsers (Chromium, Firefox, WebKit)
-    # One system is enough: the point is that three browser engines agree with
-    # one set of reference images, and those were made on Linux.
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps chromium firefox webkit
-      - uses: actions/cache@v4
-        with:
-          path: vendor/ffmpeg
-          key: ffmpeg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-ffmpeg.sh', 'scripts/build-decoder.sh', 'apps/desktop/native/decoder/**') }}
-      - run: npm run fetch:ffmpeg
-      - run: npm run test:visual
-      # The player and published LMS packages in each engine (P3.2, Phase 5).
-      - run: npm run test:player
-      - run: npm run test:lms
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: visual-test-results
-          path: |
-            playwright-report
-            test-results
-
   package:
     name: Package (${{ matrix.os }})
     needs: [verify, ffmpeg-windows]

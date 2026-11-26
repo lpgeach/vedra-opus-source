@@ -112,6 +112,10 @@ async function stopFrames(page: Page): Promise<{ median: number; p95: number; fr
 }
 
 test('a 200-slide project opens in under 3 seconds, and editing it keeps 60 frames a second', async () => {
+  // Not on macOS at all (Luke, 2026-11-26): CI's shared macOS machine, with no graphics card,
+  // misses the frame budget by a frame now and then however the code does. Windows and Linux
+  // keep the budget.
+  test.skip(process.platform === 'darwin', 'no performance testing on macOS (Luke)');
   test.setTimeout(180_000);
   const dir = mkdtempSync(join(tmpdir(), 'vo-e2e-performance-'));
   const file = await pack(dir, bigCourse());

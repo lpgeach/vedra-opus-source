@@ -122,7 +122,7 @@ Project-specific knowledge that is not obvious from the code. Update it whenever
 
 ### 19. WebKit visual tests cannot run on Arch
 **Issue**: Playwright's WebKit needs Ubuntu/Debian system libraries (`libicu74`, `libmanette`, …). On Luke's machine it fails to launch with "Host system is missing dependencies". Docker is installed but this user is not allowed to use it.
-**Solution**: Locally run `npm run test:visual -- --project=chromium --project=firefox`. CI's `Visual` job runs all three. Say in the log that WebKit was verified in CI only.
+**Solution**: Locally run `npm run test:visual -- --project=chromium --project=firefox`, and WebKit in the WSL test bed. CI no longer runs the browser suites (Luke, 2026-11-26), so say in the log where WebKit was checked, or that it was not.
 
 ### 20. Engines disagree about SVG pictures inside SVG
 **Issue**: `<image preserveAspectRatio="xMidYMid slice">` covering a shape works for bitmaps everywhere, but when the picture is itself an SVG, Chromium letterboxes it while Firefox covers. The cross-engine visual test caught this.
@@ -723,7 +723,7 @@ Recorded in `docs/PLAN.md` section 3 (architecture and stack) and section 10 (op
 **Watch**: the published course never uses previews; only the editor's drawings do. A picture imported before its size was recorded (no `width`/`height` in its meta) is drawn from the file itself.
 
 ### 147. The performance budget is a test
-**How**: `e2e/performance.spec.ts` opens a generated 200-slide course: under 3 s. It then drags a shape and types into a text box, timing frames with `requestAnimationFrame`: the median within one 60 Hz frame, the 95th percentile within two. The numbers are printed, and each session that changes the editor should note them.
+**How**: `e2e/performance.spec.ts` opens a generated 200-slide course: under 3 s. It then drags a shape and types into a text box, timing frames with `requestAnimationFrame`: the median within one 60 Hz frame, the 95th percentile within two. The numbers are printed, and each session that changes the editor should note them. **Not run on macOS** (Luke, 2026-11-26): CI's shared macOS machine missed the p95 by a frame now and then; Windows and Linux keep the budget. CI's installer smoke test leaves it out on every system, as Verify runs it.
 **Watch**: the test checks the drag moved and the typing landed, or a broken gesture would measure an idle page. If CI's runners are slower, set their limits from what they measure; do not loosen this machine's.
 
 ### 146. PowerShell 5.1 mangles UTF-8 files and quoted arguments

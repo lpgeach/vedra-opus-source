@@ -176,10 +176,10 @@ VEDRAOPUS_E2E_EXECUTABLE=apps/desktop/release/linux-unpacked/vedraopus npx playw
 
 `npm run test:visual` draws each case in `packages/render/visual/` in Chromium, Firefox and WebKit and compares every one with the same reference image in `packages/render/visual/__snapshots__/`. Sharing one reference across engines is the point: it shows objects look the same everywhere. A small tolerance (set in `playwright.render.config.ts`) allows for engines smoothing edges differently.
 
-- First time: `npx playwright install chromium firefox webkit`. WebKit needs system libraries that Playwright only supports on Ubuntu and Debian; where it cannot start (Arch, for one), run the other two with `npm run test:visual -- --project=chromium --project=firefox` and let CI cover WebKit.
+- First time: `npx playwright install chromium firefox webkit`. WebKit needs system libraries that Playwright only supports on Ubuntu and Debian; where it cannot start (Arch, for one), run the other two with `npm run test:visual -- --project=chromium --project=firefox`, and WebKit in the WSL test bed or on Linux.
 - After an intended change to how something is drawn: `npm run test:visual:update` regenerates references with Chromium. Look at the changed images before committing them, then run the other engines against them.
 - Cases contain no text, because fonts differ between systems. Text gets its own snapshots with bundled fonts in P2.4.
-- CI runs them in the `Visual` job, on Linux only.
+- CI does not run them (Luke, 2026-11-26: CI checks the app on Windows, Linux and macOS only). Run them locally, and the player and LMS suites (`npm run test:player`, `npm run test:lms`), when `packages/render`, `player` or `publish` change.
 
 ## Packaging
 
