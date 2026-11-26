@@ -136,7 +136,7 @@ Packages depend on each other in one direction only: `model ← engine ← rende
 
 ## 🔒 Privacy
 
-Vedra Opus has no telemetry and sends nothing about you or your work anywhere. A test (`e2e/privacy.spec.ts`) goes through editing, previewing and publishing and checks that no request leaves the machine.
+Vedra Opus has no telemetry and collects no data: see the **[privacy policy](PRIVACY.md)**. It sends nothing about you or your work anywhere. A test (`e2e/privacy.spec.ts`) goes through editing, previewing and publishing and checks that no request leaves the machine.
 
 Crash reports are off unless you turn on Help → Keep Crash Reports. They are then kept on this computer, never sent; Help → Show Crash Reports opens their folder, so you can choose to share one.
 
