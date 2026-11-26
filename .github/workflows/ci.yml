@@ -105,11 +105,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium firefox webkit
-      # A sound device, silent: with none, Firefox and WebKit run their media clocks wrongly
-      # (positions jump, or stand still), and the player's media timing tests fail. PulseAudio
-      # with no hardware plays into its null sink in real time (session 117).
-      - name: A silent sound device for the browsers' media clocks
-        run: sudo apt-get install -y pulseaudio && pulseaudio --start --exit-idle-time=-1
       - uses: actions/cache@v4
         with:
           path: vendor/ffmpeg
@@ -129,7 +124,7 @@ jobs:
 
   package:
     name: Package (${{ matrix.os }})
-    needs: verify
+    needs: [verify, ffmpeg-windows]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -151,7 +146,27 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The ffmpeg the checks above used: from the cache, or on Windows the cross-compiled
+      # build, so packaging does not build its own (it cannot on Windows, without WSL).
+      - if: runner.os != 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: vendor/ffmpeg
+          key: ffmpeg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/build-ffmpeg.sh', 'scripts/build-decoder.sh', 'apps/desktop/native/decoder/**') }}
+      - if: runner.os == 'Windows'
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-win-x64
+          path: vendor/ffmpeg/win-x64
+      # Packaging never uploads: a release is published by hand (docs/releasing.md).
       - run: npm run package
+      # The smoke test is the end-to-end suite, which opens published courses in Chromium.
+      - name: Install Chromium for the smoke test (Linux)
+        if: runner.os == 'Linux'
+        run: npx playwright install --with-deps chromium
+      - name: Install Chromium for the smoke test
+        if: runner.os != 'Linux'
+        run: npx playwright install chromium
       - name: Smoke-test the packaged app (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum npx playwright test
