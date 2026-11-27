@@ -129,7 +129,8 @@ jobs:
           name: ffmpeg-win-x64
           path: vendor/ffmpeg/win-x64
       # Packaging never uploads: a release is published by hand (docs/releasing.md).
-      - run: npm run package
+      - id: package
+        run: npm run package
       # The smoke test is the end-to-end suite, which opens published courses in Chromium.
       - name: Install Chromium for the smoke test (Linux)
         if: runner.os == 'Linux'
@@ -158,7 +159,10 @@ jobs:
           path: |
             playwright-report
             test-results
+      # The installers are kept whenever they were built, even if the smoke test then failed;
+      # the job still shows the failure (Luke, 2026-11-27).
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && steps.package.outcome == 'success' }}
         with:
           name: vedraopus-${{ matrix.os }}
           if-no-files-found: error
