@@ -7,6 +7,7 @@ export default defineConfig({
       'apps/*/src/**/*.test.ts',
       'fixtures/**/*.test.ts',
       'scripts/**/*.test.ts',
+      'help/**/*.test.ts',
     ],
   },
 });

@@ -98,6 +98,7 @@ export default tseslint.config(
       '*.config.{js,ts}',
       '**/*.config.{js,ts}',
       'e2e/**/*.ts',
+      'help/**/*.ts',
       'fixtures/**/*.ts',
       'scripts/**/*.mjs',
     ],

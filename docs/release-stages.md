@@ -56,6 +56,42 @@ See `logs/2026-11-24-session-111.md`. No macOS or Linux package.
 
 See `logs/2026-11-24-session-114.md`. No macOS or Linux package.
 
+## Alpha 4 (published 2026-11-25)
+
+The first macOS version, for Intel and Apple Silicon, alongside Windows, built by hand (Windows here, both Macs in the macOS VM). See `logs/2026-11-25-session-116.md`, "Alpha 4".
+
+## Alpha 5 (published 2026-11-27)
+
+**What it is:** alpha 4, plus:
+
+- the brand: the logo, the app icon and Outfit as the typeface (B18);
+- the ribbon in seven tabs, its new commands, the two panels on the right and the stage toolbar (B17);
+- closing on Windows straight after an edit no longer hangs;
+- TipTap 3 and Electron 45.5.0;
+- **the first Linux version** (AppImage and `.deb`).
+
+**Built by CI**, the first release to be: run 45999894618 on the public `vedra-opus-source`, at `eb008a8`, tagged `v0.1.0-alpha.5`. Every installer passed its smoke test on its own system, the Apple Silicon one on an Apple Silicon Mac. Both Mac apps are signed ad hoc; none is signed or notarised.
+
+**Where** (both on the public downloads repository, https://github.com/lpgeach/vedra-opus-releases, as pre-releases):
+
+- `v0.1.0-alpha.5`:
+  - the Windows installer, its `.blockmap` and `latest.yml`;
+  - both `.dmg`s;
+  - the AppImage, the `.deb` and `latest-linux.yml`.
+- `sources-0.1.0-alpha.5`: the ten third-party source files.
+
+**SHA-256:**
+
+```
+49a2a8acf7b1f7e5a1a24522ff4950d0d3622c8459141a82c47c9dffb7187a3d  Vedra-Opus-0.1.0-alpha.5-x64.exe
+269b30870e5d30688b68acae9d6218e2d4e01142c8234e9e9ace4bdfa22bf52e  Vedra-Opus-0.1.0-alpha.5-arm64.dmg
+d2776f644e1c3f32c5a6f2d5609cdb3368c73bcc272fee6c0155ee49b24433f0  Vedra-Opus-0.1.0-alpha.5-x64.dmg
+dac1b2248cf9c030da829a771962fadc6b0fe0740317fa514eedb09e2f2398bc  Vedra-Opus-0.1.0-alpha.5-x86_64.AppImage
+1235bfddcb1a6519ae59ba8e868e9c4234e35b3cc1123bfac4cee3fc26f77f22  Vedra-Opus-0.1.0-alpha.5-amd64.deb
+```
+
+Saved format 41, so projects saved in alpha 5 do not open in alpha 4. The `.deb` still names the placeholder maintainer (`electron-builder.yml`). See `logs/2026-11-27-session-118.md`.
+
 ## Beta (to come)
 
 **Look and name:**

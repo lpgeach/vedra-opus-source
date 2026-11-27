@@ -106,6 +106,19 @@ For a release:
 3. **CI runs there**, on Linux, macOS and Windows. The release's installers are built from that commit, and signed there once code signing is set up.
 4. **Tag it** `v<version>` on the public repository, so each release's source can be found again.
 
+### The installers, from CI (alpha 5 onwards)
+
+CI's Package job builds every installer: Windows, Linux (AppImage and `.deb`), the Apple Silicon Mac (`macos-latest`) and the Intel Mac (`macos-15-intel`). Both Mac apps are signed ad hoc (`-c.mac.identity=-`) and checked with `codesign`, and each installer is smoke-tested on its own system. Each system's artifact, `vedraopus-<os>`, holds its installers, their `.blockmap` files and the `latest*.yml` feed files.
+
+To publish them (alpha 5, session 118):
+
+1. `gh run download <run> --repo lpgeach/vedra-opus-source --dir apps/desktop/release/<version>` (ignored by git). Leave out the `ffmpeg-win-x64` artifact.
+2. Upload under the names the feed files give: electron-builder writes `Vedra Opus-…` on disk, but `latest.yml` and `latest-linux.yml` point at `Vedra-Opus-…`.
+   - Check each installer's SHA-512 against its feed file.
+   - Upload the `.exe` with its `.blockmap` and `latest.yml`, both `.dmg`s, and the AppImage and `.deb` with `latest-linux.yml`.
+   - Leave out `latest-mac.yml` and the `.dmg` blockmaps: macOS cannot update in place yet (see "Updates").
+3. Check that GitHub's SHA-256 for each asset matches.
+
 ## Where people download it
 
 **The public downloads repository** (Luke, 2026-11-24) is `lpgeach/vedra-opus-releases`: https://github.com/lpgeach/vedra-opus-releases. This repository is private, so that is the one to send people. It holds a README with download steps and no code.

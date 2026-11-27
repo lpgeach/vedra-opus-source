@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { answerDialogs, launchApp } from './launch';
+import { chooseEffect, effectButton } from './animation';
 
 const ribbon = (page: Page, name: string) =>
   page.getByTestId('ribbon').getByRole('tab', { name, exact: true }).click();
@@ -58,11 +59,11 @@ test('animations: an entrance, an exit and a motion path, set in the editor, kep
     await page.getByRole('button', { name: 'Button', exact: true }).click();
 
     await ribbon(page, 'Animations');
-    await page.getByLabel('Entrance effect').selectOption('fly');
+    await chooseEffect(page, 'Entrance', 'Fly');
     await page.getByLabel('Entrance direction').selectOption('right');
     await page.getByLabel('Entrance duration').fill('1');
     await page.getByLabel('Entrance duration').press('Enter');
-    await page.getByLabel('Exit effect').selectOption('fade');
+    await chooseEffect(page, 'Exit', 'Fade');
     // A button has text, so it can come in by paragraph.
     await expect(page.getByLabel('Entrance by paragraph')).not.toBeChecked();
 
@@ -116,9 +117,9 @@ test('animations: an entrance, an exit and a motion path, set in the editor, kep
     await expect(page.getByTestId('stage-canvas')).toBeVisible();
     await row(page, 'Button').locator('.timeline-name').click();
     await ribbon(page, 'Animations');
-    await expect(page.getByLabel('Entrance effect')).toHaveValue('fly');
+    await expect(effectButton(page, 'Entrance')).toHaveAttribute('data-kind', 'fly');
     await expect(page.getByLabel('Entrance direction')).toHaveValue('right');
-    await expect(page.getByLabel('Exit effect')).toHaveValue('fade');
+    await expect(effectButton(page, 'Exit')).toHaveAttribute('data-kind', 'fade');
     await expect(page.getByLabel('Motion path', { exact: true }).locator('option')).toHaveText([
       'Line',
     ]);

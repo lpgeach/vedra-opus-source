@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { answerDialogs, launchApp } from './launch';
+import { chooseEffect, effectButton } from './animation';
 
 /**
  * A group's members with their own timing and animations, in the editor
@@ -53,13 +54,13 @@ test('a group’s members have their own bars on the timeline, and their own ani
     await ribbon(page, 'Animations');
     const memberId = await first.getAttribute('data-object-id');
     await expect(page.getByLabel('Part to animate')).toHaveValue(memberId!);
-    await page.getByLabel('Entrance effect').selectOption('fade');
+    await chooseEffect(page, 'Entrance', 'Fade');
     await expect(first.getByTestId('timeline-entrance')).toHaveCount(1);
     // The group itself has none.
     const groupRow = page.getByTestId('timeline-row').filter({ hasText: 'Group' });
     await expect(groupRow.getByTestId('timeline-entrance')).toHaveCount(0);
     await page.getByLabel('Part to animate').selectOption({ index: 0 });
-    await expect(page.getByLabel('Entrance effect')).toHaveValue('');
+    await expect(effectButton(page, 'Entrance')).toHaveAttribute('data-kind', 'none');
 
     // Undo takes the member's entrance away, and its timing back.
     const undo = page.getByRole('button', { name: 'Undo' });

@@ -106,7 +106,13 @@ Claude's memory files stay on the computer they were made on. Everything a new m
   - **The Windows slow close fixed** (`wp/windows-close-hang`, PR #153): closing waited on nothing and removed the working copy under an autosave write.
   - **Dependencies up to date** (`wp/dependency-updates`): TipTap 3, Electron 45.5.0, the rest in range. TypeScript 7 waits for typescript-eslint.
   - **This computer:** the clone is at `C:\Users\lukeg\Luke-Repos\project-eloquent`; WSL has no distribution, so ffmpeg and LibreOffice are not fetched and the media tests fail here. `gh` works (added to the user PATH; the system PATH's entry is broken by a stray quote).
-  - **Next:** merge both PRs; a CI run on the public repository, when Luke says, to check the smoke test's close and the new dependencies.
+  - **Both merged** (PRs #153 and #154). The CI run after them passed everywhere but one Mac test, which was fixed (pitfall #180).
+  - **Alpha 5 published** (`0.1.0-alpha.5`, 2026-11-27):
+    - the first release built by CI: Windows, Linux (AppImage and `.deb`), the Apple Silicon Mac and the Intel Mac;
+    - pre-releases `v0.1.0-alpha.5` and `sources-0.1.0-alpha.5` on `vedra-opus-releases`, and its README updated;
+    - the installers kept here in `apps/desktop/release/alpha-5/` (ignored).
+    - `docs/release-stages.md` has the details.
+  - **Next:** new screenshots for the downloads README, and a real maintainer for the `.deb`, when Luke says. Then B19 to B25.
 - **Luke (2026-11-24): no builds or releases until he says.** He checks the Storyline import himself with `npm run dev`.
 
 - **Questions waiting for Luke:**

@@ -16,7 +16,13 @@ import {
   useEditor,
 } from '../project-store';
 import type { OpenProject } from '../project-store';
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
+import { EffectPicture } from './EffectPicture';
 import { NumericInput } from './NumericInput';
+import { popupPlace, useDismiss } from './popover';
+import { TileGallery } from './tile-gallery';
+import type { Tile } from './tile-gallery';
 import { Command, Group } from './ribbon-parts';
 import { cancelFormatPainter, pickAnimations, useFormatPainter } from '../format-painter';
 
@@ -54,6 +60,27 @@ const EASING_NAMES: Record<MotionPath['easing'], string> = {
   easeOut: 'Slow down',
   easeInOut: 'Speed up, slow down',
 };
+
+/** A small drawing of a motion path's shape, for its button (B28): a dot travelling a line. */
+function PathPicture({ shape }: { shape: 'line' | 'arc' | 'freeform' }) {
+  const d = {
+    line: 'M6 22 L38 8',
+    arc: 'M6 24 Q22 -4 38 24',
+    freeform: 'M5 20 C10 6 16 26 22 14 S32 4 39 16',
+  }[shape];
+  return (
+    <svg className="path-picture" viewBox="0 0 44 30" width="44" height="30" aria-hidden="true">
+      <path d={d} className="path-picture-line" />
+      <circle
+        cx={5.5}
+        cy={shape === 'line' ? 22 : shape === 'arc' ? 24 : 20}
+        r={3.5}
+        className="path-picture-start"
+      />
+      <path d={d} className="path-picture-dash" />
+    </svg>
+  );
+}
 
 /** Indents a member in the Part list by its depth in the group. */
 const EM_SPACE = String.fromCodePoint(0x2003);
@@ -190,8 +217,9 @@ export function AnimationsTab() {
               <button
                 key={shape}
                 type="button"
-                className="ribbon-button small"
+                className="path-button"
                 aria-label={`Add ${shape} path`}
+                title={shape === 'line' ? 'Add a straight path' : 'Add a curved path'}
                 onClick={() =>
                   addMotionPath(
                     open,
@@ -202,17 +230,20 @@ export function AnimationsTab() {
                   )
                 }
               >
-                {shape === 'line' ? 'Line' : 'Arc'}
+                <PathPicture shape={shape} />
+                <span>{shape === 'line' ? 'Line' : 'Arc'}</span>
               </button>
             ))}
             <button
               type="button"
-              className="ribbon-button small"
+              className="path-button"
               aria-label="Draw freeform path"
+              title="Draw a path on the stage"
               aria-pressed={drawingPathFor === object.id}
               onClick={() => editor.drawPathFor(drawingPathFor === object.id ? null : object.id)}
             >
-              Freeform
+              <PathPicture shape="freeform" />
+              <span>Freeform</span>
             </button>
             {chosen && (
               <select
@@ -297,6 +328,118 @@ export function AnimationsTab() {
   );
 }
 
+/**
+ * A new effect of `kind`, keeping the duration, By paragraph, and the direction when the new
+ * kind takes it (Fly from the left becomes Float from the left).
+ */
+function changeEffect(previous: Effect | null, kind: EffectKind, withText: boolean): Effect {
+  const fresh = createEffect(kind, previous?.duration ?? 0.5);
+  const allowed: readonly string[] = effectDirections[kind];
+  return {
+    ...fresh,
+    direction:
+      previous?.direction && allowed.includes(previous.direction)
+        ? previous.direction
+        : fresh.direction,
+    byParagraph: (previous?.byParagraph ?? false) && withText,
+  };
+}
+
+/**
+ * The effects as a gallery (B28): a button showing the chosen effect's picture and name,
+ * which opens a grid of every effect, each a tile whose picture plays it.
+ */
+function EffectGallery({
+  title,
+  phase,
+  effect,
+  onChoose,
+}: {
+  title: string;
+  phase: 'entrance' | 'exit';
+  effect: Effect | null;
+  onChoose: (kind: EffectKind | 'none') => void;
+}) {
+  const [place, setPlace] = useState<CSSProperties | null>(null);
+  const [pointed, setPointed] = useState(false);
+  const container = useRef<HTMLDivElement>(null);
+  const open = place !== null;
+  useDismiss(
+    container,
+    open,
+    () => setPlace(null),
+    () => setPlace(popupPlace(container)),
+  );
+  // Opened: the keyboard starts on the chosen effect.
+  useEffect(() => {
+    if (open) container.current?.querySelector<HTMLElement>('[aria-checked="true"]')?.focus();
+  }, [open]);
+  const chosen = effect?.kind ?? 'none';
+  const name = effect ? EFFECT_NAMES[effect.kind] : 'None';
+  const tiles: Tile<EffectKind | 'none'>[] = [
+    {
+      key: 'none',
+      name: 'None',
+      title: phase === 'entrance' ? 'No entrance effect' : 'No exit effect',
+      picture: () => <EffectPicture effect={null} phase={phase} playing={false} />,
+    },
+    ...effectKinds.map((kind) => ({
+      key: kind,
+      name: EFFECT_NAMES[kind],
+      title: `${EFFECT_NAMES[kind]}: point at it to see it`,
+      picture: (playing: boolean) => (
+        <EffectPicture
+          effect={kind === chosen && effect ? effect : createEffect(kind)}
+          phase={phase}
+          playing={playing}
+        />
+      ),
+    })),
+  ];
+  return (
+    <div className="gallery" ref={container}>
+      <button
+        type="button"
+        className="effect-gallery-button"
+        aria-label={`${title} effect`}
+        aria-haspopup="true"
+        aria-expanded={open}
+        data-kind={chosen}
+        title={`${title}: ${name}. Choose another effect`}
+        onClick={() => setPlace(open ? null : popupPlace(container))}
+        onPointerEnter={() => setPointed(true)}
+        onPointerLeave={() => setPointed(false)}
+        onFocus={() => setPointed(true)}
+        onBlur={() => setPointed(false)}
+      >
+        <EffectPicture effect={effect} phase={phase} playing={pointed && !open} />
+        <span className="effect-gallery-name">
+          {name}
+          <span aria-hidden="true"> ▾</span>
+        </span>
+      </button>
+      {place && (
+        <div
+          className="menu-panel effect-gallery-panel"
+          role="dialog"
+          aria-label={`${title} effects`}
+          style={place}
+        >
+          <TileGallery
+            label={`${title} effect`}
+            tiles={tiles}
+            chosen={chosen}
+            onChoose={onChoose}
+            onClickTile={() => setPlace(null)}
+            className="tile-grid"
+            testId={`${phase}-gallery`}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function EffectGroup({
   open,
   object,
@@ -312,63 +455,47 @@ function EffectGroup({
   const set = (next: Effect | null, label: string) =>
     setAnimations(open, object.id, { ...object.animations, [phase]: next }, label);
   const directions: readonly EffectDirection[] = effect ? effectDirections[effect.kind] : [];
+  const choose = (kind: EffectKind | 'none') =>
+    kind === 'none'
+      ? set(null, `Remove ${phase}`)
+      : set(changeEffect(effect, kind, hasText(object)), `Change ${phase}`);
   return (
     <Group label={title}>
-      <div className="anim-fields">
-        <div className="anim-row">
+      <div className="anim-effect">
+        <EffectGallery title={title} phase={phase} effect={effect} onChoose={choose} />
+        <div className="anim-fields">
           <select
             className="ribbon-select"
-            aria-label={`${title} effect`}
-            value={effect?.kind ?? ''}
-            onChange={(event) => {
-              const kind = event.target.value as EffectKind | '';
-              if (kind === '') return set(null, `Remove ${phase}`);
-              const fresh = createEffect(kind, effect?.duration ?? 0.5);
+            aria-label={`${title} direction`}
+            disabled={!effect || directions.length === 0}
+            value={effect?.direction ?? ''}
+            onChange={(event) =>
+              effect &&
               set(
-                { ...fresh, byParagraph: (effect?.byParagraph ?? false) && hasText(object) },
-                `Change ${phase}`,
-              );
-            }}
+                { ...effect, direction: event.target.value as EffectDirection },
+                `Change ${phase} direction`,
+              )
+            }
           >
-            <option value="">None</option>
-            {effectKinds.map((kind) => (
-              <option key={kind} value={kind}>
-                {EFFECT_NAMES[kind]}
+            {directions.length === 0 && <option value="">No direction</option>}
+            {directions.map((direction) => (
+              <option key={direction} value={direction}>
+                {DIRECTION_NAMES[direction]}
               </option>
             ))}
           </select>
-          {directions.length > 0 && effect && (
-            <select
-              className="ribbon-select"
-              aria-label={`${title} direction`}
-              value={effect.direction ?? ''}
-              onChange={(event) =>
-                set(
-                  { ...effect, direction: event.target.value as EffectDirection },
-                  `Change ${phase} direction`,
-                )
-              }
-            >
-              {directions.map((direction) => (
-                <option key={direction} value={direction}>
-                  {DIRECTION_NAMES[direction]}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-        {effect && (
           <div className="anim-row">
             <NumericInput
               className="ribbon-input ribbon-number"
               aria-label={`${title} duration`}
               title="Seconds"
-              value={String(effect.duration)}
+              value={effect ? String(effect.duration) : ''}
+              disabled={!effect}
               min={0.05}
               max={30}
               undoLabel={`Change ${phase} duration`}
               onValue={(n) =>
-                n !== null && set({ ...effect, duration: n }, `Change ${phase} duration`)
+                effect && n !== null && set({ ...effect, duration: n }, `Change ${phase} duration`)
               }
             />
             <span className="ribbon-unit">s</span>
@@ -377,8 +504,10 @@ function EffectGroup({
                 <input
                   type="checkbox"
                   aria-label={`${title} by paragraph`}
-                  checked={effect.byParagraph}
+                  disabled={!effect}
+                  checked={effect?.byParagraph ?? false}
                   onChange={(event) =>
+                    effect &&
                     set({ ...effect, byParagraph: event.target.checked }, `Change ${phase}`)
                   }
                 />
@@ -386,7 +515,7 @@ function EffectGroup({
               </label>
             )}
           </div>
-        )}
+        </div>
       </div>
     </Group>
   );

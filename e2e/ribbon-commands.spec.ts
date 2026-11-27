@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { answerDialogs, launchApp, previewFrom } from './launch';
+import { chooseEffect, effectButton } from './animation';
 
 /**
  * The ribbon's new commands (docs/briefs/B17-ribbon-and-panels.md, part 1): Animation Painter,
@@ -30,18 +31,18 @@ test('Animation Painter, Hyperlink, Trigger, Symbol, Clear Formatting, and Find 
     }
     await objects(page).nth(0).click();
     await ribbonTab(page, 'Animations');
-    await page.getByLabel('Entrance effect').selectOption('fly');
+    await chooseEffect(page, 'Entrance', 'Fly');
 
     // Animation Painter: the first button's entrance onto the second, in one undoable step.
     await page.getByRole('button', { name: 'Animation Painter', exact: true }).click();
     await objects(page).nth(1).click();
-    await expect(page.getByLabel('Entrance effect')).toHaveValue('fly');
+    await expect(effectButton(page, 'Entrance')).toHaveAttribute('data-kind', 'fly');
     await expect(
       page.getByRole('button', { name: 'Animation Painter', exact: true }),
     ).toBeVisible();
     await undo(page);
     await objects(page).nth(1).click();
-    await expect(page.getByLabel('Entrance effect')).not.toHaveValue('fly');
+    await expect(effectButton(page, 'Entrance')).not.toHaveAttribute('data-kind', 'fly');
 
     // Hyperlink on an object: a click trigger that opens the address.
     await ribbonTab(page, 'Insert');

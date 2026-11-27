@@ -7,6 +7,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { makeWebm, wav } from '../fixtures/make-media';
 import { answerDialogs, launchApp, previewFrom } from './launch';
+import { chooseEffect, effectButton } from './animation';
 
 /**
  * The Phase 6 review (session 44): a course using the phase's features
@@ -128,7 +129,7 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await ribbon(page, 'Insert');
     await page.getByRole('button', { name: 'Button', exact: true }).click();
     await ribbon(page, 'Animations');
-    await page.getByLabel('Entrance effect').selectOption('fade');
+    await chooseEffect(page, 'Entrance', 'Fade');
     await page.getByRole('button', { name: 'Add line path' }).click();
     await expect(page.getByTestId('motion-path')).toHaveCount(1);
 
@@ -156,7 +157,10 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await ribbon(page, 'Home');
     await page.getByRole('button', { name: 'New Slide' }).click();
     await ribbon(page, 'Transitions');
-    await page.getByLabel('Slide transition', { exact: true }).selectOption('push');
+    await page
+      .getByRole('radiogroup', { name: 'Slide transition', exact: true })
+      .getByRole('radio', { name: 'Push', exact: true })
+      .click();
     await ribbon(page, 'Insert');
     await page.getByRole('button', { name: 'Video…', exact: true }).click();
     await expect(row(page, 'film')).toBeVisible();
@@ -166,7 +170,10 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     await ribbon(page, 'Insert');
     await page.getByRole('button', { name: 'Text Box', exact: true }).click();
     await ribbon(page, 'Transitions');
-    await page.getByLabel('Layer transition', { exact: true }).selectOption('fade');
+    await page
+      .getByRole('radiogroup', { name: 'Layer transition', exact: true })
+      .getByRole('radio', { name: 'Fade', exact: true })
+      .click();
     await page
       .getByTestId('layer-row')
       .filter({ hasText: 'Base Layer' })
@@ -204,21 +211,29 @@ test('a course using all of Phase 6 survives saving and plays in preview and pub
     if (hasSpeech) await expect(row(page, 'Speech: Hello there.')).toBeVisible();
     await selectRow(page, 'Button');
     await ribbon(page, 'Animations');
-    await expect(page.getByLabel('Entrance effect')).toHaveValue('fade');
+    await expect(effectButton(page, 'Entrance')).toHaveAttribute('data-kind', 'fade');
     await expect(page.getByLabel('Motion path', { exact: true }).locator('option')).toHaveText([
       'Line',
     ]);
     // …and slide 2's transition and layer transition.
     await slideItem(page, 2).click();
     await ribbon(page, 'Transitions');
-    await expect(page.getByLabel('Slide transition', { exact: true })).toHaveValue('push');
+    await expect(
+      page
+        .getByRole('radiogroup', { name: 'Slide transition', exact: true })
+        .getByRole('radio', { name: 'Push', exact: true }),
+    ).toHaveAttribute('aria-checked', 'true');
     await right(page, 'Slide Layers');
     await page
       .getByTestId('layer-row')
       .filter({ hasText: 'Layer 1' })
       .locator('.layer-name')
       .click();
-    await expect(page.getByLabel('Layer transition', { exact: true })).toHaveValue('fade');
+    await expect(
+      page
+        .getByRole('radiogroup', { name: 'Layer transition', exact: true })
+        .getByRole('radio', { name: 'Fade', exact: true }),
+    ).toHaveAttribute('aria-checked', 'true');
     await page
       .getByTestId('layer-row')
       .filter({ hasText: 'Base Layer' })
@@ -278,7 +293,7 @@ test('Master View keeps what does not play there off its layers, and dialogs clo
     // An animated button copied from a slide comes into a master without its animation.
     await page.getByRole('button', { name: 'Button', exact: true }).click();
     await ribbon(page, 'Animations');
-    await page.getByLabel('Entrance effect').selectOption('fade');
+    await chooseEffect(page, 'Entrance', 'Fade');
     await menu(app, 'edit.copy');
     await expect
       .poll(() => page.evaluate(() => window.vedraopus.clipboard.read()))

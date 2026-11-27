@@ -1,6 +1,6 @@
 {
   "name": "project-vedraopus",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "license": "GPL-3.0-or-later",
   "private": true,
   "type": "module",
@@ -20,6 +20,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "e2e": "npm run build && playwright test",
+    "help:shots": "npm run build && playwright test --config playwright.help.config.ts",
     "test:visual": "playwright test --config playwright.render.config.ts",
     "test:visual:update": "playwright test --config playwright.render.config.ts --project=chromium --update-snapshots",
     "build:player": "npm run build --workspace=@vedraopus/player",

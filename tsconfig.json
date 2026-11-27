@@ -6,6 +6,7 @@
   },
   "include": [
     "e2e",
+    "help",
     "fixtures",
     "packages/render/visual",
     "*.config.ts",

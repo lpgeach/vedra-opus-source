@@ -8,7 +8,10 @@ import type { Transition, TransitionDirection, TransitionKind } from '@vedraopus
 import { previewTransition } from '../stage/transition-preview';
 import { editedSlide, editor, useEditor } from '../project-store';
 import { NumericInput } from './NumericInput';
-import { Group } from './ribbon-parts';
+import { Command, Group } from './ribbon-parts';
+import { TileGallery } from './tile-gallery';
+import type { Tile } from './tile-gallery';
+import { TransitionPicture } from './TransitionPicture';
 
 const KIND_NAMES: Record<TransitionKind, string> = {
   fade: 'Fade',
@@ -37,10 +40,68 @@ const UNCOVER_NAMES: Partial<Record<TransitionDirection, string>> = {
 };
 
 /**
- * The fields for one transition: its kind (or none), direction and duration,
- * named `title` ("Slide transition", "Layer transition").
+ * A new transition of `kind`, keeping the duration, and the direction when the new kind
+ * takes it (Push from the left becomes Cover from the left).
  */
-function TransitionFields({
+function changeKind(previous: Transition | null, kind: TransitionKind): Transition {
+  const next = createTransition(kind, previous?.duration ?? 0.5);
+  const allowed: readonly string[] = transitionDirections[kind];
+  return previous?.direction && allowed.includes(previous.direction)
+    ? { ...next, direction: previous.direction as TransitionDirection }
+    : next;
+}
+
+/**
+ * The transitions as a gallery (B27): one tile each, with a picture that plays it while the
+ * pointer or the keyboard is on it (`TileGallery`, shared with the Animations tab).
+ */
+function Gallery({
+  title,
+  transition,
+  onChange,
+}: {
+  title: string;
+  transition: Transition | null;
+  onChange: (next: Transition | null, label: string) => void;
+}) {
+  const chosen = transition?.kind ?? 'none';
+  const tiles: Tile<TransitionKind | 'none'>[] = [
+    {
+      key: 'none',
+      name: 'None',
+      title: 'No transition',
+      picture: () => <TransitionPicture transition={null} playing={false} />,
+    },
+    ...transitionKinds.map((kind) => ({
+      key: kind,
+      name: KIND_NAMES[kind],
+      title: `${KIND_NAMES[kind]}: point at it to see it`,
+      picture: (playing: boolean) => (
+        <TransitionPicture
+          transition={kind === chosen && transition ? transition : createTransition(kind)}
+          playing={playing}
+        />
+      ),
+    })),
+  ];
+  return (
+    <TileGallery
+      label={title}
+      tiles={tiles}
+      chosen={chosen}
+      testId="transition-gallery"
+      onChoose={(kind) =>
+        onChange(
+          kind === 'none' ? null : changeKind(transition, kind),
+          kind === 'none' ? 'Remove transition' : 'Change transition',
+        )
+      }
+    />
+  );
+}
+
+/** The direction of the chosen transition, for those that have one. */
+function EffectOptions({
   title,
   transition,
   onChange,
@@ -54,69 +115,34 @@ function TransitionFields({
     : [];
   return (
     <div className="anim-fields">
-      <div className="anim-row">
-        <select
-          className="ribbon-select"
-          aria-label={title}
-          value={transition?.kind ?? ''}
-          onChange={(event) => {
-            const kind = event.target.value as TransitionKind | '';
-            onChange(
-              kind === '' ? null : createTransition(kind, transition?.duration ?? 0.5),
-              kind === '' ? 'Remove transition' : 'Change transition',
-            );
-          }}
-        >
-          <option value="">None</option>
-          {transitionKinds.map((kind) => (
-            <option key={kind} value={kind}>
-              {KIND_NAMES[kind]}
+      <span className="ribbon-unit">Direction</span>
+      <select
+        className="ribbon-select"
+        aria-label={`${title} direction`}
+        disabled={!transition || directions.length === 0}
+        value={transition?.direction ?? ''}
+        onChange={(event) =>
+          transition &&
+          onChange(
+            { ...transition, direction: event.target.value as TransitionDirection },
+            'Change transition direction',
+          )
+        }
+      >
+        {directions.length === 0 && <option value="">None</option>}
+        {transition &&
+          directions.map((direction) => (
+            <option key={direction} value={direction}>
+              {(transition.kind === 'uncover' && UNCOVER_NAMES[direction]) ||
+                DIRECTION_NAMES[direction]}
             </option>
           ))}
-        </select>
-        {transition && directions.length > 0 && (
-          <select
-            className="ribbon-select"
-            aria-label={`${title} direction`}
-            value={transition.direction ?? ''}
-            onChange={(event) =>
-              onChange(
-                { ...transition, direction: event.target.value as TransitionDirection },
-                'Change transition direction',
-              )
-            }
-          >
-            {directions.map((direction) => (
-              <option key={direction} value={direction}>
-                {(transition.kind === 'uncover' && UNCOVER_NAMES[direction]) ||
-                  DIRECTION_NAMES[direction]}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-      {transition && (
-        <div className="anim-row">
-          <NumericInput
-            className="ribbon-input ribbon-number"
-            aria-label={`${title} duration`}
-            title="Seconds"
-            value={String(transition.duration)}
-            min={0.1}
-            max={5}
-            undoLabel="Change transition duration"
-            onValue={(n) =>
-              n !== null && onChange({ ...transition, duration: n }, 'Change transition duration')
-            }
-          />
-          <span className="ribbon-unit">s</span>
-        </div>
-      )}
+      </select>
     </div>
   );
 }
 
-/** The Transitions ribbon tab (docs/briefs/P6.6-transitions.md). */
+/** The Transitions ribbon tab (docs/briefs/P6.6-transitions.md; the gallery, B27). */
 export function TransitionsTab() {
   const { open, view, selectedSlideId, masterTargetId } = useEditor();
   const current = open
@@ -138,6 +164,7 @@ export function TransitionsTab() {
     );
   }
   const { history } = open;
+  // While a layer is being edited, the tab sets that layer's transition; otherwise the slide's.
   const layer = current.layerId ? slide.layers.find((each) => each.id === current.layerId) : null;
   const inOneStep = (label: string, run: () => void) => {
     editor.beginGesture(label);
@@ -147,76 +174,82 @@ export function TransitionsTab() {
       editor.commitGesture();
     }
   };
+  const title = layer ? 'Layer transition' : 'Slide transition';
+  const transition = layer ? layer.properties.transition : slide.properties.transition;
+  const onChange = (next: Transition | null, label: string) =>
+    inOneStep(label, () =>
+      layer
+        ? history.execute('layer.setProperties', {
+            layerId: layer.id,
+            properties: { transition: next },
+          })
+        : history.execute('slide.setProperties', {
+            slideId: slide.id,
+            properties: { transition: next },
+          }),
+    );
 
   return (
     <>
-      <Group label="Transition to This Slide">
-        <TransitionFields
-          title="Slide transition"
-          transition={slide.properties.transition}
-          onChange={(transition, label) =>
-            inOneStep(label, () =>
-              history.execute('slide.setProperties', {
-                slideId: slide.id,
-                properties: { transition },
-              }),
-            )
+      <Group label="Preview">
+        <Command
+          icon="play"
+          label="Preview"
+          title={
+            layer
+              ? `Play ${layer.name}'s transition on the stage`
+              : 'Play the transition on the stage'
           }
+          onClick={transition ? () => previewTransition(layer ? 'layer' : 'slide') : undefined}
         />
-        <div className="anim-fields">
-          <button
-            type="button"
-            className="ribbon-button small"
-            disabled={!slide.properties.transition}
-            onClick={() => previewTransition('slide')}
-          >
-            Preview
-          </button>
-          <button
-            type="button"
-            className="ribbon-button small"
-            onClick={() =>
-              inOneStep('Apply transition to all slides', () => {
-                for (const { slide: each } of allSlides(history.project)) {
-                  history.execute('slide.setProperties', {
-                    slideId: each.id,
-                    properties: { transition: slide.properties.transition },
-                  });
-                }
-              })
-            }
-          >
-            Apply to all slides
-          </button>
-        </div>
       </Group>
-      {layer && (
-        <Group label={`Transition of ${layer.name}`}>
-          <TransitionFields
-            title="Layer transition"
-            transition={layer.properties.transition}
-            onChange={(transition, label) =>
-              inOneStep(label, () =>
-                history.execute('layer.setProperties', {
-                  layerId: layer.id,
-                  properties: { transition },
-                }),
-              )
-            }
-          />
-          <div className="anim-fields">
+      <Group label={layer ? `Transition to ${layer.name}` : 'Transition to This Slide'}>
+        <Gallery title={title} transition={transition} onChange={onChange} />
+      </Group>
+      <Group label="Effect Options">
+        <EffectOptions title={title} transition={transition} onChange={onChange} />
+      </Group>
+      <Group label="Timing">
+        <div className="anim-fields">
+          <div className="anim-row">
+            <span className="ribbon-unit">Duration</span>
+            <NumericInput
+              className="ribbon-input ribbon-number"
+              aria-label={`${title} duration`}
+              title="Seconds"
+              value={transition ? String(transition.duration) : ''}
+              disabled={!transition}
+              min={0.1}
+              max={5}
+              undoLabel="Change transition duration"
+              onValue={(n) =>
+                transition &&
+                n !== null &&
+                onChange({ ...transition, duration: n }, 'Change transition duration')
+              }
+            />
+            <span className="ribbon-unit">s</span>
+          </div>
+          {!layer && (
             <button
               type="button"
-              className="ribbon-button small"
-              aria-label="Preview layer transition"
-              disabled={!layer.properties.transition}
-              onClick={() => previewTransition('layer')}
+              className="ribbon-button compact"
+              onClick={() =>
+                inOneStep('Apply transition to all slides', () => {
+                  for (const { slide: each } of allSlides(history.project)) {
+                    history.execute('slide.setProperties', {
+                      slideId: each.id,
+                      properties: { transition: slide.properties.transition },
+                    });
+                  }
+                })
+              }
             >
-              Preview
+              Apply to All Slides
             </button>
-          </div>
-        </Group>
-      )}
+          )}
+        </div>
+      </Group>
     </>
   );
 }
