@@ -95,6 +95,9 @@ jobs:
   package:
     name: Package (${{ matrix.os }})
     needs: [verify, ffmpeg-windows]
+    # Built even when a check fails, so an intermittent test never holds the installers back;
+    # the checks still show their failures (Luke, 2026-11-27: "force an installer build").
+    if: ${{ !cancelled() && needs.ffmpeg-windows.result == 'success' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
