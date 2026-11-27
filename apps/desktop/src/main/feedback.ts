@@ -1,11 +1,14 @@
 /**
- * Help → Send Feedback… (B6): opens the feedback site in the author's browser with the app's
+ * Help → Send Feedback… (B6), and Feedback in the title bar (B29): each opens the feedback site in the author's browser with the app's
  * version and the computer filled in. The app itself sends nothing; the author chooses what
  * to send from the page. The site's code is in the separate `lpgeach/vedra-opus-feedback`
  * repository.
  */
 
 export const FEEDBACK_URL = 'https://vedra-opus-feedback.vercel.app/';
+
+/** The help's contents page, for Help → Vedra Opus Help (B30): `help/`, as published. */
+export const HELP_URL = 'https://github.com/lpgeach/vedra-opus-releases/blob/main/help/README.md';
 
 /** Luke's Ko-fi page, for Donate in the title bar and Help → Donate… (B9). */
 export const DONATE_URL = 'https://ko-fi.com/lukegeach';
@@ -31,4 +34,9 @@ export function feedbackUrl(version: string, system: string): string {
   url.searchParams.set('v', version);
   url.searchParams.set('os', system);
   return url.toString();
+}
+
+/** The feedback site's address for this copy of the app on this computer. */
+export function feedbackUrlHere(version: string): string {
+  return feedbackUrl(version, describeSystem(process.platform, process.getSystemVersion()));
 }

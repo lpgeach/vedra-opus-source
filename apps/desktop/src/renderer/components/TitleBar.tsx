@@ -109,7 +109,15 @@ export function TitleBar({ open, view }: { open: OpenProject | null; view: Edito
         <span />
       )}
       <div className="title-bar-right">
-        {/* On the Welcome screen and in the editor alike (B9). */}
+        {/* Feedback (B29) and Donate (B9): on the Welcome screen and in the editor alike. */}
+        <button
+          className="top-bar-button"
+          data-testid="feedback"
+          title={t('titleBar.feedbackHint')}
+          onClick={() => void window.vedraopus.app.sendFeedback()}
+        >
+          {t('titleBar.feedback')}
+        </button>
         <button
           className="top-bar-button donate-button"
           data-testid="donate"

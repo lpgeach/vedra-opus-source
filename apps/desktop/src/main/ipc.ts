@@ -7,7 +7,7 @@ import { basename, dirname, extname, join, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
 import type { createScreenCapture } from './screen-capture';
 import { readNotices } from './notices';
-import { DONATE_URL } from './feedback';
+import { DONATE_URL, feedbackUrlHere } from './feedback';
 import { findElectronDir, folderWithSource, NOTICES_FILE, thirdPartyNotices } from './third-party';
 import { locale, t } from '../shared/strings';
 import { readTranslationDocument, writeTranslationDocument } from './translation-document';
@@ -117,6 +117,7 @@ export function registerIpcHandlers(context: IpcContext): void {
     },
     'app:thirdPartyNotices': () => thirdParty(),
     'app:donate': () => shell.openExternal(DONATE_URL),
+    'app:sendFeedback': () => shell.openExternal(feedbackUrlHere(app.getVersion())),
     'app:openNotice': async (id) => {
       const path = noticeFiles.get(id);
       if (!path) return false;

@@ -8,7 +8,8 @@ import { answerDialogs, launchApp } from '../e2e/launch';
  * The help pages' screenshots, and the downloads page's (docs/briefs/B26-help-wiki.md).
  * `npm run help:shots` builds the app and retakes them all into help/images/. Each test
  * drives the app as an author would, so a renamed control fails here instead of leaving a
- * picture that no longer matches the app.
+ * picture that no longer matches the app. Every picture is taken at one pixel per point
+ * (`scale: 'css'`), so it is the same size from a high-density screen.
  */
 
 const images = join(import.meta.dirname, 'images');
@@ -57,7 +58,7 @@ async function settle(page: Page): Promise<void> {
 
 async function shot(page: Page, name: string): Promise<void> {
   await settle(page);
-  await page.screenshot({ path: join(images, `${name}.png`) });
+  await page.screenshot({ path: join(images, `${name}.png`), scale: 'css' });
 }
 
 /** A picture of one part of the window, by its test id. */
@@ -66,7 +67,7 @@ async function part(page: Page, testId: string, name: string): Promise<void> {
   await page
     .getByTestId(testId)
     .first()
-    .screenshot({ path: join(images, `${name}.png`) });
+    .screenshot({ path: join(images, `${name}.png`), scale: 'css' });
 }
 
 const TABS = ['Home', 'Insert', 'Slides', 'Design', 'Transitions', 'Animations', 'View'];
@@ -237,18 +238,10 @@ test('audio and video: their Format panels, captions, recording, text-to-speech'
     await shot(page, 'captions');
 
     await slide(page, 5);
-    const video = page
-      .getByTestId('timeline-row')
-      .filter({ has: page.locator('.timeline-name') })
-      .filter({ hasNotText: 'Narration' });
     await panelTab(page, 'Timeline');
-    await select(
-      page,
-      (await video.locator('.timeline-name').allTextContents()).find((name) =>
-        /video|film|clip|launch|cubesat|satellite/i.test(name),
-      ) ?? 'Narration',
-    );
+    await select(page, 'Earth from the ISS');
     await panelTab(page, 'Format');
+    await expect(page.getByTestId('right-upper')).toContainText('video selected');
     await part(page, 'right-upper', 'video-format');
 
     await ribbonTab(page, 'Insert');
@@ -276,14 +269,14 @@ test('quizzes: the question kinds, Form View, a draw and a result slide', async 
     await page
       .getByRole('menu')
       .first()
-      .screenshot({ path: join(images, 'question-menu.png') });
+      .screenshot({ path: join(images, 'question-menu.png'), scale: 'css' });
     await page.keyboard.press('Escape');
     await page.getByRole('button', { name: 'Survey', exact: true }).click();
     await settle(page);
     await page
       .getByRole('menu')
       .first()
-      .screenshot({ path: join(images, 'survey-menu.png') });
+      .screenshot({ path: join(images, 'survey-menu.png'), scale: 'css' });
     await page.keyboard.press('Escape');
 
     await slide(page, 13);
@@ -318,6 +311,7 @@ test('the player, tracking, publishing and Preview', async () => {
       await section.scrollIntoViewIfNeeded();
       await settle(page);
       await section.screenshot({
+        scale: 'css',
         path: join(
           images,
           `player-${legend
@@ -347,7 +341,7 @@ test('the player, tracking, publishing and Preview', async () => {
     const course = await preview;
     await course.setViewportSize({ width: 1280, height: 800 }).catch(() => undefined);
     await course.waitForTimeout(2500);
-    await course.screenshot({ path: join(images, 'preview.png') });
+    await course.screenshot({ path: join(images, 'preview.png'), scale: 'css' });
   } finally {
     await app.close();
   }
@@ -382,7 +376,7 @@ test('the Animations tab’s grid of entrance effects', async () => {
     await settle(page);
     await page
       .locator('.effect-gallery-panel')
-      .screenshot({ path: join(images, 'entrance-gallery.png') });
+      .screenshot({ path: join(images, 'entrance-gallery.png'), scale: 'css' });
     await page.keyboard.press('Escape');
   } finally {
     await app.close();

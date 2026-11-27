@@ -3,7 +3,7 @@ import type { MenuItemConstructorOptions } from 'electron';
 import type { IpcEvents } from '../shared/ipc';
 import type { UpdateChannel } from '../shared/settings';
 import { t } from '../shared/strings';
-import { describeSystem, DONATE_URL, feedbackUrl } from './feedback';
+import { DONATE_URL, feedbackUrlHere, HELP_URL } from './feedback';
 import { PUBLIC_REPOSITORY } from './third-party';
 
 const isMac = process.platform === 'darwin';
@@ -219,15 +219,15 @@ export function buildApplicationMenu(
       role: 'help',
       submenu: [
         {
+          id: 'help.guide',
+          label: t('menu.help.guide'),
+          click: () => void shell.openExternal(HELP_URL),
+        },
+        { type: 'separator' },
+        {
           id: 'help.sendFeedback',
           label: t('menu.help.sendFeedback'),
-          click: () =>
-            void shell.openExternal(
-              feedbackUrl(
-                app.getVersion(),
-                describeSystem(process.platform, process.getSystemVersion()),
-              ),
-            ),
+          click: () => void shell.openExternal(feedbackUrlHere(app.getVersion())),
         },
         {
           id: 'help.donate',

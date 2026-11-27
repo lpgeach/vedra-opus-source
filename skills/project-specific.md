@@ -5,6 +5,10 @@
 Project-specific knowledge that is not obvious from the code. Update it whenever something surprises you.
 
 ## Current State
+- **Alpha 7** (`wp/alpha-7`, 2026-11-27, session 121): `0.1.0-alpha.7`, alpha 6 plus B29 and B30, with the help's pictures retaken on the Mac (`scale: 'css'`, so a Retina screen gives the same size). Format 41.
+- **B29, a Feedback button** (`wp/b29-feedback-button`, 2026-11-27, session 120): in the title bar before Donate, opening the same page as Help → Send Feedback… (`app:sendFeedback`). Not in alpha 6. The help's pictures do not show it yet (`npm run help:shots`). Merged (PR #163).
+- **B30, Help → Vedra Opus Help** (`wp/b30-help-link`, session 120): opens the published guide (`HELP_URL`) in the browser. Not in alpha 6. The published help is a copy: copy `help/` to the downloads repository at each release.
+- **Alpha 6 published** (2026-11-27, session 119, `logs/2026-11-27-session-119.md`): `0.1.0-alpha.6` and its third-party sources are on `vedra-opus-releases`, with the help in its `help/`. New since alpha 5: the Transitions and Animations galleries (B27, B28, `TileGallery`) and the help (B26, `npm run help:shots` retakes its pictures). An Apple Silicon Mac is now set up (`docs/HANDOVER.md` section 0).
 - **Alpha 5** (2026-11-27, session 118): `0.1.0-alpha.5`, the first release built by CI, for Windows, both Macs and Linux, published on `vedra-opus-releases` (`docs/release-stages.md`, `docs/releasing.md` "The installers, from CI").
 - **Session 118 (2026-11-27, `logs/2026-11-27-session-118.md`):**
   - **The Windows slow close** (`wp/windows-close-hang`, PR #153): closing waits for the working copy's write, and removing the working copy never throws (pitfall #179).
@@ -551,6 +555,10 @@ Recorded in `docs/PLAN.md` section 3 (architecture and stack) and section 10 (op
 **Issue**: In session 115 an e2e step `await expect(stage).not.toContainText('…')` failed after a layer was hidden, and an afternoon went on suspecting the importer, then the player. The engine had hidden the layer. The player keeps a hidden layer's elements, hidden, and `toContainText` reads all text, shown or not.
 **Rule**: to check something on the stage went away, use `expect(locator).toBeHidden()` on it. Before blaming the player, drive the engine alone (`createEngine(project)`, `pointer`, `tick`, `getView().layers`): it separates the two in a minute.
 
+### 181. On a Mac, a test run must stay silent: stub what reaches the desktop
+**Issue**: In session 120, the first e2e run on Luke's Mac put a microphone prompt on the desktop. The recording test uses Chromium's stand-in microphone, but `permissions.ts` still calls macOS's `askForMediaAccess`. Transparent windows alone do not make a run silent.
+**Rule**: `e2e/transparent-windows.cjs` mutes the app, hides it from the Dock, answers the microphone question itself, and blocks `shell.openExternal`, `openPath` and `showItemInFolder`. Anything new that calls the system (a permission, a prompt, a sound) needs a stand-in there. On a new machine, run one test first while watching which app is in front (`lsappinfo front`), then check `log show` for `AUTHREQ_PROMPTING`. CI does not load the file.
+
 ### 180. A fast machine can finish before a frame: test what lasts, or make it last
 **Issue**: On CI's Apple Silicon Mac, the B7 test's tiny course imported in about 0.1 s, before the window drew a frame, so the import cover never reached the screen and the test failed on both tries (session 118). It had passed there that morning, by timing.
 **Rule**: a test that watches for something shown only while work runs must make the work last long enough, as real work does. `storyline-import.spec.ts` holds the main process after the first progress message, through the window's `webContents.send`. Never accept "not seen" as a pass.
@@ -571,7 +579,8 @@ Recorded in `docs/PLAN.md` section 3 (architecture and stack) and section 10 (op
 **Issue**: In session 117 a scripted edit with `open(path, 'w')` turned a whole `.tsx` file's line endings into CRLF, so its diff was every line. Python's text mode writes `
 ` as `
 ` on Windows.
-**Rule**: in scripts that edit repository files, read and write with `open(path, encoding='utf-8', newline='')`. If it happens, `sed -i 's/$//' file` puts it back.
+**Rule**: in scripts that edit repository files, read and write with `open(path, encoding='utf-8', newline='')`. If it happens, `sed -i 's/
+$//' file` puts it back.
 
 ### 175. The window-size e2e test fails on Luke's Windows machine (650 → 652)
 **What**: `e2e/shell.spec.ts` "restores window size after restart" reopens a 1000 × 650 window as 1000 × 652 on Luke's Windows machine. It fails the same way with master's code (session 117), so it is the machine (most likely its display scaling), not a change. It runs only with visible windows, so CI and WSL skip it.

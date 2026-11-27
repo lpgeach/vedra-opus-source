@@ -45,9 +45,13 @@ If Vedra Opus crashes, it can keep a report on your computer, to help find the c
 
 Reports stay on your computer: Vedra Opus never sends them anywhere. To share one, attach it to your feedback.
 
+## Opening this help
+
+**Help → Vedra Opus Help**, in the menu (☰), opens this guide in your browser. You need to be online.
+
 ## Sending feedback
 
-**Help → Send Feedback…** opens the feedback page in your browser, with the app's version and your computer's system filled in. Report a problem, suggest something, or ask a question, with screenshots if they help.
+**Feedback**, at the top right of the window beside Donate (or **Help → Send Feedback…**), opens the feedback page in your browser, with the app's version and your computer's system filled in. Report a problem, suggest something, or ask a question, with screenshots if they help.
 
 ## Privacy
 

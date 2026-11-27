@@ -7,7 +7,26 @@
 //   Playwright drives the pages directly, so the tests see no difference.
 // - The app's clipboard calls use a clipboard of this app's own, not the
 //   system's, so copy and paste in a test leave the developer's alone.
-const { app, clipboard } = require('electron');
+// - It makes no sound, and opens nothing outside itself (no browser, Finder or
+//   other app; a test that checks what would open replaces these with its own).
+//   On macOS it has no Dock icon and does not become the active app.
+// - It never asks macOS for the microphone, which would put a prompt on the
+//   desktop: the recording test uses Chromium's stand-in microphone.
+const { app, clipboard, shell, systemPreferences } = require('electron');
+
+app.commandLine.appendSwitch('mute-audio');
+
+if (process.platform === 'darwin') {
+  systemPreferences.askForMediaAccess = () => Promise.resolve(true);
+  const stayInBackground = () => app.setActivationPolicy('accessory');
+  stayInBackground();
+  app.once('will-finish-launching', stayInBackground);
+  app.once('ready', stayInBackground);
+}
+
+shell.openExternal = () => Promise.resolve();
+shell.openPath = () => Promise.resolve('');
+shell.showItemInFolder = () => {};
 
 app.on('browser-window-created', (_event, window) => {
   window.setOpacity(0);

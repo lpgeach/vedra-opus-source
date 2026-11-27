@@ -92,6 +92,33 @@ dac1b2248cf9c030da829a771962fadc6b0fe0740317fa514eedb09e2f2398bc  Vedra-Opus-0.1
 
 Saved format 41, so projects saved in alpha 5 do not open in alpha 4. The `.deb` still names the placeholder maintainer (`electron-builder.yml`). See `logs/2026-11-27-session-118.md`.
 
+## Alpha 6 (published 2026-11-27)
+
+**What it is:** alpha 5, plus:
+
+- the Transitions tab as a gallery (B27);
+- the Animations tab as galleries (B28);
+- help for every feature (B26), published in `help/` on the downloads repository.
+
+**Built by CI:** run 46022488234 on the public `vedra-opus-source`, at `9934cc8`, tagged `v0.1.0-alpha.6`. Every job passed, each installer's smoke test included. None is signed with a developer certificate or notarised.
+
+**Where** (both on https://github.com/lpgeach/vedra-opus-releases, as pre-releases):
+
+- `v0.1.0-alpha.6`: the Windows installer, its `.blockmap` and `latest.yml`; both `.dmg`s; the AppImage, the `.deb` and `latest-linux.yml`.
+- `sources-0.1.0-alpha.6`: the ten third-party source files.
+
+**SHA-256:**
+
+```
+22935c381eed2cc41fd5faa82ec54b33d451e382abbad92ca0dcfa3afba29779  Vedra-Opus-0.1.0-alpha.6-x64.exe
+ee09748cd74e05b3541a9b72a996efe09652df8c9d3e6f108471641953e6871f  Vedra-Opus-0.1.0-alpha.6-arm64.dmg
+6bd5dec4915676df829d0a2eef1f10e5523b7aef5055255e9862609243225f55  Vedra-Opus-0.1.0-alpha.6-x64.dmg
+d790e6aa9cb4d39c853276b4195b62445c2c159764b894483a97a3310a1002c9  Vedra-Opus-0.1.0-alpha.6-x86_64.AppImage
+97c1be4925e0591b096928aab9beeb5b547826e6b1f116880a519b14a6d322fe  Vedra-Opus-0.1.0-alpha.6-amd64.deb
+```
+
+Saved format 41, as alpha 5, so each opens the other's projects. The `.deb` still names the placeholder maintainer (`electron-builder.yml`). See `logs/2026-11-27-session-119.md`.
+
 ## Beta (to come)
 
 **Look and name:**

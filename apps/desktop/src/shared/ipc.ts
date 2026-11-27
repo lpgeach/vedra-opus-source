@@ -231,6 +231,8 @@ export const ipcChannels = {
   'app:thirdPartyNotices': { args: none },
   /** Open the Ko-fi page in the browser (B9); one fixed address, so no arguments. */
   'app:donate': { args: none },
+  /** Open the feedback site in the browser (B29); main builds the address, so no arguments. */
+  'app:sendFeedback': { args: none },
   /** Open a component's larger notice file outside the app; by its id, never a path. */
   'app:openNotice': {
     args: z.tuple([
@@ -479,6 +481,7 @@ export interface IpcResults {
   'app:setTitleBarColours': void;
   'app:thirdPartyNotices': ThirdPartyNotices;
   'app:donate': void;
+  'app:sendFeedback': void;
   'app:openNotice': boolean;
   'project:new': OpenResult;
   'project:open': OpenResult;
@@ -591,6 +594,7 @@ export interface VedraOpusApi {
     getLaunchPath(): Promise<string | null>;
     thirdPartyNotices(): Promise<ThirdPartyNotices>;
     donate(): Promise<void>;
+    sendFeedback(): Promise<void>;
     openNotice(id: NoticeComponent['id']): Promise<boolean>;
     showMenu(at: { x: number; y: number }): Promise<void>;
     setTitleBarColours(colours: { color: string; symbolColor: string }): Promise<void>;

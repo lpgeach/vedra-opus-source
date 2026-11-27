@@ -4,6 +4,29 @@
 
 Claude's memory files stay on the computer they were made on. Everything a new machine needs is therefore here, in the repository: the standing instructions, the setup, and where the work stopped.
 
+## 0. Start here: alpha 6 is published (2026-11-27, session 119)
+
+Nothing is half done. `docs/release-stages.md` says what alpha 6 holds, and `logs/2026-11-27-session-119.md` what was checked.
+
+**An Apple Silicon Mac is now set up** (`~/Repositories/project-eloquent`, with `vedra-opus-releases` and `vedra-opus-feedback` beside it):
+
+- Node 24.22.3 and `gh` 2.106.0 are unpacked in `~/.local/opt`, not on the `PATH`:
+
+  ```bash
+  export PATH="$HOME/.local/opt/node-v24.22.3-darwin-arm64/bin:$HOME/.local/opt/gh_2.106.0_macOS_arm64/bin:$PATH"
+  ```
+
+- `gh` is logged in as `lpgeach`; the `public` remote is added.
+- ffmpeg, LibreOffice and Playwright's browsers are fetched.
+- **Git identity:** set globally to `lpgeach-mac` with the GitHub noreply address.
+- **No `samples/` folder.**
+- **e2e runs here silently** (session 120, pitfall #181). Luke allows it as long as it stays silent.
+
+### Still open for Luke
+
+- **The `.deb`'s maintainer:** still the placeholder `maintainers@vedraopus.invalid` (`apps/desktop/electron-builder.yml`). It shipped that way in alpha 5 and 6.
+- **Next:** B19 to B25 (section 1), unless Luke says otherwise.
+
 ## 1. Where the work is
 
 - **`master`:** all of Phase 8 and its review (PRs #62 to #68), P9.1 (PR #69), the Vedra Opus rename (PR #70), P9.2 (PR #71), P9.3 (PR #72), P9.4 (PR #73), P9.5 (PR #74), P9.6 (PR #75), P9.7 (PR #76), P9.8 (PR #77), P9.9 (PR #78), P9.10 (PR #79) and P9.11 (PR #80).
@@ -112,7 +135,16 @@ Claude's memory files stay on the computer they were made on. Everything a new m
     - pre-releases `v0.1.0-alpha.5` and `sources-0.1.0-alpha.5` on `vedra-opus-releases`, and its README updated;
     - the installers kept here in `apps/desktop/release/alpha-5/` (ignored).
     - `docs/release-stages.md` has the details.
-  - **Next:** new screenshots for the downloads README, and a real maintainer for the `.deb`, when Luke says. Then B19 to B25.
+  - **Later the same day:**
+    - new downloads-page screenshots;
+    - B27 (the Transitions gallery), B28 (the Animations galleries) and B26 (the help, 16 pages and 47 pictures from `npm run help:shots`), all merged;
+    - **alpha 6 under way** (section 0).
+  - **A second computer's quirks** (Windows, `C:\Users\lukeg\Luke-Repos\project-eloquent`):
+    - **`gh`** was not on PATH: the system PATH's entry has a stray quote, so `C:\Program Files\GitHub CLI` was added to the user PATH.
+    - **The `public` remote** had to be added: `git remote add public https://github.com/lpgeach/vedra-opus-source.git`.
+    - **Commits** use the noreply address through an `includeIf` in the global git config.
+    - **No ffmpeg or LibreOffice:** WSL has no distribution, so the 7 media e2e tests and the ffmpeg unit check fail there. Everything else passes.
+    - **PowerShell 5.1:** commit messages with quotes need `git commit -F <file>`.
 - **Luke (2026-11-24): no builds or releases until he says.** He checks the Storyline import himself with `npm run dev`.
 
 - **Questions waiting for Luke:**

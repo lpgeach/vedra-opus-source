@@ -24,6 +24,7 @@ const api: VedraOpusApi = {
     getLaunchPath: () => invoke('app:getLaunchPath'),
     thirdPartyNotices: () => invoke('app:thirdPartyNotices'),
     donate: () => invoke('app:donate'),
+    sendFeedback: () => invoke('app:sendFeedback'),
     openNotice: (id) => invoke('app:openNotice', id),
     showMenu: (at) => invoke('app:showMenu', at),
     setTitleBarColours: (colours) => invoke('app:setTitleBarColours', colours),

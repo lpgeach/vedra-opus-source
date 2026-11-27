@@ -62,7 +62,7 @@ Vedra Opus keeps a working copy of the open project as you go. If the app or the
 The ☰ button at the top left opens the menu: **File**, **Edit**, **View**, **Insert** and **Help**. Most of what is in it is also on the ribbon; the menu adds:
 
 - **File:** **Save as Template…**, **Import Slides…**, **Translation…**, **Export Handout…** and **Export Video…**;
-- **Help:** **Open Demo Course**, **Check for Updates…**, **Send Feedback…**, **Third-Party Notices…** and **Donate…**.
+- **Help:** **Vedra Opus Help** (this guide, in your browser), **Open Demo Course**, **Check for Updates…**, **Send Feedback…**, **Third-Party Notices…** and **Donate…**.
 
 ## Next
 

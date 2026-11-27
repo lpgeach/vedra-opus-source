@@ -4,7 +4,7 @@
   "description": "Desktop eLearning authoring tool",
   "author": "Vedra Opus contributors",
   "homepage": "https://github.com/lpgeach/vedra-opus-source",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0-alpha.7",
   "license": "GPL-3.0-or-later",
   "private": true,
   "type": "module",

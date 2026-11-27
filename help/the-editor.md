@@ -6,7 +6,7 @@
 
 The window has six parts:
 
-1. **The title bar**, at the top: the menu, Save, Undo and Redo, the course's title, and the three views.
+1. **The title bar**, at the top: the menu, Save, Undo and Redo, the course's title, Feedback, Donate and the three views.
 2. **The ribbon**, below it: the commands, in seven tabs.
 3. **The Slides panel**, on the left: every slide, by scene, and the project's media.
 4. **The stage**, in the middle: the slide you are working on, with a toolbar above it.
@@ -18,6 +18,7 @@ The window has six parts:
 - **☰** opens the menu (File, Edit, View, Insert and Help). See [Getting started](getting-started.md#the-menu).
 - **Save**, **Undo** and **Redo**. Every change can be undone, one step at a time.
 - **The course's title.** Click it to rename the course.
+- **Feedback** opens the feedback page in your browser, and **Donate** the page to support Vedra Opus. See [Settings and updates](settings-and-updates.md#sending-feedback).
 - **Overview**, **Slide View** and **Master View** switch between:
   - the **Overview**, every slide as a card with arrows showing where each leads (see [Slides and scenes](slides-and-scenes.md#the-overview));
   - **Slide View**, where you build one slide at a time;
