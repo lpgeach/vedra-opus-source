@@ -106,7 +106,13 @@ jobs:
           - os: ubuntu-latest
             executable: apps/desktop/release/linux-unpacked/vedraopus
           - os: macos-latest
+            app: apps/desktop/release/mac-arm64/Vedra Opus.app
             executable: apps/desktop/release/mac-arm64/Vedra Opus.app/Contents/MacOS/Vedra Opus
+          # Intel Macs (Luke, 2026-11-27, alpha 5). Its ffmpeg is built here on the first run,
+          # then cached by architecture like the others.
+          - os: macos-15-intel
+            app: apps/desktop/release/mac/Vedra Opus.app
+            executable: apps/desktop/release/mac/Vedra Opus.app/Contents/MacOS/Vedra Opus
           - os: windows-latest
             executable: apps/desktop/release/win-unpacked/Vedra Opus.exe
     env:
@@ -132,8 +138,20 @@ jobs:
           name: ffmpeg-win-x64
           path: vendor/ffmpeg/win-x64
       # Packaging never uploads: a release is published by hand (docs/releasing.md).
+      # The Mac apps are signed ad hoc (`-c.mac.identity=-`), as alpha 4's were: without it,
+      # Apple Silicon calls the downloaded app "damaged" (skills/project-specific.md #174).
       - id: package
-        run: npm run package
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then
+            npm run fetch:ffmpeg && npm run fetch:libreoffice &&
+              npm run package --workspace=vedraopus-desktop -- -c.mac.identity=-
+          else
+            npm run package
+          fi
+      - name: Check the Mac app's ad-hoc signature
+        if: runner.os == 'macOS'
+        run: codesign --verify --deep --strict --verbose=2 "${{ matrix.app }}"
       # The smoke test is the end-to-end suite, which opens published courses in Chromium.
       - name: Install Chromium for the smoke test (Linux)
         if: runner.os == 'Linux'
@@ -174,3 +192,5 @@ jobs:
             apps/desktop/release/*.deb
             apps/desktop/release/*.dmg
             apps/desktop/release/*.exe
+            apps/desktop/release/*.blockmap
+            apps/desktop/release/latest*.yml

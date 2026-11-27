@@ -134,6 +134,24 @@ test('while a course imports, a cover over the whole window shows its progress, 
         return choose(...args);
       }) as typeof choose;
     });
+    // This test's course is tiny: on a fast machine it imported in about 0.1 s, before the
+    // window drew a frame, so the cover never showed (CI's Apple Silicon Mac, 2026-11-27).
+    // A real course takes seconds. So hold the main process for a moment after the first
+    // progress message has gone, as a real import would, and the cover gets drawn.
+    await app.evaluate(({ BrowserWindow }) => {
+      const contents = BrowserWindow.getAllWindows()[0]!.webContents;
+      const send = contents.send.bind(contents);
+      let held = false;
+      contents.send = (channel: string, ...args: unknown[]) => {
+        send(channel, ...args);
+        if (channel !== 'event:importProgress' || held) return;
+        held = true;
+        const until = Date.now() + 500;
+        while (Date.now() < until) {
+          // Busy: the import itself is held, the window is not.
+        }
+      };
+    });
     // The cover comes and goes within the import: note it the moment it appears.
     await page.evaluate(() => {
       const seen: CoverSighting[] = [];
