@@ -1,3 +1,5 @@
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
@@ -42,11 +44,26 @@ describe('the third-party notices plugin', () => {
     expect(react.text).toContain('Permission is hereby granted');
     expect(react.text).toContain('Copyright (c) Meta Platforms');
 
-    // TipTap's packages name MIT but carry no licence file.
+    // TipTap 3's packages carry their own licence file (TipTap 2's did not).
     const tiptap = describePackage(join(modules, '@tiptap', 'core'));
-    expect(tiptap).toMatchObject({ name: '@tiptap/core', licence: 'MIT', standard: true });
-    expect(tiptap.text).toMatch(/^MIT License\n\nCopyright \(c\) /);
+    expect(tiptap).toMatchObject({ name: '@tiptap/core', licence: 'MIT', standard: false });
     expect(tiptap.text).toContain('Permission is hereby granted');
+
+    // A package that names MIT but carries no licence file gets the standard text. Made
+    // here, so the case stays covered whatever the installed packages ship.
+    const bare = mkdtempSync(join(tmpdir(), 'vedraopus-notices-'));
+    try {
+      writeFileSync(
+        join(bare, 'package.json'),
+        JSON.stringify({ name: 'no-licence-file', license: 'MIT' }),
+      );
+      const standard = describePackage(bare);
+      expect(standard).toMatchObject({ name: 'no-licence-file', licence: 'MIT', standard: true });
+      expect(standard.text).toMatch(/^MIT License\n\nCopyright \(c\) /);
+      expect(standard.text).toContain('Permission is hereby granted');
+    } finally {
+      rmSync(bare, { recursive: true, force: true });
+    }
   });
 
   it('lists each package once, by name, and leaves our own out', () => {

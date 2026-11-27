@@ -16,7 +16,7 @@ export function wholeTextEditor(doc: RichText): Editor {
     extensions: richTextExtensions(),
   });
   if (loaded !== doc) {
-    hidden.commands.setContent(doc, false);
+    hidden.commands.setContent(doc, { emitUpdate: false });
     loaded = doc;
   }
   hidden.commands.setTextSelection(wholeRange(hidden));

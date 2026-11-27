@@ -92,13 +92,13 @@ test('text parity: editor rendering and static rendering of the same document ar
       <div id="static" style="position:relative;width:360px;height:260px">${html}</div>
       <div id="editor" style="position:relative;width:360px;height:260px;margin-top:8px"></div>
       <script type="module">
-        import { Editor } from 'https://esm.sh/@tiptap/core@2.11.5?bundle';
-        import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.11.5?bundle';
-        import Underline from 'https://esm.sh/@tiptap/extension-underline@2.11.5?bundle';
-        import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.11.5?bundle';
-        import Color from 'https://esm.sh/@tiptap/extension-color@2.11.5?bundle';
-        import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.11.5?bundle';
-        import Paragraph from 'https://esm.sh/@tiptap/extension-paragraph@2.11.5?bundle';
+        import { Editor } from 'https://esm.sh/@tiptap/core@3.35.0';
+        import { StarterKit } from 'https://esm.sh/@tiptap/starter-kit@3.35.0';
+        import { Underline } from 'https://esm.sh/@tiptap/extension-underline@3.35.0';
+        import { TextStyle } from 'https://esm.sh/@tiptap/extension-text-style@3.35.0';
+        import { Color } from 'https://esm.sh/@tiptap/extension-color@3.35.0';
+        import { TextAlign } from 'https://esm.sh/@tiptap/extension-text-align@3.35.0';
+        import { Paragraph } from 'https://esm.sh/@tiptap/extension-paragraph@3.35.0';
         const TextStyleExtended = TextStyle.extend({ addAttributes(){ return { ...this.parent?.(), fontSize:{default:null,parseHTML:e=>e.style.fontSize||null,renderHTML:a=>a.fontSize?{style:'font-size: '+a.fontSize}:{}}, lineHeight:{default:null,parseHTML:e=>e.style.lineHeight||null,renderHTML:a=>a.lineHeight?{style:'line-height: '+a.lineHeight}:{}} }; }});
         const ParagraphExtended = Paragraph.extend({ addAttributes(){ return { ...this.parent?.(), textAlign:{default:null,parseHTML:e=>e.style.textAlign||null,renderHTML:a=>a.textAlign?{style:'text-align: '+a.textAlign}:{}}, lineHeight:{default:null,parseHTML:e=>e.style.lineHeight||null,renderHTML:a=>a.lineHeight?{style:'line-height: '+a.lineHeight}:{}}, spaceBefore:{default:null,parseHTML:()=>null,renderHTML:a=>typeof a.spaceBefore==='number'?{style:'margin-top: '+a.spaceBefore+'px'}:{}}, spaceAfter:{default:null,parseHTML:()=>null,renderHTML:a=>typeof a.spaceAfter==='number'?{style:'margin-bottom: '+a.spaceAfter+'px'}:{}} }; }});
         const doc = ${docJson};
@@ -114,7 +114,7 @@ test('text parity: editor rendering and static rendering of the same document ar
         edEl.style.overflowWrap='break-word';
         new Editor({
           element: edEl,
-          extensions: [StarterKit.configure({paragraph:false,heading:false,code:false,codeBlock:false,blockquote:false,horizontalRule:false}), ParagraphExtended, Underline, TextStyleExtended, Color, TextAlign.configure({types:['paragraph']})],
+          extensions: [StarterKit.configure({paragraph:false,heading:false,code:false,codeBlock:false,blockquote:false,horizontalRule:false,link:false,underline:false,trailingNode:false,listKeymap:false}), ParagraphExtended, Underline, TextStyleExtended, Color, TextAlign.configure({types:['paragraph']})],
           content: doc,
           editable: false,
           editorProps: { attributes: { class: 'vo-rich-text', style: "font-family:'Inter', sans-serif;font-size:18px;line-height:1.3;color:#1c2024;white-space:pre-wrap;overflow-wrap:break-word;width:100%" } }

@@ -11,7 +11,7 @@ import {
 import type { Project } from '@vedraopus/model';
 import { app, dialog } from 'electron';
 import type { BrowserWindow, MessageBoxOptions } from 'electron';
-import { existsSync, rmSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { mkdir, rm } from 'node:fs/promises';
 import { basename, extname, join } from 'node:path';
 import type {
@@ -62,6 +62,7 @@ import { DEMO_COURSE_FILE, isOwnTemplate, listTemplates, templateFileName } from
 import type { TemplateFolders } from './templates';
 import {
   createWorkspace,
+  discardWorkspace,
   findRecoverableWorkspaces,
   readWorkspaceProject,
   removeWorkspace,
@@ -712,19 +713,24 @@ export class ProjectSessions {
         if (saved.status !== 'saved') return false;
       }
     }
+    // An edit just before closing may still be writing to the working copy. Removing the
+    // folder under that write fails on Windows, so let it finish first; a write not yet
+    // started is not needed (docs/briefs/windows-close-hang.md).
+    clearTimeout(this.autosaveTimer);
+    await this.writes;
     this.discardCurrent();
     return true;
   }
 
   /**
    * Forget the open project and delete its working copy. Synchronous so it
-   * completes even when called on the way out of the process.
+   * completes even when called on the way out of the process; never throws.
    */
   discardCurrent(): void {
     clearTimeout(this.autosaveTimer);
     const session = this.session;
     this.session = null;
-    if (session) rmSync(session.workspace.dir, { recursive: true, force: true });
+    if (session) discardWorkspace(session.workspace.dir);
     this.updateWindow();
   }
 

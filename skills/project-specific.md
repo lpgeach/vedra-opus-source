@@ -5,6 +5,10 @@
 Project-specific knowledge that is not obvious from the code. Update it whenever something surprises you.
 
 ## Current State
+- **Session 118 (2026-11-27, `logs/2026-11-27-session-118.md`):**
+  - **The Windows slow close** (`wp/windows-close-hang`, PR #153): closing waits for the working copy's write, and removing the working copy never throws (pitfall #179).
+  - **Dependencies** (`wp/dependency-updates`): TipTap 3.35.0 (pitfall #178), Electron 45.5.0, and every in-range update. `electron-winstaller`'s install script is denied (`allowScripts`). Still held: TypeScript 6 (pitfall #2); the 6 audit findings left are minimatch inside electron-builder.
+  - **A second Windows computer:** the clone is at `C:\Users\lukeg\Luke-Repos\project-eloquent`, with no WSL distribution and no `vendor/ffmpeg` or `vendor/libreoffice` yet, so the media tests fail there. `gh` is at `C:\Program Files\GitHub CLI\gh.exe`, added to the user PATH; the system PATH's entry has a stray quote.
 - **Session 117 (2026-11-26):**
   - **B18, the brand** (`wp/b18-brand`): Luke's logo as SVGs in `brand/` (full logo and VO mark, black and white, app icon), the logo on the Welcome screen, `apps/desktop/icons/icon.png` for packaging, and Outfit as the whole app's typeface (`docs/briefs/B18-brand.md`). The logo files were made by a script kept outside the repository (Python, fontTools and HarfBuzz); to change the mark, edit the SVG paths or ask for the script again.
   - **B17, the ribbon and panels** (`wp/b17-ribbon-and-panels`, **format 41**):
@@ -545,6 +549,14 @@ Recorded in `docs/PLAN.md` section 3 (architecture and stack) and section 10 (op
 ### 169. A hidden layer stays in the page: test that its text is hidden, not gone
 **Issue**: In session 115 an e2e step `await expect(stage).not.toContainText('…')` failed after a layer was hidden, and an afternoon went on suspecting the importer, then the player. The engine had hidden the layer. The player keeps a hidden layer's elements, hidden, and `toContainText` reads all text, shown or not.
 **Rule**: to check something on the stage went away, use `expect(locator).toBeHidden()` on it. Before blaming the player, drive the engine alone (`createEngine(project)`, `pointer`, `tick`, `getView().layers`): it separates the two in a minute.
+
+### 179. On Windows, a folder with an open file cannot be removed: let writes finish first
+**Issue**: In CI's Windows smoke test, the packaged app sometimes spent ~28 s closing after a test that had just edited the project. Closing removed the working copy with `rmSync` while the last edit's autosave was still writing into it; Windows refused, `rmSync` threw, and the window's close handler never closed the window (session 118).
+**Rule**: before removing a folder the app writes to, wait for its writes (`this.writes` in `ProjectSessions`). Removal on the way out goes through `discardWorkspace` (`workspace.ts`), which retries and never throws. A promise in an event handler that decides whether a window closes needs a rejection path.
+
+### 178. TipTap 3: named imports only, and StarterKit brings more
+**Issue**: In TipTap 3, `@tiptap/extension-font-family`'s default export is the TextStyle kit, not FontFamily, so `import FontFamily from …` type-checks and registers the wrong extension. StarterKit 3 also includes Link, Underline, a trailing paragraph and list keys (session 118).
+**Rule**: import TipTap extensions by name (`import { FontFamily } from …`). `richTextExtensions()` turns off StarterKit's `link`, `underline`, `trailingNode` and `listKeymap`, and adds Link and Underline with our own settings; keep the render package's parity test (`text-parity.spec.ts`) on the same version and settings.
 
 ### 177. `scrollWidth` cannot tell how much room is spare
 **Issue**: In session 117 the ribbon's folding unfolded nothing when the window grew: it took `scrollWidth` as the width the groups need, but `scrollWidth` is never less than the element's own width, so with room to spare it reads as full.

@@ -142,15 +142,23 @@ function createMainWindow(): BrowserWindow {
       return;
     }
     event.preventDefault();
-    void sessions.confirmLeavingCurrent().then((proceed) => {
-      if (!proceed) {
+    void sessions.confirmLeavingCurrent().then(
+      (proceed) => {
+        if (!proceed) {
+          quitting = false;
+          return;
+        }
+        closeConfirmed = true;
+        if (quitting) app.quit();
+        else window.close();
+      },
+      (error: unknown) => {
+        // A save that failed on the way out: keep the window, as for Cancel, so the
+        // project is not lost and closing can be tried again.
+        console.error('Could not leave the project', error);
         quitting = false;
-        return;
-      }
-      closeConfirmed = true;
-      if (quitting) app.quit();
-      else window.close();
-    });
+      },
+    );
   });
   window.on('closed', () => {
     // A preview belongs to the editor window and goes with it.

@@ -7,7 +7,7 @@ This is a working record for the project. It is not legal advice; check anything
 **Libraries from npm:**
 
 - The app bundles them into its own files and ships no `node_modules`, so their notices would not otherwise reach anyone. The build lists every package built into each bundle, with the text of its licence and notice files (`scripts/third-party-notices.mjs`, writing `third-party-notices.json` beside each bundle). The page shows them.
-- A package that names its licence but carries no licence file (TipTap's packages) is shown with that licence's standard text, marked as such.
+- A package that names its licence but carries no licence file is shown with that licence's standard text, marked as such. (TipTap 2's packages were; TipTap 3's carry their own `LICENSE.md`.)
 - **The course player's** libraries (Immer and Zod, both MIT) are in every published course's `THIRD-PARTY-NOTICES.txt`.
 - electron-builder puts Electron's and Chromium's notices (`LICENSE.electron.txt`, `LICENSES.chromium.html`) in every package; the page shows the first and opens the second.
 

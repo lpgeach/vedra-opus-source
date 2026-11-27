@@ -87,8 +87,26 @@ Claude's memory files stay on the computer they were made on. Everything a new m
     - **B24, finding things:** search slides, and a search for any command by name.
     - **B25, the Overview:** a legend for link types (next, on click, jump, unresolved), what a slide leads to and arrives from, Preview from here, a minimap, and a list view.
   - **Ideas from the same review that wait for Luke:** object styles and defaults for new objects; accessibility (focus order, headings, missing alt text count) in the slide's own panel; script and course-data export and review comments; version history; layouts per device (desktop, tablet, phone), which is large; and connecting an AI assistant to the open course, which needs his decision under the rule on sending data off the machine.
-  - **CI (end of session 117):** Verify passes on Windows, Linux and macOS, and the Linux and macOS installers build, pass their smoke tests and are saved. The Windows installer builds, but its smoke test sometimes takes ~28 s to close the packaged app, which fails the job. The browser-suite job is removed, and the performance test does not run on macOS (both Luke). `logs/2026-11-26-session-117.md`, "Where this stopped", is the place to start.
+  - **CI (2026-11-27, session 117):**
+    - **What it runs** (only on the public `vedra-opus-source`): ffmpeg for Windows, then Verify (all checks and the e2e suite) on Windows, Linux and macOS, then Package on all three.
+    - **Luke's choices:** the browser-suite job is removed; the performance test does not run on macOS; packaging runs and keeps its installers even when a check or its smoke test fails ("force an installer build").
+    - **Intermittent on Windows CI only:** tests that build a trigger in the wizard and open Preview (`triggers.spec.ts:36`, `javascript.spec.ts:4`, `layers.spec.ts:76`), and the packaged app sometimes taking ~28 s to close in the smoke test. Not yet investigated: `logs/2026-11-26-session-117.md`, "Where this stopped".
+    - **The latest run:** 45971025238, started 2026-11-27 09:07 UTC, to build all three installers. To check it and fetch them:
+
+      ```bash
+      gh run view 45971025238 --repo lpgeach/vedra-opus-source
+      gh run download 45971025238 --repo lpgeach/vedra-opus-source --name vedraopus-windows-latest
+      ```
+
+      The macOS and Linux artifacts are `vedraopus-macos-latest` and `vedraopus-ubuntu-latest`. They are unsigned, a CI check, not a release: publishing a release is still only when Luke asks (`docs/releasing.md`).
+
+    - **Publishing for CI:** to run CI again, publish the private master's tree to `vedra-opus-source` as `docs/releasing.md` says, titled as a CI check, with no tag. Ask Luke before publishing, cancelling or re-running CI.
   - **Luke's brand identity:** he pointed to a Dribbble shot ("Glass Brand identity"); the page could not be read, so its colours and effects wait for his screenshots.
+- **Session 118 (2026-11-27, `logs/2026-11-27-session-118.md`), on a second Windows computer:**
+  - **The Windows slow close fixed** (`wp/windows-close-hang`, PR #153): closing waited on nothing and removed the working copy under an autosave write.
+  - **Dependencies up to date** (`wp/dependency-updates`): TipTap 3, Electron 45.5.0, the rest in range. TypeScript 7 waits for typescript-eslint.
+  - **This computer:** the clone is at `C:\Users\lukeg\Luke-Repos\project-eloquent`; WSL has no distribution, so ffmpeg and LibreOffice are not fetched and the media tests fail here. `gh` works (added to the user PATH; the system PATH's entry is broken by a stray quote).
+  - **Next:** merge both PRs; a CI run on the public repository, when Luke says, to check the smoke test's close and the new dependencies.
 - **Luke (2026-11-24): no builds or releases until he says.** He checks the Storyline import himself with `npm run dev`.
 
 - **Questions waiting for Luke:**

@@ -11,6 +11,7 @@
 import { parseProject, serializeProject } from '@vedraopus/model';
 import type { Project } from '@vedraopus/model';
 import { randomBytes } from 'node:crypto';
+import { rmSync, writeFileSync } from 'node:fs';
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { renameWithRetry } from '../fs-retry';
 import { join } from 'node:path';
@@ -83,6 +84,35 @@ export async function readWorkspaceProject(dir: string): Promise<Project> {
 
 export async function removeWorkspace(dir: string): Promise<void> {
   await rm(dir, { recursive: true, force: true });
+}
+
+/**
+ * Delete the working copy of a project the author has left (closed, or chose not to save).
+ * Synchronous, so it completes on the way out of the process, and it never throws: a working
+ * copy left behind must not stop a close (docs/briefs/windows-close-hang.md).
+ *
+ * Windows will not remove a folder while something (the antivirus, the search indexer) has a
+ * file in it open, so this retries briefly. If the folder still cannot go, it is marked as
+ * holding no unsaved changes, and the next launch deletes it instead of offering it back. Only
+ * if its bookkeeping file itself cannot be written may the next launch offer it.
+ */
+export function discardWorkspace(dir: string): void {
+  try {
+    rmSync(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+    return;
+  } catch (error) {
+    console.error('Could not remove the working copy; the next launch deletes it', error);
+  }
+  try {
+    const info: WorkspaceInfo = {
+      sourcePath: null,
+      dirty: false,
+      modifiedAt: new Date().toISOString(),
+    };
+    writeFileSync(join(dir, WORKSPACE_FILE), JSON.stringify(info));
+  } catch {
+    // Already gone, or held too: without a dirty mark the next launch deletes it.
+  }
 }
 
 /**
